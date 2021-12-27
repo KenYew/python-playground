@@ -1,5 +1,5 @@
-# Time complexity: O(nlogn) # sorted 
-# Space complexity: O(1) # not introducing any new data structure
+# O(nlogn) time | O(1) space 
+# array is searched in place - not introducing any new data structure
 def binarySearch(array, target):
     low = 0
     high = len(array) - 1

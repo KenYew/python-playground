@@ -1,14 +1,14 @@
 arr = [1, 5, 4, 3, 2]
-#1-maxIdxSwap: [5, 1, 4, 3, 2]
+#1-maxIdxFlip: [5, 1, 4, 3, 2]
 #1-pancakFlip: [2, 3, 4, 1, 5]
 
-#2-maxIdxSwap: [4, 3, 2, 1, 5]
+#2-maxIdxFlip: [4, 3, 2, 1, 5]
 #2-pancakFlip: [1, 2, 3, 4, 5]
 
-#3-maxIdxSwap: [3, 2, 1, 4, 5]
+#3-maxIdxFlip: [3, 2, 1, 4, 5]
 #3-pancakFlip: [1, 2, 3, 4, 5]
 
-#4-maxIdxSwap: [2, 1, 3, 4, 5]
+#4-maxIdxFlip: [2, 1, 3, 4, 5]
 #4-pancakFlip: [1, 2, 3, 4, 5]
 
 # O(n^2) Time | O(1) Space
