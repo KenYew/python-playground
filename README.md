@@ -28,11 +28,51 @@
 0. ### [⚡️ **Binaries**](#binaries)
 
 ---
+# 📱 [Coding Patterns](https://seanprashad.com/leetcode-patterns/)
+## 🎹 **If input array is sorted:**
+- `Binary search`
+- `Two pointers`
+
+## 🔢 **If asked for all permutations/subsets:**
+- `Backtracking`
+
+## 🎄 **If given a tree:**
+- `DFS`
+- `BFS`
+
+## 📈 **If given a graph:**
+- `DFS`
+- `BFS`
+
+## 📝 **If given a linked list:**
+- `Two pointers`
+
+## ♽ **If recursion is banned:**
+- `Stack`
+
+## 🔎 **If must solve in-place:**
+- `Swap corresponding values`
+- `Store one or more different values in the same pointer`
+
+## 🎹 **If asked for maximum/minumum subarray/subset/options:**
+- `Dynamic programming`
+
+## 📚 **If asked for top/least K items:**
+- `Heap`
+
+## 🔤 **If asked for common strings:**
+- `Map`
+- `Trie`
+
+## 📱 **Else**
+- `Map/Set for O(1) time & O(n) space`
+- `Sort input for O(nlogn) time and O(1) space`
+---
 # <div id='arrays'/> 🎹 **Arrays**
 
 - ✅ Two Sum - https://leetcode.com/problems/two-sum/
 - ✅ Best Time to Buy and Sell Stock - https://leetcode.com/problems/best-time-to-buy-and-sell-stock/
-- Contains Duplicate - https://leetcode.com/problems/contains-duplicate/
+- ✅ Contains Duplicate - https://leetcode.com/problems/contains-duplicate/
 - Product of Array Except Self - https://leetcode.com/problems/product-of-array-except-self/
 - ✅ Maximum Subarray - https://leetcode.com/problems/maximum-subarray/
 - Maximum Product Subarray - https://leetcode.com/problems/maximum-product-subarray/
@@ -112,6 +152,43 @@ def maxProfit(prices: List[int]) -> int:
   return ans
 ```
 ✅ **SLIDING WINDOW:** _Find local min and search for local max using a sliding window_
+
+---
+## [🟩 Contains Duplicate](https://leetcode.com/problems/contains-duplicate/)
+> Given an integer array `nums`, return `true` if any value appears **at least twice** in the array, and return `false` if every element is distinct.
+- [x] Input: `nums = [1,2,3,1]`
+- [x] Output: `true`
+
+### **Brute Force**
+```python
+# O(n^2) Time | O(1) Space - where n is the length of the input
+def containsDuplicate(nums):
+    for i in range(len(nums)):
+        currentValue = nums[i]
+        for j in range(i + 1, len(nums)):
+            valueToCompare = nums[j]
+            if currentValue == valueToCompare:
+                return True
+    return False
+```
+### **Hash Set**
+```python
+# O(n) Time | O(n) Space - where n is the length of the input
+def containsDuplicate(nums):
+    seen = set() # create a set which is an unordered collection of UNIQUE items
+    for num in nums: # for every num in nums, we add to the set
+        if num in seen: # but if we already find that num in the set, then we have a duplicate!
+            return True
+        seen.add(num)
+    return False
+```
+### **One-Liner**
+```python
+# One-liner solution
+def containsDuplicate(self, nums):
+    return len(nums) > len(set(nums))
+```
+✅ **HASH SET:** _Use hash set to add and keep track of unique values in array, if value is seen in hash set, we found our duplicate_
 
 ---
 ## [🟩 Maximum Subarray](https://leetcode.com/problems/maximum-subarray/)
@@ -209,6 +286,56 @@ def spiralTraverse(array):
 - Remove Nth Node From End Of List - https://leetcode.com/problems/remove-nth-node-from-end-of-list/
 - Reorder List - https://leetcode.com/problems/reorder-list/
 ### [📋 **Back to Table of Contents**](#toc)
+---
+
+## [🟩 Merge Two Sorted Lists](https://leetcode.com/problems/merge-two-sorted-lists/)
+>* You are given the heads of two sorted linked lists `list1` and `list2`.
+>* Merge the two lists in a one **sorted** list. The list should be made by splicing together the nodes of the first two lists.
+>* Return the **head of the merged linked list**.
+
+- [x] Input: `list1 = [1,2,4], list2 = [1,3,4]`
+- [x] Output: `[1,1,2,3,4,4]`
+
+<img src="https://assets.leetcode.com/uploads/2020/10/03/merge_ex1.jpg" width="500"/>
+
+
+### **Iteratively In-Place**
+```python
+class LinkedList: 
+    def __init__(self, value):
+        self.value = value
+        self.next = None
+
+# O(n + m) Time where n is the length of the 1st linked list and m is the length of the 2nd linked list
+# O(1) Space - we mutated the linked lists in place
+def mergeLinkedLists(headOne, headTwo):
+    p1 = headOne # current node of the 1st linked list
+    p1Prev = None # previous node of the 1st linked list (iteration #1: this is a None)
+    p2 = headTwo # current node of the 2nd linked list
+    
+    while p1 is not None and p2 is not None: # while both pointers are not None, we still have nodes to traverse 
+        if p1.value < p2.value: # EASY CASE: we keep moving the prev and p1 pointers onto the next subsequent nodes
+            p1Prev = p1 
+            p1 = p1.next
+        else: # HARD CASE (p2.value < p1.value): perform the 4 pointer mutation in order for this hard case
+            if p1Prev is not None: # if p1Prev is not at the None end of the linked list
+                p1Prev.next = p2 # continue setting the next of p1Prev to p2
+            p1Prev = p2 # we need to get p1Prev = p2 before we overwrite the p2 below
+            p2 = p2.next # we need to keep track of the next value of p2
+            p1Prev.next = p1 # overwriting the former p2 with p1
+    # we can get out of this while loop if either p1 is None or p2 is None, meaning we have traversed to the end of linked list
+    
+    # EDGE CASE
+    if p1 is None: # if we run out of nodes to traverse in the 1st linked list and we still have values to append from the 2nd linked list
+        p1Prev.next = p2 # in this case, p1Prev is the final node of the 1st linked list and its next value should immediately connect to the 2nd linked list at p2
+    return headOne if headOne.value < headTwo.value else headTwo # return the correct head of the linkedlist with the smaller value
+```
+✅ **ITERATIVELY IN-PLACE:** 
+- _Create 3 pointers (p1Prev, p1, p2)_
+- _If NodeL1 < NodeL2, keep moving prev and p1 to the next nodes._
+- _If NodeL2 < NodeL1, set p1Prev.next = p2 and p1Prev = p2 to keep track of value, move p2 = p2.next and then we can finally set p1Prev.next = p1_
+- _Insert each node from one list into the other_
+
 ---
 # <div id='graphs'/> 📈 **Graphs**
 
@@ -389,7 +516,7 @@ def traverseNode(i, j, matrix, visited, sizes):
         for neighbour in unvisitedNeighbours:
             nodesToExplore.append(neighbour) # append new unvisited neighbours to explore in the stack
 
-    # STEP 5: AFTER FULLY TRAVERSING, APPEND ANSWER TO OUR RIVER SIZES ARRAY
+    # STEP 5: AFTER A FULL DFS ON A RIVER, APPEND ANSWER TO OUR RIVER SIZES ARRAY
     if currentRiverSize > 0: # if we have an actual river, we append to our sizes answer array
         sizes.append(currentRiverSize)
     
