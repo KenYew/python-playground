@@ -78,7 +78,7 @@
 - Maximum Product Subarray - https://leetcode.com/problems/maximum-product-subarray/
 - Find Minimum in Rotated Sorted Array - https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/
 - Search in Rotated Sorted Array - https://leetcode.com/problems/search-in-rotated-sorted-array/
-- 3Sum - https://leetcode.com/problems/3sum/
+- ✅ 3Sum - https://leetcode.com/problems/3sum/
 - Container With Most Water - https://leetcode.com/problems/container-with-most-water/
 ### [📋 **Back to Table of Contents**](#toc)
 
@@ -217,6 +217,81 @@ def maxSubArray(self, nums):
 ✅ **DIVIDE AND CONQUER:** _pattern: prev subarray cant be negative, dynamic programming: compute max sum for each prefix_
 
 ---
+## [🟩 3Sum](https://leetcode.com/problems/3sum/)
+> Given an integer array nums, return all the triplets `[nums[i], nums[j], nums[k]` such that `i != j`, `i != k`, and `j != k`, and `nums[i] + nums[j] + nums[k] == 0`.
+- [x] Input: `nums = [-1,0,1,2,-1,-4]`
+- [x] Output: `[[-1,-1,2],[-1,0,1]]`
+
+- [x] Input: `nums = []` or `nums = [0]`
+- [x] Output: `[]`
+
+### [**Two Pointers**](https://leetcode.com/problems/two-sum/discuss/737092/Sum-MegaPost-Python3-Solution-with-a-detailed-explanation)
+```python
+# O(n^2) Time | O(n) Space
+def threeSum(nums: List[int]) -> List[List[int]]:
+    nums.sort()
+    ans = []
+    
+    for idx, val in enumerate(nums): 
+        if idx > 0 and nums[idx] == nums[idx - 1]: # Skip iteration if there are two adjacent elements of the same value (e.g.: [-2, -2, 0, 0, 2, 2])
+            continue
+        
+        # Once the idx pointer (1st pointer) has been accounted for, we simply perform TwoSum (Two Pointer Approach)
+        left = idx + 1 # Left pointer (2nd pointer) needs to be next to the idx pointer (1st pointer)
+        right = len(nums) - 1 # Right pointer (3rd pointer) is at the end of the array
+        while left < right: # While both pointers haven't traversed the entire list yet,
+            threeSum = nums[idx] + nums[left] + nums[right] # Compute threeSum
+            if threeSum < 0: # if threeSum is smaller than 0, our threeSum is too SMALL, so incrememt the left pointer to increase the threeSum
+                left += 1
+            elif threeSum > 0: # if threeSum is bigger than 0, our threeSum is too BIG, so decrement the right pointer to decrease the threeSum 
+                right -= 1
+            else: # else, we have found the threeSum that equates to 0, so we append the answer
+                ans.append([nums[idx], nums[left], nums[right]])
+                left += 1 # keep traversing to find the next threeSum
+                right -= 1
+
+                # EDGE CASE TO SKIP DUPLICATES
+                #  [-3 -2, -2, 0, 0, 2, 2]
+                # [ IDX L               R]
+                while nums[left] == nums[left - 1] and left < right: # Keep moving the left pointer if there are two adjacent elements of the same value and while the pointers haven't traversed the entire list yet,
+                    left += 1
+    return ans
+```
+✅ **TWO POINTERS:** 
+- `ThreeSum: A + B + C = 0` 
+- _Sort input array, perform a FOR loop for A, then set Two Pointers (L & R) for B and C. Increment L if sum is too small and decrement R if sum is too big._
+- _To prevent duplicates, if A == prevA, skip FOR loop iteration. If B == prevB, increment L in the TwoPointer WHILE loop_
+
+### **TargetSum Variant**
+```python
+# O(n^2) time | O(n) space
+def threeNumberSum(array, targetSum):
+    array.sort()
+    ans = []
+    for idx in range(len(array) - 2): # since we're looking for a triplet, in the n-th iteration of the for loop, the idxPointer will always be 3rd from last of the array to allow for leftPointer and rightPointer to fit in the triplet
+        left = idx + 1
+        right = len(array) - 1 # since we're dealing with pointers, we must account for Python's zero indexing
+        # POINTERS VISUALIZATION
+        # [  -3  -2   -2  0  0  2  2]
+        # [ IDX LEFT             RIGHT]
+        # FORLOOP ^---TWO POINTER---^
+        while left < right:
+            currentSum = array[idx] + array[left] + array[right] 
+            if currentSum < targetSum:
+                left += 1
+            elif currentSum > targetSum:
+                right -= 1
+            elif currentSum == targetSum:
+                ans.append([array[idx], array[left], array[right]])
+                left += 1
+                right -= 1
+    return ans
+```
+✅ **TWO POINTERS:** 
+- `ThreeSum: A + B + C = 0` 
+- _Sort input array, perform a FOR loop for A, then set Two Pointers (L & R) for B and C. Increment L if sum is too small and decrement R if sum is too big. When targetSum is found, find the next targetSum by traversing both L & R inwards._
+
+---
 # <div id='matrix'/> 🔢 **Matrix**
 
 - Set Matrix Zeroes - https://leetcode.com/problems/set-matrix-zeroes/
@@ -269,7 +344,7 @@ def spiralTraverse(array):
 - Longest Repeating Character Replacement - https://leetcode.com/problems/longest-repeating-character-replacement/
 - Minimum Window Substring - https://leetcode.com/problems/minimum-window-substring/
 - Valid Anagram - https://leetcode.com/problems/valid-anagram/
-- Group Anagrams - https://leetcode.com/problems/group-anagrams/
+- ✅ Group Anagrams - https://leetcode.com/problems/group-anagrams/
 - Valid Parentheses - https://leetcode.com/problems/valid-parentheses/
 - Valid Palindrome - https://leetcode.com/problems/valid-palindrome/
 - Longest Palindromic Substring - https://leetcode.com/problems/longest-palindromic-substring/
@@ -277,11 +352,67 @@ def spiralTraverse(array):
 - Encode and Decode Strings (Leetcode Premium) - https://leetcode.com/problems/encode-and-decode-strings/
 ### [📋 **Back to Table of Contents**](#toc)
 ---
+## [🟨 Group Anagrams](https://leetcode.com/problems/group-anagrams/)
+>* Given an array of strings `strs`, group the **anagrams** together. You can return the answer in **any order**.
+>* An **Anagram** is a word or phrase formed by rearranging the letters of a different word or phrase, typically using all the original letters exactly once.
+
+- [x] Input: `strs = ["eat","tea","tan","ate","nat","bat"]`
+- [x] Output: `[["bat"],["nat","tan"],["ate","eat","tea"]]`
+
+### **Hash Map**
+```python
+# O(w * nlog(n)) time | O(w * n) space
+# w - the number of words
+# n - the length of the longest word
+def groupAnagrams(words):
+    anagrams = {}
+    for word in words: 
+        sortedWord = "".join(sorted(word))
+        if sortedWord in anagrams:
+            anagrams[sortedWord].append(word)
+        else:
+            anagrams[sortedWord] = [word]
+    return list(anagrams.values())
+```
+✅ **HASH MAP:** _Loop and sort each word, append `sortedWord/word` key/value pairs in `anagrams_dict`, if sortedWord is in `anagrams_dict`, set `anagrams_dict[sortedWord].append(word)`, return `anagram_dict.values()`_
+
+---
+## [🟩 Caesar Cipher Encryptor](https://www.algoexpert.io/questions/Caesar%20Cipher%20Encryptor)
+>* Given a non-empty string of lowercase letters and a non-negative integer representing
+a key, write a function that returns a new string obtained by shifting every letter in the
+input string by k positions in the alphabet, where k is the key.
+>* Note that letters should "wrap" around the alphabet; in other words, the letter `z` shifted by one returns the letter `a`
+
+- [x] Input: `string = xyz, key = 2`
+- [x] Output: `zab`
+
+### **ORD/CHR String Manipulation with Modulo Wrapping**
+```python
+# O(n) Time | O(n) Space
+def caesarCipherEncryptor(string, key):
+	newLetters = []
+	newKey = key % 26 # ensures that keys larger than 26 are reseted back to 0 (to preserve key range of 0-26)
+	
+	for letter in string:
+		newLetters.append(getNewLetter(letter, newKey))
+	return "".join(newLetters) # converts array of convertedLetters into a continuous string
+	
+def getNewLetter(letter, key):
+	newLetterCode = ord(letter) + key
+	if newLetterCode <= 122:
+		return chr(newLetterCode)
+	else:
+		return chr(96 + newLetterCode % 122)
+```
+✅ **ORD/CHR AND MODULO:** 
+- `ASCII: A = 96, Z = 122`
+- _Loop each letter, convert letter into ASCII + KEY using ORD, then re-convert using CHR while handling for Z->A wrapping using MODULO 122_
+
 # <div id='linkedlists'/> 📝 **Linked Lists**
 
 - Reverse a Linked List - https://leetcode.com/problems/reverse-linked-list/
 - Detect Cycle in a Linked List - https://leetcode.com/problems/linked-list-cycle/
-- Merge Two Sorted Lists - https://leetcode.com/problems/merge-two-sorted-lists/
+- ✅ Merge Two Sorted Lists - https://leetcode.com/problems/merge-two-sorted-lists/
 - Merge K Sorted Lists - https://leetcode.com/problems/merge-k-sorted-lists/
 - Remove Nth Node From End Of List - https://leetcode.com/problems/remove-nth-node-from-end-of-list/
 - Reorder List - https://leetcode.com/problems/reorder-list/
