@@ -217,7 +217,7 @@ def maxSubArray(self, nums):
 ✅ **DIVIDE AND CONQUER:** _pattern: prev subarray cant be negative, dynamic programming: compute max sum for each prefix_
 
 ---
-## [🟩 3Sum](https://leetcode.com/problems/3sum/)
+## [🟨 3Sum](https://leetcode.com/problems/3sum/)
 > Given an integer array nums, return all the triplets `[nums[i], nums[j], nums[k]` such that `i != j`, `i != k`, and `j != k`, and `nums[i] + nums[j] + nums[k] == 0`.
 - [x] Input: `nums = [-1,0,1,2,-1,-4]`
 - [x] Output: `[[-1,-1,2],[-1,0,1]]`
@@ -408,6 +408,61 @@ def getNewLetter(letter, key):
 - `ASCII: A = 96, Z = 122`
 - _Loop each letter, convert letter into ASCII + KEY using ORD, then re-convert using CHR while handling for Z->A wrapping using MODULO 122_
 
+---
+## [🟨 Valid IP Addresses](https://www.algoexpert.io/questions/Valid%20IP%20Addresses)
+>* You're given a string of length 12 or smaller, containing only digits. Write a function that returns all the possible IP addresses that can be created by inserting three `.`s in the string.
+>* An IP address is a sequence of four positive integers that are separated by `.`s, where each individual integer is within the range `0 - 255`, inclusive.
+>* An IP address isn't valid if any of the individual integers contains leading `0`s. 
+>* For example, `"192.168.0.1"` is a valid IP address, but `"192.168.00.1"` and `"192.168.0.01"` aren't, because they contain `00` and `01`, respectively.
+>* Another example of a valid IP address is `"99.1.1.10"`; conversely, `"991.1.1.0"` isn't valid, because `"991"` is greater than 255.
+>* Your function should return the IP addresses in string format and in no particular order. If no valid IP addresses can be created from the string, your function should return an empty list.
+
+- [x] Input: `string = "1921680"`
+- [x] Output: `['1.9.216.80', '1.92.16.80', '1.92.168.0', '19.2.16.80', '19.2.168.0', '19.21.6.80', '19.21.68.0', '19.216.8.0', '192.1.6.80', '192.1.68.0', '192.16.8.0']`
+
+### **Three Pointers**
+```python
+# O(1) Time | O(1) Space
+# Time Complexity: Since an IP address is a 32 bit integer (e.g.: 0-255.0-255.0-255.0-255), you will only need to compute at most at a constant 2^32 numbers hence O(2^32) which can be reduced to O(1). The size of the input, n is independent and 2^32 is the absolute constant upper bound.
+# Space Complexity: Since you can only generate a list that is at most 2^32 IP addresses in it (2^32 being the absolute constant upper bound), the space complexity is O(2^32) which can be reduced to O(1).
+
+def validIPAddresses(string):
+    ipAddressesFound = []
+    # [192 . 1 . 68 . 0]
+    # [    i   j    k  ] # i, j, k pointers represent the dots in the IP adddresses
+    
+    # For the 1st octet, you can only place the dot at positions 1 - 3. The pointer i gives a range to slice the string for the first IP octet.
+    for i in range(1, min(len(string), 4)): # We start at range 1 so that we will never have an empty string
+        currentIPAddressParts = ['', '', '', ''] 
+        currentIPAddressParts[0] = string[:i] # slice the input string until pointer i for the 1st IP octet
+        if not isValidPart(currentIPAddressParts[0]): # then check of this sliced string is a valid IP (0-255) with not leading zeroes (e.g.: 01)
+            continue # skip if 1st IP octet is invalid
+        
+        # For thhe 2nd octet, we select a range (for j) after pointer i and spanning at most 3 digits (to honour the valid IP range of 0-255)
+        for j in range(i + 1, i + min(len(string) - i, 4)): 
+            currentIPAddressParts[1] = string[i:j] # slice the input string starting from index i to j for 2nd IP octet
+            if not isValidPart(currentIPAddressParts[1]):
+                continue # skip if 2nd IP octet is invalid
+            
+            # For the 3rd octet, we select a range (for k) after pointer j and spanning at most 3 digits (to honour the valid IP range of 0-255)
+            for k in range(j + 1, j + min(len(string) - j, 4)):
+                currentIPAddressParts[2] = string[j:k] # slice the input string starting from index j to k for 3rd IP octet
+                currentIPAddressParts[3] = string[k:] # slice the rest of the input string starting index k onwards for 4th IP octet
+                # if 3rd and 4th IP octets are valid, then we found the right combinations of IP dot pointers that make a valid IP address,
+                if isValidPart(currentIPAddressParts[2]) and isValidPart(currentIPAddressParts[3]):
+                    ipAddressesFound.append('.'.join(currentIPAddressParts)) # Add the answer and delimiting all IP address octets with '.'
+    
+    return ipAddressesFound
+        
+def isValidPart(string):
+    stringAsInt = int(string) # Converting str to int helps remove any leading zeroes in string (e.g.: 00 -> 0 and 01 -> 1)
+    if stringAsInt > 255: 
+        return False
+    return len(string) == len(str(stringAsInt)) # Checks if there are any leading 0's
+
+# SOLUTION: 
+```
+✅ **THREE POINTERS**: _Set 3 pointers i, j, k for each IP dots, create 3 FOR loops for each pointer to slice string into 4 possible IP octets and check if the octets are valid (0-255) using a helper function. If all 4 octets are valid, then join the valid octets with '.' and append to answers array._
 # <div id='linkedlists'/> 📝 **Linked Lists**
 
 - Reverse a Linked List - https://leetcode.com/problems/reverse-linked-list/
@@ -690,6 +745,68 @@ def getUnvisitedNeighbours(i, j, matrix, visited):
 - Add and Search Word - https://leetcode.com/problems/add-and-search-word-data-structure-design/
 - Word Search II - https://leetcode.com/problems/word-search-ii/
 ### [📋 **Back to Table of Contents**](#toc)
+
+---
+## [🟩 Branch Sums](https://www.algoexpert.io/questions/Branch%20Sums)
+>* Write a function that takes in a Binary Tree and returns a list of its branch sums
+ordered from leftmost branch sum to rightmost branch sum.
+>* A branch sum is the sum of all values in a Binary Tree branch. A Binary Tree branch is a
+path of nodes in a tree that starts at the root node and ends at any leaf node.
+>* Each `BinaryTree` node has an integer `value`, a `left` child node, and a `right`
+child node. Children nodes can either be BinaryTree nodes themselves or `None`/`null`.
+
+- [x] Input: 
+```python
+           1
+        /    \
+      2        3
+     /  \     /  \
+   4     5   6    7 
+  / \    /
+ 8   9  10
+```
+- [x] Output: 
+```python
+Output: [15, 16, 18, 10, 11]
+15 == 1 + 2 + 4 + 8
+16 == 1 + 2 + 4 + 9
+18 == 1 + 2 + 5 + 10
+10 == 1 + 3 + 6
+11 == 1 + 3 + 7
+```
+
+### **Recursion**
+```python
+
+# O(n) Time | O(n) Space
+# Time: traversing all of each node at least once with constant time operations
+# Space: returning a list of branch sums with the length of the number of leaf nodes in the input BT
+class TreeNode:
+    def __init__(self, value):
+        self.value = value
+        self.left = None
+        self.right = None
+            
+def branchSums(root):
+    sums = []
+    # Initialising parameters for the root node where initially there are no runningSums 
+    calculateBranchSums(root, 0, sums)
+
+def calculateBranchSums(node, runningSum, sums):
+    if node is None: 
+        return
+    # Recursively compute sum all the way to leaf node
+    newRunningSum = runningSum + node.value
+    # If node is a leaf node (reached the end of the branch), add the complete running sum to the answer
+    if node.left is None and node.right is None: 
+        sums.append(newRunningSum)
+        return
+    # Recursively calls the helper function to continue traversing and summing up nodes on both branches
+    calculateBranchSums(node.left, newRunningSum, sums)
+    calculateBranchSums(node.right, newRunningSum, sums)
+```
+✅ **RECURSION:** _Recursively call the calculateBranchSums helper function to traverse down the branch (both left and right), summing up nodes and append the totalSum when a leaf node is reached (node.left and node.right are None)_
+
 ---
 # <div id='heaps'/> 🏔 **Heaps**
 
@@ -751,7 +868,7 @@ def mergeOverlappingIntervals(intervals):
 - Climbing Stairs - https://leetcode.com/problems/climbing-stairs/
 - Coin Change - https://leetcode.com/problems/coin-change/
 - Longest Increasing Subsequence - https://leetcode.com/problems/longest-increasing-subsequence/
-- Longest Common Subsequence -
+- Longest Common Subsequence - https://leetcode.com/problems/longest-common-subsequence/
 - Word Break Problem - https://leetcode.com/problems/word-break/
 - Combination Sum - https://leetcode.com/problems/combination-sum-iv/
 - House Robber - https://leetcode.com/problems/house-robber/
@@ -760,6 +877,57 @@ def mergeOverlappingIntervals(intervals):
 - Unique Paths - https://leetcode.com/problems/unique-paths/
 - Jump Game - https://leetcode.com/problems/jump-game/
 ### [📋 **Back to Table of Contents**](#toc)
+
+---
+## [🟥 Longest Common Subsequence](https://www.algoexpert.io/questions/Longest%20Common%20Subsequence)
+>* Write a function that takes in two strings and returns their longest common subsequence.
+>* A subsequence of a string is a set of characters that aren't necessarily adjacent in the string but that are in the same order as they appear in the string. For instance, the characters `["a", "c"', "d"]` form a subsequence of the string `"abcd"`, and so do the characters `["b", "d"]`. 
+>* Note that a single character in a string and the string itself are both valid subsequences of the string.
+>* You can assume that there will only be one longest common subsequence.
+
+- [x] Input: `str1 = "ZXVVYZW", str2 = "XKYKZPW"`
+- [x] Output: `["X", "Y", "Z", "W"]`
+
+### [**Recursion**](https://leetcode.com/problems/longest-common-subsequence/discuss/436719/Python-very-detailed-solution-with-explanation-and-walkthrough-step-by-step.)
+```python
+"""
+                          lcs("AXYT", "AYZX")
+                           /              \
+             lcs("AXY", "AYZX")            lcs("AXYT", "AYZ")
+             /        \                      /              \ 
+    lcs("AX", "AYZX") lcs("AXY", "AYZ")   lcs("AXY", "AYZ") lcs("AXYT", "AY")
+"""
+def longestCommonSubsequence(self, s1: str, s2: str) -> int:
+    return self.helper(s1, s2, 0, 0)
+    
+def helper(self, s1, s2, i, j):
+    if i == len(s1) or j == len(s2):
+        return 0
+    if s1[i] == s2[j]:
+        return 1 + self.helper(s1, s2, i + 1, j + 1)
+    else:
+```
+✅ **RECURSION:** _if first chars are equal find lcs of remaining of each, else max of: lcs of first and remain of 2nd and lcs of 2nd remain of first, cache result; nested forloop to compute the cache without recursion_ 
+### [**Bottom up dynamic programming**](https://leetcode.com/problems/longest-common-subsequence/discuss/436719/Python-very-detailed-solution-with-explanation-and-walkthrough-step-by-step.)
+```python
+# O(mn * min(m,n)) Time | O(mn * min(m,n)) Space
+# Use a nested loop that visits the array systematically. The only thing we have to worry about is that when we fill in a cell L[i,j], we need to already know the values it depends on, namely in this case L[i+1,j], L[i,j+1], and L[i+1,j+1]. For this reason we'll traverse the array backwards, from the last row working up to the first and from the last column working up to the first.
+def longestCommonSubsequence(s1: str, s2: str) -> int:
+    m = len(s1)
+    n = len(s2)
+    LCS = [[0 for _ in range(n + 1)] for _ in range(m + 1)]
+
+    for row in range(1, m + 1):
+        for col in range(1, n + 1):
+            if s1[row - 1] == s2[col - 1]:
+                LCS[row][col] = 1 + LCS[row - 1][col - 1]
+            else:
+                LCS[row][col] = max(LCS[row][col - 1], LCS[row - 1][col])
+
+    return LCS[m][n] # LCS[-1][-1] to return List[str] instead
+```
+✅ **BOTTOM UP DP:** _TBD_
+
 ---
 # <div id='binaries'/> ⚡️ **Binaries**
 
