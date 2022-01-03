@@ -20,22 +20,6 @@ class BinaryTree:
         self.left = None
         self.right = None
         
-def main():
-    root = BinaryTree(1)
-    root.left = BinaryTree(2)
-    root.right = BinaryTree(3)
-    root.left.left = BinaryTree(4)
-    root.left.right = BinaryTree(5)
-    root.right.left = BinaryTree(6)
-    root.right.right = BinaryTree(7)
-    root.left.left.left = BinaryTree(8)
-    root.left.left.right = BinaryTree(9)
-    root.left.right.left = BinaryTree(10)
-    print(branchSums(root))
-    
-if __name__ == "__main__":
-    main()
-    
 # O(n) Time | O(n) Space
 # Time: traversing n nodes with constant time operations
 # Space: returning a list of branch sums with the length of the number of leaf nodes in the input BT
@@ -57,3 +41,19 @@ def calculateBranchSums(node, runningSum, sums):
     # Recursively calls the helper function to continue traversing and summing up nodes on both branches
     calculateBranchSums(node.left, newRunningSum, sums)
     calculateBranchSums(node.right, newRunningSum, sums)
+      
+def main():
+    root = BinaryTree(1)
+    root.left = BinaryTree(2)
+    root.right = BinaryTree(3)
+    root.left.left = BinaryTree(4)
+    root.left.right = BinaryTree(5)
+    root.right.left = BinaryTree(6)
+    root.right.right = BinaryTree(7)
+    root.left.left.left = BinaryTree(8)
+    root.left.left.right = BinaryTree(9)
+    root.left.right.left = BinaryTree(10)
+    print(branchSums(root))
+    
+if __name__ == "__main__":
+    main()
