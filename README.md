@@ -459,8 +459,6 @@ def isValidPart(string):
     if stringAsInt > 255: 
         return False
     return len(string) == len(str(stringAsInt)) # Checks if there are any leading 0's
-
-# SOLUTION: 
 ```
 ✅ **THREE POINTERS**: _Set 3 pointers i, j, k for each IP dots, create 3 FOR loops for each pointer to slice string into 4 possible IP octets and check if the octets are valid (0-255) using a helper function. If all 4 octets are valid, then join the valid octets with '.' and append to answers array._
 # <div id='linkedlists'/> 📝 **Linked Lists**
@@ -730,10 +728,10 @@ def getUnvisitedNeighbours(i, j, matrix, visited):
 ---
 # <div id='trees'/> 🎄 **Trees**
 
-- Maximum Depth of Binary Tree - https://leetcode.com/problems/maximum-depth-of-binary-tree/
+- ✅ Maximum Depth of Binary Tree - https://leetcode.com/problems/maximum-depth-of-binary-tree/
 - Same Tree - https://leetcode.com/problems/same-tree/
-- Invert/Flip Binary Tree - https://leetcode.com/problems/invert-binary-tree/
-- Binary Tree Maximum Path Sum - https://leetcode.com/problems/binary-tree-maximum-path-sum/
+- ✅ Invert/Flip Binary Tree - https://leetcode.com/problems/invert-binary-tree/
+- ✅ Binary Tree Maximum Path Sum - https://leetcode.com/problems/binary-tree-maximum-path-sum/
 - Binary Tree Level Order Traversal - https://leetcode.com/problems/binary-tree-level-order-traversal/
 - Serialize and Deserialize Binary Tree - https://leetcode.com/problems/serialize-and-deserialize-binary-tree/
 - Subtree of Another Tree - https://leetcode.com/problems/subtree-of-another-tree/
@@ -775,13 +773,13 @@ Output: [15, 16, 18, 10, 11]
 11 == 1 + 3 + 7
 ```
 
-### **Recursion**
+### **DFS Recursion**
 ```python
 
 # O(n) Time | O(n) Space
 # Time: traversing all of each node at least once with constant time operations
 # Space: returning a list of branch sums with the length of the number of leaf nodes in the input BT
-class TreeNode:
+class BinaryTree:
     def __init__(self, value):
         self.value = value
         self.left = None
@@ -805,7 +803,237 @@ def calculateBranchSums(node, runningSum, sums):
     calculateBranchSums(node.left, newRunningSum, sums)
     calculateBranchSums(node.right, newRunningSum, sums)
 ```
-✅ **RECURSION:** _Recursively call the calculateBranchSums helper function to traverse down the branch (both left and right), summing up nodes and append the totalSum when a leaf node is reached (node.left and node.right are None)_
+✅ **DFS RECURSION:** _Recursively call the calculateBranchSums helper function to traverse down the branch (both left and right), summing up nodes and append the totalSum when a leaf node is reached (node.left and node.right are None)_
+
+---
+## [🟩 Node Depths](https://www.algoexpert.io/questions/Node%20Depths)
+>* The distance between a node in a Binary Tree and the tree's root is called the node's depth.
+>* Write a function that takes in a Binary Tree and returns the sum of its node/s depths.
+>* Each `BinaryTree` node has an integer `value`, a `left` child node, and a `right` child node. Children nodes can either be `BinaryTree` nodes themselves or `None`
+
+- [x] Input: 
+```python
+           1
+        /    \
+      2        3      Depth = 1
+     /  \     /  \   
+   4     5   6    7   Depth = 2
+  / \    
+ 8   9                Depth = 3
+```
+- [x] Output: 16
+- [x] Explanation: 
+  - The depth of the node with value 2 is 1.
+  - The depth of the node with value 3 is 1.
+  - The depth of the node with value 4 is 2.
+  - The depth of the node with value 5 is 2.
+  - etc...
+  - Summing all of these depths yields 16.
+
+### **DFS Stack**
+```python
+
+class BinaryTree:
+    def __init__(self, value):
+        self.value = value
+        self.left = None
+        self.right = None
+
+# Average case: When the tree is balanced
+# O(n) Time | O(h) Space - where n is the number of nodes in BT and h is the height of BT
+def nodeDepths(root):
+    sumofDepths = 0
+    # Initialise a stack of dicts to keep track of node objects and depth value
+    stack = [{"node": root, "depth": 0}]
+
+    # while we still have nodes to evaluate their depths (stack is not empty yet),
+    while len(stack) > 0: 
+        nodeInfo = stack.pop() # pop out the dict to evaluate
+        node = nodeInfo["node"] # extract the dict's node object 
+        depth = nodeInfo["depth"] # extract the dict's depth
+
+        if node is None: # if we reached a branch end of the BT, skip the below code and iteration
+            continue
+
+        sumofDepths += depth # otherwise, if we still have non-empty nodes, aggregate the depth values
+        stack.append({"node": node.left, "depth": depth + 1}) # then, traverse the left node and increment depth
+        stack.append({"node": node.right, "depth": depth + 1}) # as well as traverse the right node and increment depth
+
+    return sumofDepths # return total sum of depths after all dictionaries are popped from stack
+```
+✅ **DFS STACK:** _Use stack of nodeDicts to keep track each node object and their depth (stored as key-value pairs). Pop the stack and aggregate sumOfDepths value. To traverse down the BT, push in new nodeDicts (left and right) into Stack and increment depth value. Return sumOfDepths when all nodes are popped from stack._
+
+---
+## [🟨 Invert Binary Tree](https://www.algoexpert.io/questions/Invert%20Binary%20Tree)
+>* Write a function that takes in a Binary Tree and inverts it. In other words, the function should swap every left node in the tree for its corresponding right node.
+>* Each `BinaryTree` node has an integer `value`, a `left` child node, and a `right` child node. Children nodes can elther be `BinaryTree` nodes themselves or `None`.
+
+- [x] Input: 
+```python
+         1
+      /    \
+     2      3      
+    /  \   /  \   
+  4     5 6    7  
+ / \    
+8   9      
+```
+- [x] Output:
+```python
+      1
+    /    \
+   3      2      
+ /  \    /  \   
+7    6  5    4  
+            / \    
+           9   8    
+```
+
+### **BFS Queue**
+```python
+class BinaryTree:
+    def __init__(self, value):
+        self.value = value
+        self.left = None
+        self.right = None
+
+# O(n) Time | O(n) Space
+def invertBinaryTree(tree):
+    # Initialise a queue of nodes to keep track of nodes in FIFO order
+    queue = [tree] 
+    while len(queue):
+        # Pop the first-in element of the queue (FIFO order)
+        node = queue.pop(0)
+        if node is None: # if we reach a branch end of the BT, skip the below code and iteration
+            continue
+        swapLeftAndRight(node) # helper function to swap node.left and node.right objects of the current node
+        # to traverse down the BT, we keep appending the available nodes (to the left and right) down the tree
+        queue.append(node.left) 
+        queue.append(node.right)
+    return tree # return the mutated BT after all nodes are popped from the queue
+        
+def swapLeftAndRight(tree): # helper function to swap node.left and node.right objects of the current node
+    tree.left, tree.right = tree.right, tree.left
+```
+✅ **BFS QUEUE:** _Use queue of BT nodes to keep track of nodes in FIFO order. Pop the currentNode from the queue and execute a helper function to swap its node.left and node.right childs. To traverse down the BT, push in new node.left and node.right of currentNode into queue. Return root of the mutated BT when all nodes are popped from queue._
+
+---
+## [🟨 Binary Tree Diameter](https://www.algoexpert.io/questions/Binary%20Tree%20Diameter)
+>* Write a function that takes in a Binary Tree and returns its diameter. The diameter of a binary tree is defined as the length of its longest path, even if that path doesn't pass through the root of the tree.
+>* A path is a collection of connected nodes in a tree, where no node is connected to more than two other nodes. The length of a path is the number of edges between the path's first node and its last node.
+>* Each `BinaryTree` node has an integer `value`, a `left` child node, and a `right` child node. Children nodes can either be `BinaryTree` nodes themselves or `None`
+
+- [x] Input: 
+```python
+            1
+         /    \
+        3      2      
+       /  \     
+      7    4   
+     /      \
+    8        5  
+   /          \
+  9            6
+```
+- [x] Output: 6
+- [x] Explanation: 9 -> 8 -> 7 -> 3 -> 4 -> 5 -> 6. There are 6 edges between the first node and the last node of this tree's longest path.  
+### **DFS Recursion with Backtracking Max Computations**
+```python
+class BinaryTree:
+    def __init__(self, value):
+        self.value = value
+        self.left = None
+        self.right = None
+
+class TreeInfo:
+    def __init__(self, diameter, height):
+        self.diameter = diameter
+        self.height = height
+
+# Average case: When the tree is balanced
+# O(n) Time | O(h) Space - where n is the number of nodes in the BT and h is the height of the BT
+def binaryTreeDiameter(tree):
+    return getTreeInfo(tree).diameter
+
+def getTreeInfo(tree):
+    # Once we've reached the branch end leaf node after DFS recursive calls, return TreeInfo(0, 0) object 
+    if tree is None:
+        return TreeInfo(0, 0)
+    
+    # ====================================================
+    # STEP 1: RECURSIVE DFS CALLS TO REACH LEAF NODE FIRST
+    # ====================================================
+    # Recursively call child nodes all the way to the branch end (DFS) first before executing the below code
+    leftTreeInfo = getTreeInfo(tree.left) # for child nodes to the left
+    rightTreeInfo = getTreeInfo(tree.right) # for child nodes to the right
+    
+    # ===================================================================
+    # STEP 2: BACKTRACK USING MAX COMPUTATIONS FROM LEAF BACK TO THE ROOT
+    # ===================================================================
+    # Once recursive DFS until the branch end is complete, backtrack with the following computations:
+    currentDiameter = max(leftTreeInfo.height + rightTreeInfo.height, leftTreeInfo.diameter, rightTreeInfo.diameter)
+    currentHeight = 1 + max(leftTreeInfo.height, rightTreeInfo.height) # Adding 1 to account for the leaf node
+    # Note: currentDiameter = max(longestPathThroughRoot, maxDiameterSoFar)
+    # where: longestPathThroughRoot = leftTreeInfo.height + rightTreeInfo.height
+    #        maxDiameterSoFar = max(leftTreeInfo.diameter, rightTreeInfo.diameter)
+    
+    return TreeInfo(currentDiameter, currentHeight) # Return TreeInfo object with diameter and height properties
+```
+✅ **DFS RECURSION WITH BACKTRACKING MAX COMPUTATIONS:** _Create a TreeInfo class to store diameter and height properties. Recursively call getTreeInfo to perform DFS on all child nodes until the leaf node. Then, backtrack and compute diameter and height values using max functions. Return TreeInfo object with the final diameter and height values after all recursive calls._
+
+---
+## [🟥 Binary Tree Maximum Path Sum](https://leetcode.com/problems/binary-tree-maximum-path-sum/)
+>* Write a function that takes in a Binary Tree and returns its max path sum.
+>* A path is a collection of connected nodes in a tree, where no node is connected to more than two other nodes; a path sum is the sum of the values of the nodes in a particular path.
+>* Each `BinaryTree` node has an integer `value`, a `left` child node, and a `right` child node. Children nodes can either be `BinaryTree` nodes themselves or `None`.
+
+- [x] Input
+```python
+         1
+      /    \
+     2      3      
+    /  \   /  \   
+  4     5 6    7  
+```
+- [x] Output: 18
+- [x] Explanation: The optimal path is 5 -> 2 -> 1 -> 3 -> 7 with a path sum of 5 + 2 + 1 + 3 + 7 = 18
+### [**DFS Recursion with Backtracking Max Computations**](https://leetcode.com/problems/binary-tree-maximum-path-sum/discuss/603423/Python-Recursion-stack-thinking-process-diagram)
+```python
+class BinaryTree:
+    def __init__(self, value):
+        self.value = value
+        self.left = None
+        self.right = None
+
+def maxPathSum(tree):
+    _, maxSum = findMaxSum(tree)
+    return maxSum
+
+def findMaxSum(tree):
+    if tree is None:
+        return (0, float("-inf"))
+    
+    # ====================================================
+    # STEP 1: RECURSIVE DFS CALLS TO REACH LEAF NODE FIRST
+    # ====================================================
+    # Recursively call child nodes all the way to the branch end (DFS) first before executing the below code
+    leftMaxSumAsBranch, leftMaxPathSum = findMaxSum(tree.left)
+    rightMaxSumAsBranch, rightMaxPathSum = findMaxSum(tree.right)
+    
+    # ===================================================================
+    # STEP 2: BACKTRACK USING MAX COMPUTATIONS FROM LEAF BACK TO THE ROOT
+    # ===================================================================
+    # Once recursive DFS until the branch end is complete, backtrack with the following computations:
+    maxChildSumAsBranch = max(leftMaxSumAsBranch, rightMaxSumAsBranch)
+    value = tree.value
+    maxSumAsBranch = max(maxChildSumAsBranch + value, value)
+    maxSumAsRootNode = max(leftMaxSumAsBranch + value + rightMaxSumAsBranch, maxSumAsBranch)
+    maxPathSum = max(leftMaxPathSum, rightMaxPathSum, maxSumAsRootNode)
+    
+    return (maxSumAsBranch, maxPathSum) # Return tuple with MaxSumAsBranch, maxPathSum values
+```
+
+✅ **DFS RECURSION WITH BACKTRACKING MAX COMPUTATIONS:** _Recursively call findMaxSum to perform DFS on all child nodes until the leaf node. Then, backtrack and compute maxChildSumAsBranch, maxSumAsBranch, maxSumAsRootNode and maxPathSum using max functions. Return tuple with maxSumAsBranch and maxPathSum values after all recursive calls._
 
 ---
 # <div id='heaps'/> 🏔 **Heaps**
