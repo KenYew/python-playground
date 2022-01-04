@@ -1,10 +1,3 @@
-<style>
-  code {
-    white-space : pre-wrap !important;
-    word-break: break-word;
-  }
-</style>
-
 <img src="https://www.python.org/static/community_logos/python-logo-generic.svg" width="500px"/><br/>
 
 # **💻 Python Coding Patterns**
