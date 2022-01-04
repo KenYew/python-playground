@@ -217,6 +217,153 @@ def maxSubArray(self, nums):
 ✅ **DIVIDE AND CONQUER:** _pattern: prev subarray cant be negative, dynamic programming: compute max sum for each prefix_
 
 ---
+## [🟨 Smallest Difference](https://www.algoexpert.io/questions/Smallest%20Difference)
+>* Write a function that takes in two non-empty arrays of integers, finds the pair of numbers (one from each array) whose absolute difference is closest to zero, and returns an array containing these two numbers, with the number from the first array in the first position.
+>* Note that the absolute difference of two integers is the distance between them on the real number line. For example, the absolute difference of -5 and 5 is 10, and the absolute difference of -5 and -4 is 1.
+>* You can assume that there will only be one pair of numbers with the smallest difference.
+- [x] Input: `arrayOne = [-1, 5, 10, 20, 28, 3], arrayTwo = [26, 134, 135, 15, 17]`
+- [x] Output: `[28, 26]`
+
+```python
+# O(nlog(n) + mlog(m)) time | O(1) space
+def smallestDifference(arrayOne, arrayTwo):
+    # 1: Sort both input arrays first required for two pointer traversal
+    arrayOne.sort() # O(nlog(n))
+    arrayTwo.sort() # O(mlog(m))
+    # 2: Initialise pointers, ans list and set MAX placeholders for smallestNum variable to be replaced by currentNum
+    idxOne = idxTwo = currentNum = 0
+    currentNum = smallestNum = float("inf")
+    smallestPair = []
+    
+    ## EXAMPLE INPUT: 
+    # sortedArrayOne = [-1, 3, 5, 10, 20, 28]
+    #                    * <-- idxOne pointer
+    # sortedArrayTwo = [15, 17, 26, 134, 135]
+    #                    * <-- idxTwo pointer
+    # Iteration #1: -1 < 15 so idxOne += 1 to bring the gap closer for min difference
+    
+    # 3: While both idx1 and idx2 pointers have not fully traversed the end of the list,
+    while idxOne < len(arrayOne) and idxTwo < len(arrayTwo):
+        firstNum, secondNum = arrayOne[idxOne], arrayTwo[idxTwo]
+
+        # 4: if num1 in array1 < num2 in array2, calculate the difference and increment idx1 (to close the gap and move closer to the smallest difference between both nums)
+        if firstNum < secondNum: 
+            currentNum = secondNum - firstNum
+            idxOne += 1
+        # 5: elif num2 in array2 < num1 in array1, calculate the difference and increment idx2 (to close the gap and move closer to the smallest difference between both nums)
+        elif secondNum < firstNum:
+            currentNum = firstNum - secondNum 
+            idxTwo += 1
+        else: 
+            # 6: else if we're lucky to get two exactly same num1 and num2 values, this is the best answer possible with smallest difference = 0
+            return [firstNum, secondNum]
+        
+        # 7: To keep track on the smallest difference, we keep updating the smallestNum if currentNum < smallestNum in this iteration,
+        if currentNum < smallestNum: 
+            smallestNum = currentNum # update smallestNum if currentNum < smallestNum in this iteration
+            smallestPair = [firstNum, secondNum] # store also the smallest pair of nums in this iteration
+    return smallestPair
+```
+✅ **TWO POINTERS:** 
+1. Sort both input array1 and array2. 
+2. While idx1 and idx2 pointers have not fully traversed their arrays,
+3. If num1 < num2, calculate the difference and increment idx1, elif num2 < num1, calculate the difference and increment idx2, else return [num1, num2]. 
+4. Incrementing idx1 or idx2 pointers will close the gap between two array values and move closer to the smallest difference
+5. Keep track of smallestNum and smallestPair if currentNum < smallestNum.
+
+---
+## [🟨 Move Element To End](https://www.algoexpert.io/questions/Move%20Element%20To%20End)
+>* You're given an array of integers and an integer. Write a function that moves all instances of that integer in the array to the end of the array and returns the array.
+>* The function should perform this in place (i.e., it should mutate the input array) and doesn't need to maintain the order of the other integers.
+- [x] Input: `array = [2, 1, 2, 2, 2, 3, 4, 2], toMove = 2`
+- [x] Output: `[1, 3, 4, 2, 2, 2, 2, 2]`
+
+```python
+# O(n) Time | O(1) Space - where n is the length of the input array
+def moveElementToEnd(array, toMove):
+    # 1: Initialise both left and right pointers of each end of the array
+    left = 0
+    right = len(array) - 1
+    # 2: While both pointers have not fully traverse the array and pass each other,
+    while left < right: 
+        # 3: If the right pointer is on the value == toMoveNum, we keep decrementing the right pointer until it points to a number != toMoveNum
+        while array[right] == toMove and left < right: # EDGE: left < right to ensure we don't keep decrementing the right pointer pass the left pointer and perform an accidental swap below
+            right -= 1
+        
+        # 5: Finally, if left points to a value == toMoveNum (right would've pointed to a value != toMoveNum at this point), perform a swap
+        if array[left] == toMove:
+            array[left], array[right] = array[right], array[left]
+        
+        # 4: Then, keep moving the left pointer inward until value == toMoveNum
+        left += 1
+    return array
+```
+✅ **TWO POINTERS:** _Initialise two pointers (left & right) on each end. While left < right, nested while rightVal == toMoveNum, decrement right to ensure rightVal points to a swappable num != toMoveNum. Keep incrementing left. If leftVal == toMoveNum, perform swap._
+
+---
+## [🟨 Longest Peak](https://www.algoexpert.io/questions/Longest%20Peak)
+>* Write a function that takes in an array of integers and returns the length of the longest
+peak in the array.
+>* A peak is defined as adjacent integers in the array that are strictly increasing until they reach a tip (the highest value in the peak), at which point they become strictly decreasing. At least three integers are required to form a peak.
+>* For example, the integers `1, 4, 10, 2` form a peak, but the integers `4, 0, 10` don't and neither do the integers `1, 2, 2, 0`. Similarly, the integers `1, 2, 3` don't form a peak because there aren't any strictly decreasing integers after the `3`.
+- [x] Input: `array = [1, 2, 3, 3, 4, 0, 10, 6, 5, -1, -3, 2, 3]`
+- [x] Output: `6`
+- [x] Explanation: `0, 10, 6, 5, -1 -3` form the longest peak
+
+```python
+# O(n) time | O(1) space  - where n is the length of the input array
+def longestPeak(array):
+    # 1: Initialise peakIdx pointer to be 1 (since we need at least one value to the left to evaluate a potential peak)
+    longestPeakLength = 0
+    peakIdx = 1
+
+    # 2: While peakIdx has not fully traversed the array,
+    while peakIdx < len(array) - 1: 
+
+        # 3: Check previous and next values to see if current peakIdxValue forms a peak
+        isPeak = array[peakIdx - 1] < array[peakIdx] and array[peakIdx] > array[peakIdx + 1]
+
+        # 4: If they don't form a peak, keep incrementing peakIdx and skip current iteration
+        if not isPeak: 
+            peakIdx += 1
+            continue
+
+        # 5: Else if current peakIdxValue does form a peak, let's evaluate how long is the peak.
+
+        # 6: For the left side of the peak, set the leftIdx to point to the subsequent previous value (peakIdx - 2) and then perform a while loop that keeps decrementing the leftIdx if the previous values are consecutively decreasing
+        leftIdx = peakIdx - 2
+        while array[leftIdx] < array[leftIdx + 1] and leftIdx >= 0:
+            leftIdx -= 1
+
+        # 7: For the right side of the peak, set the rightIdx to point to the subsequent next value (peakIdx + 2) and then perform a while loop that keeps incrementing the rightIdx if the next values are consecutively increasing
+        rightIdx = peakIdx + 2
+        while rightIdx < len(array) and array[rightIdx] < array[rightIdx - 1]:
+            rightIdx += 1
+            
+        # 8: Evaluate the total length of the peak by using the difference between the two pointers (accounting for zero-indexing)
+        currentPeakLength = rightIdx - leftIdx - 1
+
+        # 9: Evaluate only the MAX between the longestPeakLength (from previous iteration) and currentPeakLength (current iteration)
+        longestPeakLength = max(longestPeakLength, currentPeakLength) 
+
+        # 10: Update the peakIdx to be the right-most index. This is will be the new starting point to look for the next peak as we keep traversing the array.
+        peakIdx = rightIdx
+        
+    return longestPeakLength
+```
+✅ **TWO POINTERS:** 
+1. Intialise peakIdx to traverse the array and find a potential peak.
+2. If peak is found, set leftIdx and rightIdx to be peakIdx - 2 and peakIdx + 2 to. 
+3. Decrement leftIdx in a while loop if previous values are consecutively decreasing.
+4. Increment rightIdx in a while loop if next values are consecutively increasing. 
+5. Evaluate currentPeakLength by calculating the difference between leftIdx and rightIdx. 
+6. Update peakIdx to be rightIdx to find the next potential longest peak. 
+7. Return max(longestPeakLength, currentPeakLength)
+
+
+
+
+---
 ## [🟨 3Sum](https://leetcode.com/problems/3sum/)
 > Given an integer array nums, return all the triplets `[nums[i], nums[j], nums[k]` such that `i != j`, `i != k`, and `j != k`, and `nums[i] + nums[j] + nums[k] == 0`.
 - [x] Input: `nums = [-1,0,1,2,-1,-4]`
@@ -266,23 +413,39 @@ def threeSum(nums: List[int]) -> List[List[int]]:
 ```python
 # O(n^2) time | O(n) space
 def threeNumberSum(array, targetSum):
+    # 1: Sort the input array for two pointer traversal
     array.sort()
     ans = []
+
+    # 2: idx pointer loops through all values from index 0 to "n - 2" for the 1st value of the sum
     for idx in range(len(array) - 2): # since we're looking for a triplet, in the n-th iteration of the for loop, the idxPointer will always be 3rd from last of the array to allow for leftPointer and rightPointer to fit in the triplet
+
+        # 3: Initialise left and right pointers for the 2nd and 3rd value of the sum
         left = idx + 1
         right = len(array) - 1 # since we're dealing with pointers, we must account for Python's zero indexing
         # POINTERS VISUALIZATION
         # [  -3  -2   -2  0  0  2  2]
         # [ IDX LEFT             RIGHT]
         # FORLOOP ^---TWO POINTER---^
+
+        # 4: While left and right pointers have not traverse the entire list and pass each other,
         while left < right:
+
+            # 5: Evaluate the currentSum of the current iteration
             currentSum = array[idx] + array[left] + array[right] 
+
+            # 6: If currentSum of the current iteration < targetSum, increment left to increase value
             if currentSum < targetSum:
                 left += 1
+            # 7: If currentSum of the current iteration > targetSum, decrement right to decrease value
             elif currentSum > targetSum:
                 right -= 1
+
+            # 8: If we found the right combination to equal targetSum, append the 3 values of currentSum
             elif currentSum == targetSum:
                 ans.append([array[idx], array[left], array[right]])
+
+                # 9: and move both left and right pointers inwards to look for more potential sums
                 left += 1
                 right -= 1
     return ans
@@ -313,23 +476,34 @@ def threeNumberSum(array, targetSum):
 ```python
 # O(n) Time | O(n) Space
 def spiralTraverse(array):
+    # 1: Initialise row pointers and col pointers on all 4 ends of the 2-D matrix.
     startRow, endRow = 0, len(array) - 1 # Iteration 1: 0, 3
     startCol, endCol = 0, len(array[0]) - 1 # Iteration 1: 0, 3
     ans = []
     
+    # 2: While the row and col pointers have not traversed until the other ends,
     while startRow <= endRow and startCol <= endCol: 
+
+        # 3: Append col values from "left" to "right" columns
         for col in range(startCol, endCol + 1): # Iteration 1: 0, 4 (0 -> 3) Iteration 2: 1, 3 (1 -> 2)
             ans.append(array[startRow][col])
+        # 4: Append row values from "top + 1" to "bottom" rows
         for row in range(startRow + 1, endRow + 1): # Iteration 1: 1, 4 (1 -> 3) Iteration 2: 2, 3 (2)
             ans.append(array[row][endCol])
+        # 5: Append col values from "right - 1" to "left" columns
         for col in reversed(range(startCol, endCol)): # Iteration 1: 3, 0 (2 -> 0) Iteration 2: 2, 1 (1)
-            if startRow == endRow: # Handle the edge case when there's a single row in the middle of the matrix. In this case, we don't want to double-count the values in this row, which we've already counted in the first for loop above.
+            # EDGE 1: Break iteration if there is only 1 row left in the centre of matrix (to avoid double counting)
+            if startRow == endRow:
                 break
             ans.append(array[endRow][col])
+        # 6: Append row values from "bottom - 1" to "top + 1" rows
         for row in reversed(range(startRow + 1, endRow)): # Iteration 1: 3, 1 (2 -> 1) Iteration 2:  2, 2 (BREAK)
-            if startCol == endCol: # Handle the edge case when there's a single column in the middle of the matrix. In this case, we don't want to double-count the values in this column, which we've already counted in the second for loop above.
+            # EDGE 2: Break iteration if there is only 1 column left in the centre of matrix (to avoid double counting)
+            if startCol == endCol:
                 break
             ans.append(array[row][startCol])
+
+        # 7: Update all 4 edge pointers to move inwards and evaluate layer by layer
         startRow += 1 # Value Updated: 1
         endRow -= 1 # Value Updated: 2
         startCol += 1 # Value Updated: 1
