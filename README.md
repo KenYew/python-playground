@@ -21,8 +21,9 @@
 0. ### [🏔 **Heaps**](#heaps)
 0. ### [🥞 **Stacks**](#stacks)
 0.  ### [⏱ **Intervals**](#intervals)
-0.  ### [🔎 **Search Algorithms**](#search)
 0. ### [📚 **Sorting Algorithms**](#sort)
+0.  ### [🔎 **Search Algorithms**](#search)
+0.  ### [🌲 **Binary Search Trees**](#bst)
 0. ### [📱 **Dynamic Programming**](#dp)
 0. ### [♽ **Recursion**](#recursion)
 0. ### [⚡️ **Binaries**](#binaries)
@@ -708,6 +709,231 @@ def mergeLinkedLists(headOne, headTwo):
 ### [📋 **Back to Table of Contents**](#toc)
 
 ---
+## [🟨 River Sizes](https://www.algoexpert.io/questions/River%20Sizes)
+>* You're given a two-dimensional array (a matrix) of potentially unequal height and width containing only `0`'s and `1`'s. Each `0` represents land, and each `1` represents part of a river. A river consists of any number of `1`'s that are either horizontally or vertically adjacent (but not diagonally adjacent). The number of adjacent 1s forming a river determine its size.
+>* Note that a river can twist. In other words, it doesn't have to be a straight vertical line or
+a straight horizontal line; it can be L-shaped, for example.
+>* Write a function that returns an array of the sizes of all rivers represented if the input
+matrix. The sizes don't need to be in any particular order.
+
+```yaml
+Input: matrix = [
+    [1, 0, 0, 1, 0],
+    [1, 0, 1, 0, 0],
+    [0, 0, 1, 0, 1],
+    [1, 0, 1, 0, 1],
+    [1, 0, 1, 1, 0]
+  ]
+Output: [1, 2, 2, 2, 5] # The numbers could be ordered differently
+Explanation: matrix = [ # The rivers can be clearly seen here:
+    [1,  ,  , 1,  ],
+    [1,  , 1,  ,  ],
+    [ ,  , 1,  , 1],
+    [1,  , 1,  , 1],
+    [1,  , 1, 1,  ]
+  ]
+```
+### **Depth First Search (Iterative)**
+```python
+# O(n) Time - we only need to traverse all of the elements in the matrix once
+# O(n) Space - we are using an auxiliary matrix of size n to keep track of visited nodes
+# n - the number of elements in the matrix
+def riverSizes(matrix):
+    sizes = [] 
+    # 1: Initialise an auxiliary matrix to keep track of nodes already visited
+    visited = [[False for value in row] for row in matrix] 
+    # 2: Loop through every element in each row and column,
+    for i in range(len(matrix)):
+        for j in range(len(matrix[i])):
+            # 3: Skip nodes that are already marked as visited in the auxiliary matrix
+            if visited[i][j]:
+                continue
+            # 4: Otherwise if unvisited, call the traverseNode helper function to traverse node at position (i, j) in the current interation
+            traverseNode(i, j, matrix, visited, sizes) 
+    return sizes
+
+def traverseNode(i, j, matrix, visited, sizes): 
+    currentRiverSize = 0 
+    # ==============================
+    # Depth First Search (Iterative)
+    # ==============================
+    # 5: Initialise a stack of nodes to explore (for DFS implementation in LIFO order)
+    nodesToExplore = [[i, j]]
+
+    # STEP 1: EXPLORE NODES, USE STACK AND ITERATE DFS ON POPPED NODES THAT ARE RIVERS (1's)
+    while len(nodesToExplore): # while we still have nodes to explore,
+        currentNode = nodesToExplore.pop() # pop out the final value of the nodesToExplore array
+        i, j = currentNode[0], currentNode[1]
+
+        # STEP 2: SKIP IF ALREADY VISITED OR LAND
+        if visited[i][j]: # if node has already been visited, we skip it
+            continue
+        visited[i][j] = True # otherwise if not visited, mark the current node being traversed as visited to keep track
+        if matrix[i][j] == 0: # if it is a piece of land, we skip it
+            continue
+
+        # STEP 3: OTHERWISE, WE FOUND A RIVER!
+        currentRiverSize += 1
+
+        # STEP 4: NOW, CHECK ADJACENT NEIGHBOURS AND ITERATE DFS ON NEWLY APPENDED NEIGHBOUR NODES THAT ARE RIVERS
+        unvisitedNeighbours = getUnvisitedNeighbours(i, j, matrix, visited) # get unvisited neighbours around our current node and add it to nodesToExplore stack
+        for neighbour in unvisitedNeighbours:
+            nodesToExplore.append(neighbour) # append new unvisited neighbours to explore in the stack
+
+    # STEP 5: AFTER A FULL DFS ON A RIVER, APPEND ANSWER TO OUR RIVER SIZES ARRAY
+    if currentRiverSize > 0: # if we have an actual river, we append to our sizes answer array
+        sizes.append(currentRiverSize)
+    
+def getUnvisitedNeighbours(i, j, matrix, visited):
+    unvisitedNeighbours = []
+    # Check if the 4 surrounding adjacent neighbours are valid neighbours (unvisited and within the matrix boundary)
+    # ==========================================
+    # ROWS CHECK FOR NEIGHBOURS ABOVE AND BELOW
+    # ==========================================
+    if i > 0 and not visited[i - 1][j]: # if we are not in the top row and not visited the neighbour above,
+        unvisitedNeighbours.append([i - 1, j]) # append the node (with indices) of the neighbour above us
+    if i < len(matrix) - 1 and not visited[i + 1][j]: # if we are not in the bottomw row and not visited neighbour below,
+        unvisitedNeighbours.append([i + 1, j]) # append the node (with indices) of the neighbour below us
+    # ============================================
+    # COLUMNS CHECK FOR NEIGHBOURS LEFT AND RIGHT
+    # ============================================
+    if j > 0 and not visited[i][j - 1]: # if we are not in the left-most column and not visited the neighbour to the left,
+        unvisitedNeighbours.append([i, j - 1]) # append the node (with indices) of the left neighbour
+    if j < len(matrix[0]) - 1 and not visited[i][j + 1]: # if we are not in the right-most column and not visited the neighbour to the right, 
+        unvisitedNeighbours.append([i, j + 1]) # append the node (with indices) of the right neighbour
+    return unvisitedNeighbours # finally, return the array containing nodes of all unvisited adjacent neighbours
+```
+✅ **DEPTH FIRST SEARCH (ITERATIVE)**: _for each cell, if cell is 1 and unvisited, run dfs, increment count and mark each contiguous 1's as visited in auxiliary matrix_
+
+---
+## [🟨 Remove Islands](https://www.algoexpert.io/questions/Remove%20Islands)
+>* You're given a two-dimensional array (a matrix) of potentially unequal height and width containing only `0`s and `1`s.
+>* The matrix represents a two-toned image, where each `1` represents black and each `0` represents white. 
+>* An island is defined as any number of `1`s that are horizontally or vertically adjacent (but not diagonally adjacent) and that don't touch the border of the image. 
+>* In other words, a group of horizontally or vertically adjacent `1`s isn't an island if any of those `1`s are in the first row, last row, first column, or last column of the input matrix.
+>* Note that an island can twist. In other words, it doesn't have to be a straight vertical line or a straight horizontal line; it can be L-shaped, for example.
+>* You can think of islands as patches of black that don't touch the border of the two-toned image.
+>* Write a function that returns a modified version of the input matrix, where all of the islands are removed. You remove an island by replacing it with `0`s. Naturally, you're allowed to mutate the input matrix.
+
+- [x] Input: 
+```python
+matrix = 
+[
+    [1, 0, 0, 0, 0, 0],
+    [0, 1, 0, 1, 1, 1],
+    [0, 0, 1, 0, 1, 0],
+    [1, 1, 0, 0, 1, 0],
+    [1, 0, 1, 1, 0, 0],
+    [1, 0, 0, 0, 0, 1],
+]
+```
+
+- [x] Output: 
+```python
+matrix = 
+[
+    [1, 0, 0, 0, 0, 0],
+    [0, 0, 0, 1, 1, 1],
+    [0, 0, 0, 0, 1, 0],
+    [1, 1, 0, 0, 1, 0],
+    [1, 0, 0, 0, 0, 0],
+    [1, 0, 0, 0, 0, 1],
+]
+```
+### **Depth First Search (Iterative)**
+```python
+# O(w.h) Time | O(w.h) Space where w and are the width and height of the input matrix
+def removeIslands(matrix):
+    for row in range(len(matrix)):
+        for col in range(len(matrix[row])):
+            """
+            [x, x, x, x] rowIsBorder: row == 0
+            [x, 0, 0, x]
+            [x, 0, 0, x]
+            [x, x, x, x] rowIsBorder: row == len(matrix) - 1
+            colIsBorder:
+            col == 0  len(matrix[row]) - 1
+            """
+            # 1: Evaluate the Booleans below if current element (row, col) constitutes as a border island
+            rowIsBorder = (row == 0 or row == len(matrix) - 1)
+            colIsBorder = (col == 0 or col == len(matrix[row]) - 1)
+            isBorder = (rowIsBorder or colIsBorder)
+            
+            # 2: Skip iteration if current element is not located at a border
+            if not isBorder:
+                continue
+            
+            # 3: Skip iteration if current element is not an island (1)
+            if matrix[row][col] != 1:
+                continue
+            
+            # 4: Otherwise, current element is a border island that we need to traverse via iterative DFS
+            changeOnesConnectedToBorderToTwos(matrix, row, col)
+            
+    # 15: After iterative DFS, all islands (1) have been mutated to 2 and we loop through the matrix,
+    for row in range(len(matrix)):
+        for col in range(len(matrix[row])):
+            color = matrix[row][col]
+            # 16: Convert any 1s into 0s as they constitute islands not connected to a border
+            if color == 1:
+                matrix[row][col] = 0
+            # 17: Convert any 2s into 1s as they constitute border islands
+            elif color == 2:
+                matrix[row][col] = 1
+    # 18: Finally, output the mutated matrix in place as the answer
+    return matrix
+
+def changeOnesConnectedToBorderToTwos(matrix, startRow, startCol):
+    # 5: Initialise a stack of tuples to keep track of all islands to traverse
+    stack = [(startRow, startCol)]
+    
+    # 6: While we haven't finish traversing, pop the stack to evaluate current island
+    while len(stack) > 0: 
+        currentPosition = stack.pop()
+        
+        # 7: Unpack the tuple into currentRow and currentCol
+        currentRow, currentCol = currentPosition
+        
+        # 8: Mutate the island value of the matrix in-place from 1 to 2 
+        matrix[currentRow][currentCol] = 2
+        
+        # 9: Then, check neighboring elements for any potential islands
+        neighbors = getNeighbors(matrix, currentRow, currentCol)
+        
+        # 12: Once we've collected a list of valid neighbors to explore, loop through each neighbor 
+        for neighbor in neighbors:
+            row, col = neighbor # Unpack the (row, col) tuple of current neighbor
+            
+            # 13: If neighbor is not an island (0), skip iteration
+            if matrix[row][col] != 1:
+                continue
+            
+            # 14: Otherwise neighbor is an island (1) and append its tuple (row, col) into the stack 
+            # The stack enables LIFO order to perform DFS on all islands
+            stack.append(neighbor)
+            
+def getNeighbors(matrix, row, col):
+    # 10: Initialise a list of potential neighbors, depth and width of matrix
+    neighbors = []
+    numRows = len(matrix)
+    numCols = len(matrix[row])
+    
+    # 11: Append all the (row, col) tuples of valid neighbors into List
+    if row - 1 >= 0: # ABOVE
+        neighbors.append((row - 1, col))
+    if row + 1 < numRows: # BELOW
+        neighbors.append((row + 1, col))
+    if col - 1 >= 0: # LEFT
+        neighbors.append((row, col - 1))
+    if col + 1 < numCols: # RIGHT
+        neighbors.append((row, col + 1))
+        
+    return neighbors
+
+```
+✅ **DEPTH FIRST SEARCH (ITERATIVE)**: _Loop through only cells at the border, if cell is 1, run iterative dfs using a stack, mutate 1s into 2s, check for neighbours for any 1s to push to stack for next dfs iteration. Then, loop through all cells again and mutate 1s to 0s and 2s to 1s and return the mutated matrix in place._
+
+---
 ## [🟨 Number of Islands](https://leetcode.com/problems/number-of-islands/)
 >* Given an `m x n` 2D binary grid `grid` which represents a map of `'1'`s (land) and `'0'`s (water), return the number of islands.
 >* An island is surrounded by water and is formed by connecting adjacent lands horizontally or vertically. You may assume all four edges of the grid are all surrounded by water.
@@ -807,97 +1033,67 @@ def maxAreaOfIsland(self, grid):
 ✅ **DEPTH FIRST SEARCH (ITERATIVE)**: _for each cell, if cell is 1 and unvisited, run dfs, increment count and mark each contiguous 1's as visited in auxiliary matrix_
 
 ---
-## [🟨 River Sizes](https://www.algoexpert.io/questions/River%20Sizes)
->* You're given a two-dimensional array (a matrix) of potentially unequal height and width containing only `0`'s and `1`'s. Each `0` represents land, and each `1` represents part of a river. A river consists of any number of `1`'s that are either horizontally or vertically adjacent (but not diagonally adjacent). The number of adjacent 1s forming a river determine its size.
->* Note that a river can twist. In other words, it doesn't have to be a straight vertical line or
-a straight horizontal line; it can be L-shaped, for example.
->* Write a function that returns an array of the sizes of all rivers represented if the input
-matrix. The sizes don't need to be in any particular order.
+## [🟨 Youngest Common Ancestor](https://www.algoexpert.io/questions/Youngest%20Common%20Ancestor)
+>* You're given three inputs, all of which are instances of an `AncestralTree` class that have an `ancestor` property pointing to their youngest ancestor. 
+>* The first input is the top ancestor in an ancestral tree (i.e., the only instance that has no ancestor--its
+`ancestor` property points to `None`, and the other two inputs are descendants in the ancestral tree.
+>* Write a function that returns the youngest common ancestor to the two descendants.
+>* Note that a descendant is considered its own ancestor. So in the simple ancestral tree below, the youngest common ancestor to nodes A and B is node A.
 
-```yaml
-Input: matrix = [
-    [1, 0, 0, 1, 0],
-    [1, 0, 1, 0, 0],
-    [0, 0, 1, 0, 1],
-    [1, 0, 1, 0, 1],
-    [1, 0, 1, 1, 0]
-  ]
-Output: [1, 2, 2, 2, 5] # The numbers could be ordered differently
-Explanation: matrix = [ # The rivers can be clearly seen here:
-    [1,  ,  , 1,  ],
-    [1,  , 1,  ,  ],
-    [ ,  , 1,  , 1],
-    [1,  , 1,  , 1],
-    [1,  , 1, 1,  ]
-  ]
-```
-### **Depth First Search (Iterative)**
 ```python
-# O(n) Time - we only need to traverse all of the elements in the matrix once
-# O(n) Space - we are using an auxiliary matrix of size n to keep track of visited nodes
-# n - the number of elements in the matrix
-def riverSizes(matrix):
-    sizes = [] # answer array
-    # Auxiliary matrix to keep track of nodes that already been visited
-    visited = [[False for value in row] for row in matrix] 
-    for i in range(len(matrix)): # for every row,
-        for j in range(len(matrix[i])): # for every column,
-            if visited[i][j]: # if node is already marked as visited in our auxiliary matrix, we skip it
-                continue
-            traverseNode(i, j, matrix, visited, sizes) # otherwise if unvisited, traverse node at position (i, j)
-    return sizes
-
-def traverseNode(i, j, matrix, visited, sizes): 
-    currentRiverSize = 0 # initializing a potentially new river
-    # ==============================
-    # Depth First Search (Iterative)
-    # ==============================
-    nodesToExplore = [[i, j]] # stack of nodes to explore (Iterative DFS implementation)
-
-    # STEP 1: EXPLORE NODES, USE STACK AND ITERATE DFS ON POPPED NODES THAT ARE RIVERS (1's)
-    while len(nodesToExplore): # while we still have nodes to explore,
-        currentNode = nodesToExplore.pop() # pop out the final value of the nodesToExplore array
-        i, j = currentNode[0], currentNode[1]
-
-        # STEP 2: SKIP IF ALREADY VISITED OR LAND
-        if visited[i][j]: # if node has already been visited, we skip it
-            continue
-        visited[i][j] = True # otherwise if not visited, mark the current node being traversed as visited to keep track
-        if matrix[i][j] == 0: # if it is a piece of land, we skip it
-            continue
-
-        # STEP 3: OTHERWISE, WE FOUND A RIVER!
-        currentRiverSize += 1
-
-        # STEP 4: NOW, CHECK ADJACENT NEIGHBOURS AND ITERATE DFS ON NEWLY APPENDED NEIGHBOUR NODES THAT ARE RIVERS
-        unvisitedNeighbours = getUnvisitedNeighbours(i, j, matrix, visited) # get unvisited neighbours around our current node and add it to nodesToExplore stack
-        for neighbour in unvisitedNeighbours:
-            nodesToExplore.append(neighbour) # append new unvisited neighbours to explore in the stack
-
-    # STEP 5: AFTER A FULL DFS ON A RIVER, APPEND ANSWER TO OUR RIVER SIZES ARRAY
-    if currentRiverSize > 0: # if we have an actual river, we append to our sizes answer array
-        sizes.append(currentRiverSize)
-    
-def getUnvisitedNeighbours(i, j, matrix, visited):
-    unvisitedNeighbours = []
-    # Check if the 4 surrounding adjacent neighbours are valid neighbours (unvisited and within the matrix boundary)
-    # ==========================================
-    # ROWS CHECK FOR NEIGHBOURS ABOVE AND BELOW
-    # ==========================================
-    if i > 0 and not visited[i - 1][j]: # if we are not in the top row and not visited the neighbour above,
-        unvisitedNeighbours.append([i - 1, j]) # append the node (with indices) of the neighbour above us
-    if i < len(matrix) - 1 and not visited[i + 1][j]: # if we are not in the bottomw row and not visited neighbour below,
-        unvisitedNeighbours.append([i + 1, j]) # append the node (with indices) of the neighbour below us
-    # ============================================
-    # COLUMNS CHECK FOR NEIGHBOURS LEFT AND RIGHT
-    # ============================================
-    if j > 0 and not visited[i][j - 1]: # if we are not in the left-most column and not visited the neighbour to the left,
-        unvisitedNeighbours.append([i, j - 1]) # append the node (with indices) of the left neighbour
-    if j < len(matrix[0]) - 1 and not visited[i][j + 1]: # if we are not in the right-most column and not visited the neighbour to the right, 
-        unvisitedNeighbours.append([i, j + 1]) # append the node (with indices) of the right neighbour
-    return unvisitedNeighbours # finally, return the array containing nodes of all unvisited adjacent neighbours
+# The youngest common ancestor to nodes A and B is node A.
+      A
+    /    
+  B        
 ```
-✅ **DEPTH FIRST SEARCH (ITERATIVE)**: _for each cell, if cell is 1 and unvisited, run dfs, increment count and mark each contiguous 1's as visited in auxiliary matrix_
+
+- [x] Input: 
+```python
+# The nodes are from the ancestral tree below.
+topAncestor = node A
+descendantOne = node E
+descendantTwo = node I
+           A
+        /    \
+      B        C
+     /  \     /  \
+   D     E   F    G 
+  / \    
+ H   I  
+```
+- [x] Output: `node B`
+### **DFS Recursion**
+```python
+class AncestralTree:
+    def __init__(self, name):
+        self.name = name
+        self.ancestor = None
+
+# O(h) Time | O(1) Space - where h is the height of the ancestral tree
+def getYoungestCommonAncestor(topAncestor, descendantOne, descendantTwo):
+    depthOne = getDescendantDepth(descendantOne, topAncestor)
+    depthTwo = getDescendantDepth(descendantTwo, topAncestor)
+    if depthOne > depthTwo: 
+        return backtrackAncestralTree(descendantOne, descendantTwo, depthOne - depthTwo)
+    else:
+        return backtrackAncestralTree(descendantOne, descendantTwo, depthTwo - depthOne)
+
+def getDescendantDepth(descendant, topAncestor):
+    depth = 0
+    while descendant != topAncestor: 
+        depth += 1
+        descendant = descendant.ancestor
+    return depth
+
+def backtrackAncestralTree(lowerDescendant, higherDescendant, diff):
+    while diff > 0: 
+        lowerDescendant = lowerDescendant.ancestor
+        diff -= 1
+    while lowerDescendant != higherDescendant:
+        lowerDescendant = lowerDescendant.ancestor
+        higherDescendant = higherDescendant.ancestor
+    return lowerDescendant
+```
 
 ---
 # <div id='trees'/> 🎄 **Trees**
@@ -961,23 +1157,42 @@ class BinaryTree:
             
 def branchSums(root):
     sums = []
-    # Initialising parameters for the root node where initially there are no runningSums 
+    # 1: Initialise the recursion function call with initial parameters
     calculateBranchSums(root, 0, sums)
 
 def calculateBranchSums(node, runningSum, sums):
+    
+    # EDGE: Skip function call if node is None, which can occur when parent node has only 1 child
     if node is None: 
         return
-    # Recursively compute sum all the way to leaf node
+
+    # 2: Compute the newRunningSum of the current node being traversed
     newRunningSum = runningSum + node.value
-    # If node is a leaf node (reached the end of the branch), add the complete running sum to the answer
+    
+    # 4: If we have reached a leaf node in this function call, append the final newRunningSum answer
     if node.left is None and node.right is None: 
         sums.append(newRunningSum)
         return
-    # Recursively calls the helper function to continue traversing and summing up nodes on both branches
+
+    # 3: Traverse down the tree in DFS order by recursively calling the function itself with new inputs
     calculateBranchSums(node.left, newRunningSum, sums)
     calculateBranchSums(node.right, newRunningSum, sums)
 ```
 ✅ **DFS RECURSION:** _Recursively call the calculateBranchSums helper function to traverse down the branch (both left and right), summing up nodes and append the totalSum when a leaf node is reached (node.left and node.right are None)_
+
+### 🧠 Key Anatomy of DFS
+```python
+# 1: Base edge case to return if node is None, which can occur when parent node has only 1 child
+if node is None:
+    return
+
+# 2: When reaching a leaf node
+if node.left is None and node.right is None:
+
+# 3: Recursive function call to traverse down the tree and passing computed values down
+recursiveFunction(node.left, doSomething, ans)
+recursiveFunction(node.right, doSomething, ans)
+```
 
 ---
 ## [🟩 Node Depths](https://www.algoexpert.io/questions/Node%20Depths)
@@ -1017,23 +1232,27 @@ class BinaryTree:
 # O(n) Time | O(h) Space - where n is the number of nodes in BT and h is the height of BT
 def nodeDepths(root):
     sumofDepths = 0
-    # Initialise a stack of dicts to keep track of node objects and depth value
+    # 1: Initialise a stack of dicts to keep track of node objects and depth value
     stack = [{"node": root, "depth": 0}]
 
-    # while we still have nodes to evaluate their depths (stack is not empty yet),
+    # 2: While we still have nodes to evaluate their depths (stack is not empty yet),
     while len(stack) > 0: 
-        nodeInfo = stack.pop() # pop out the dict to evaluate
-        node = nodeInfo["node"] # extract the dict's node object 
-        depth = nodeInfo["depth"] # extract the dict's depth
+        nodeInfo = stack.pop() # 3: Pop out the dict from the stack to evaluate
+        node = nodeInfo["node"] # 4: Extract the dict's node object 
+        depth = nodeInfo["depth"] # 5: Extract the dict's depth
 
-        if node is None: # if we reached a branch end of the BT, skip the below code and iteration
+        # EDGE: If we reached a branch end of the BT, skip the below code and iteration
+        if node is None: 
             continue
 
-        sumofDepths += depth # otherwise, if we still have non-empty nodes, aggregate the depth values
-        stack.append({"node": node.left, "depth": depth + 1}) # then, traverse the left node and increment depth
-        stack.append({"node": node.right, "depth": depth + 1}) # as well as traverse the right node and increment depth
+        # 6: Aggregate and sum up the depth value of the node to get sumOfDepth
+        sumofDepths += depth 
 
-    return sumofDepths # return total sum of depths after all dictionaries are popped from stack
+        # 7: Then, continue traversing left and right nodes while incrementing their depth values
+        stack.append({"node": node.left, "depth": depth + 1})
+        stack.append({"node": node.right, "depth": depth + 1})
+
+    return sumofDepths # 8: Return total sum of depths after all dictionaries are popped from stack
 ```
 ✅ **DFS STACK:** _Use stack of nodeDicts to keep track each node object and their depth (stored as key-value pairs). Pop the stack and aggregate sumOfDepths value. To traverse down the BT, push in new nodeDicts (left and right) into Stack and increment depth value. Return sumOfDepths when all nodes are popped from stack._
 
@@ -1073,15 +1292,20 @@ class BinaryTree:
 
 # O(n) Time | O(n) Space
 def invertBinaryTree(tree):
-    # Initialise a queue of nodes to keep track of nodes in FIFO order
+    # 1: Initialise a queue of nodes to keep track of nodes in FIFO order for BFS
     queue = [tree] 
     while len(queue):
-        # Pop the first-in element of the queue (FIFO order)
+        # 2: Pop the first-in element of the queue (FIFO order)
         node = queue.pop(0)
-        if node is None: # if we reach a branch end of the BT, skip the below code and iteration
+        
+        # EDGE: If we reach a branch end of the BT, skip the below code and iteration
+        if node is None: 
             continue
-        swapLeftAndRight(node) # helper function to swap node.left and node.right objects of the current node
-        # to traverse down the BT, we keep appending the available nodes (to the left and right) down the tree
+
+        # 3: Call helper function to swap the node.left and node.right objects of the current node
+        swapLeftAndRight(node)
+
+        # 4: To traverse down the BT, we keep appending the available nodes (to the left and right) down the tree
         queue.append(node.left) 
         queue.append(node.right)
     return tree # return the mutated BT after all nodes are popped from the queue
@@ -1119,6 +1343,7 @@ class BinaryTree:
         self.left = None
         self.right = None
 
+# 1: Create a new class TreeInfo for a more elegant output with object.attribute format rather than using a tuple
 class TreeInfo:
     def __init__(self, diameter, height):
         self.diameter = diameter
@@ -1134,24 +1359,25 @@ def getTreeInfo(tree):
     if tree is None:
         return TreeInfo(0, 0)
     
-    # ====================================================
-    # STEP 1: RECURSIVE DFS CALLS TO REACH LEAF NODE FIRST
-    # ====================================================
-    # Recursively call child nodes all the way to the branch end (DFS) first before executing the below code
+    # ============================================
+    # RECURSIVE DFS CALLS TO REACH LEAF NODE FIRST
+    # ============================================
+    # 2: Recursively call the function itself while passing in tree.left and tree.right as inputs 
+    # The recursive function calls of child nodes will traverse down until the branch end (DFS) before executing the below code
     leftTreeInfo = getTreeInfo(tree.left) # for child nodes to the left
     rightTreeInfo = getTreeInfo(tree.right) # for child nodes to the right
     
-    # ===================================================================
-    # STEP 2: BACKTRACK USING MAX COMPUTATIONS FROM LEAF BACK TO THE ROOT
-    # ===================================================================
-    # Once recursive DFS until the branch end is complete, backtrack with the following computations:
+    # ===========================================================
+    # BACKTRACK USING MAX COMPUTATIONS FROM LEAF BACK TO THE ROOT
+    # ===========================================================
+    # 3: Once recursive DFS until the branch end is complete, backtrack with the following computations:
     currentDiameter = max(leftTreeInfo.height + rightTreeInfo.height, leftTreeInfo.diameter, rightTreeInfo.diameter)
     currentHeight = 1 + max(leftTreeInfo.height, rightTreeInfo.height) # Adding 1 to account for the leaf node
     # Note: currentDiameter = max(longestPathThroughRoot, maxDiameterSoFar)
     # where: longestPathThroughRoot = leftTreeInfo.height + rightTreeInfo.height
     #        maxDiameterSoFar = max(leftTreeInfo.diameter, rightTreeInfo.diameter)
     
-    return TreeInfo(currentDiameter, currentHeight) # Return TreeInfo object with diameter and height properties
+    return TreeInfo(currentDiameter, currentHeight) # 4: Return TreeInfo object with diameter and height properties
 ```
 ✅ **DFS RECURSION WITH BACKTRACKING MAX COMPUTATIONS:** _Create a TreeInfo class to store diameter and height properties. Recursively call getTreeInfo to perform DFS on all child nodes until the leaf node. Then, backtrack and compute diameter and height values using max functions. Return TreeInfo object with the final diameter and height values after all recursive calls._
 
@@ -1187,24 +1413,25 @@ def findMaxSum(tree):
     if tree is None:
         return (0, float("-inf"))
     
-    # ====================================================
-    # STEP 1: RECURSIVE DFS CALLS TO REACH LEAF NODE FIRST
-    # ====================================================
-    # Recursively call child nodes all the way to the branch end (DFS) first before executing the below code
+    # ============================================
+    # RECURSIVE DFS CALLS TO REACH LEAF NODE FIRST
+    # ============================================
+    # 1: Recursively call the function itself while passing in tree.left and tree.right as inputs 
+    # The recursive function calls of child nodes will traverse down until the branch end (DFS) before executing the below code
     leftMaxSumAsBranch, leftMaxPathSum = findMaxSum(tree.left)
     rightMaxSumAsBranch, rightMaxPathSum = findMaxSum(tree.right)
     
     # ===================================================================
     # STEP 2: BACKTRACK USING MAX COMPUTATIONS FROM LEAF BACK TO THE ROOT
     # ===================================================================
-    # Once recursive DFS until the branch end is complete, backtrack with the following computations:
+    # 2: Once recursive DFS until the branch end is complete, backtrack with the following computations:
     maxChildSumAsBranch = max(leftMaxSumAsBranch, rightMaxSumAsBranch)
     value = tree.value
     maxSumAsBranch = max(maxChildSumAsBranch + value, value)
     maxSumAsRootNode = max(leftMaxSumAsBranch + value + rightMaxSumAsBranch, maxSumAsBranch)
     maxPathSum = max(leftMaxPathSum, rightMaxPathSum, maxSumAsRootNode)
     
-    return (maxSumAsBranch, maxPathSum) # Return tuple with MaxSumAsBranch, maxPathSum values
+    return (maxSumAsBranch, maxPathSum) # 3: Return tuple with MaxSumAsBranch, maxPathSum values
 ```
 
 ✅ **DFS RECURSION WITH BACKTRACKING MAX COMPUTATIONS:** _Recursively call findMaxSum to perform DFS on all child nodes until the leaf node. Then, backtrack and compute maxChildSumAsBranch, maxSumAsBranch, maxSumAsRootNode and maxPathSum using max functions. Return tuple with maxSumAsBranch and maxPathSum values after all recursive calls._
@@ -1264,6 +1491,174 @@ def mergeOverlappingIntervals(intervals):
 - 252 Meeting Rooms
 - 253 Meetings Rooms II
 - 435 Non-overlapping Intervals
+---
+# <div id='bst'/> 🌲 **Binary Search Trees**
+## [🟩 Find Closest Value in BST](https://www.algoexpert.io/questions/Find%20Closest%20Value%20In%20BST)
+>* Write a function that takes in a Binary Search Tree (BST) and a target integer value and returns the closest value to that target value contained in the BST.
+>* You can assume that there will only be one glosest value.
+>* Each `BST` node has an integer `value`, a `left` child node, and a `right` child node. 
+>* A node is said to be a valid `BST` node if and only if it satisfies the BST property: 
+>   - its `value` is strictly greater than the values of every node to its left; 
+>   - its `value` is less than or equal to the values of every node to its right; 
+>   - and its children nodes are either valid `BST` nodes themselves or `None`
+
+- [x] Input: 
+```python
+tree =
+          10
+        /    \
+      5        15      
+     /  \     /  \   
+   2     5   13   22   
+  /           \    
+ 1             14
+target = 12      
+```
+- [x] Output: 13
+
+### **Binary Search Tree**
+```python
+def findClosestValueInBst(tree, target):
+    return helper(tree, target, tree.value)
+
+def helper(tree, target, closest):
+    if tree is None:
+        return closest
+    if abs(target - closest) > abs(target - tree.value): 
+        closest = tree.value
+        
+    if target < tree.value: 
+        return helper(tree.left, target, closest)
+    elif target > tree.value: 
+        return helper(tree.right, target, closest)
+    else:
+        return closest
+
+class BST:
+    def __init__(self, value):
+        self.value = value
+        self.left = None
+        self.right = None
+```
+
+---
+## [🟨 BST Construction](https://www.algoexpert.io/questions/BST%20Construction)
+>* Write a BST class for a Binary Search Tree. The class should support:
+>   - Inserting values with the `insert` method.
+>   - Removing values with the `remove` method; this method should only remove the first instance of a given value.
+>   - Searching for values with the `contains` method.
+>* Note that you can't remove values from a single-node tree. In other words, calling the remove method on a single-node tree should simply not do anything.
+>* Each `BST` node has an integer `value`, a `left` child node, and a `right` child node. 
+>* A node is said to be a valid `BST` node if and only if it satisfies the BST property:
+>   - its `value` is strictly greater than the values of every node to its left
+>   - its `value` is less than or equal to the values of every node to its right
+>   - and its children nodes are either valid `BST` nodes themselves or `None`
+
+- [x] Sample Usage: 
+```python
+          10
+        /    \
+      5        15      
+     /  \     /  \   
+   2     5   13   22   
+  /           \    
+ 1             14
+insert(12):
+          10
+        /    \
+      5        15      
+     /  \     /  \   
+   2     5   13   22   
+  /         /  \    
+ 1         12   14
+remove(10):
+          12
+        /    \
+      5        15      
+     /  \     /  \   
+   2     5   13   22   
+  /           \    
+ 1             14
+contains(15): true
+```
+
+### **Binary Search Tree**
+```python
+class BST:
+    def __init__(self, value):
+        self.value = value
+        self.left = None
+        self.right = None
+
+    # Avg: O(log(n)) Time | O(log(n)) Space
+    # Worst: O(n) Time | O(n) Space
+    def insert(self, value):
+        if value < self.value:
+            if self.left is None:
+                self.left = BST(value)
+            else:
+                self.left.insert(value)
+        else:
+            if self.right is None: 
+                self.right = BST(value)
+            else:
+                self.right.insert(value)
+        return self
+
+    # Avg: O(log(n)) Time | O(log(n)) Space
+    # Worst: O(n) Time | O(n) Space
+    def contains(self, value):
+        if value < self.value: 
+            if self.left is None: 
+                return False
+            else: 
+                return self.left.contains(value)
+        elif value > self.value:
+            if self.right is None: 
+                return False
+            else: 
+                return self.right.contains(value)
+        else: 
+            return True
+   
+    # Avg: O(log(n)) Time | O(log(n)) Space
+    # Worst: O(n) Time | O(n) Space         
+    def remove(self, value, parent=None):
+        if value < self.value:
+            if self.left is not None:
+                self.left.remove(value, self)
+        elif value > self.value: 
+            if self.right is not None: 
+                self.right.remove(value, self)
+        else: 
+            if self.left is not None and self.right is not None: 
+                self.value = self.right.getMinValue()
+                self.right.remove(self.value, self)
+            elif parent is None: 
+                if self.left is not None: 
+                    self.value = self.left.value
+                    self.right = self.left.right
+                    self.left = self.left.left
+                elif self.right is not None:
+                    self.value = self.right.value
+                    self.left = self.right.left
+                    self.right = self.right.right
+                else:
+                    # This is a single-node tree; do nothing.
+                    pass
+            elif parent.left == self:
+                parent.left = self.left if self.left is not None else self.right
+            elif parent.right == self:
+                parent.right = self.left if self.left is not None else self.right
+        return self
+    
+    def getMinValue(self):
+        if self.left is None:
+            return self.value
+        else: 
+            return self.left.getMinValue()
+```
+
 ---
 # <div id='dp'/> 📱 **Dynamic Programming**
 
