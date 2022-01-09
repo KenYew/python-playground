@@ -509,6 +509,8 @@ def spiralTraverse(array):
         endRow -= 1 # Value Updated: 2
         startCol += 1 # Value Updated: 1
         endCol -= 1 # Value Updated: 2
+    
+    return ans
 ```
 ✅ **TWO POINTERS:** _Keep track of visited cells; keep track of boundaries, layer-by-layer_
 
@@ -696,6 +698,156 @@ def mergeLinkedLists(headOne, headTwo):
 - _Insert each node from one list into the other_
 
 ---
+
+## [🟨 Sum of Linked Lists](https://www.algoexpert.io/questions/Sum%20of%20Linked%20Lists)
+>* You're given two Linked Lists of potentially unequal length. Each Linked List represents a non-negative integer, where each node in the Linked List is a digit of that integer, and the first node in each Linked List always represents the least significant digit of the integer. 
+>* Write a function that returns the head of a new Linked List that represents the sum of the integers represented by the two input Linked Lists.
+>* Each `LinkedList` node has an integer `value` as well as a `next` node pointing to the next node in the list or to `None` if it's the tail of the list. 
+>* The `value` of each `LinkedList` node is always in the range of `0 - 9`
+>* Note: your function must create and return a new Linked List, and you're not allowed to modify either of the input Linked Lists.
+
+- [x] Input:
+```python
+linkedListOne = 2 -> 4 -> 7 -> 1
+linkedListTwo = 9 -> 4 -> 5
+```
+- [x] Output: 
+```python
+1 -> 9 -> 2 -> 2
+# linkedListOne represents 1742
+# linkedListTwo represents 549
+# Hence, 1742 + 549 = 2291
+```
+### **Iterative Arithmetics**
+```python
+class LinkedList:
+    def __init__(self, value):
+        self.value = value
+        self.next = None
+
+# O(max(m, n)) Time | O(max(m, n)) Space
+# where m is the length of linkedListOne
+# where n is the length of linkedListTwo
+def sumOfLinkedLists(linkedListOne, linkedListTwo):
+    # 1: Initialise a new placeholder node with value 0
+    newLinkedListHeadPointer = LinkedList(0)
+    currentNode = newLinkedListHeadPointer # Initially set currentNode to be the placeholder node (will be updated)
+    carry = 0
+    
+    # 2: Renaming input nodes for readability 
+    nodeOne = linkedListOne
+    nodeTwo = linkedListTwo
+    
+    # 3: While we haven't reached the each of the linked list,
+    while nodeOne is not None or nodeTwo is not None or carry != 0:
+
+        # 4: Unpack the value of the node (or set it to 0 if it is a node with None) 
+        valueOne = nodeOne.value if nodeOne is not None else 0
+        valueTwo = nodeTwo.value if nodeTwo is not None else 0
+
+        """
+        Visual Example of Algorithm
+        # For Step 5 and 6, 
+        LL1: 2 -> 4 -> 7 -> 1
+             +    +    +    + 
+        LL2: 9 -> 4 -> 5
+        ______________________
+             11   8    12   1
+        ______________________ 
+        CAR: +0   +1   +0   +1 
+        SUM: 11   9    12   2  (sumOfValues = valueOne + valueTwo + carry)
+            %10  %10  %10  %10  
+        OUT: 1    9    2    2  (newValue = sumOfValues % 10)
+
+        # For Step 7,
+        SUM: 11   9    12   2  (sumOfValues = valueOne + valueTwo + carry)
+            //10 //10 //10 //10  
+        CAR: +0   +1   +0   +1 (carry = sumOfValues // 10)
+        """
+        ## ARITHMETICS
+        # 5: Compute the sum of nodeOneValue, nodeTwoValue and carryOverValue (from previous sum)
+        sumOfValues = valueOne + valueTwo + carry
+        # 6: Compute value of the newNode which will be pointer as next
+        newValue = sumOfValues % 10
+        # 7: Compute the carry over value using sumOfValues // 10
+        carry = sumOfValues // 10
+
+        ## UPDATE LINKED LISTS
+        # 8: Create a newNode using newValue
+        newNode = LinkedList(newValue)
+        # 9: Connect currentNode to newNode by setting the next pointer of currentNode to point to newNode
+        currentNode.next = newNode
+        # 10: Update the currentNode to the next newNode
+        currentNode = newNode
+        
+        ## TRAVERSE LINKED LISTS
+        # 11: Iterate to the next nodes of the linked lists
+        nodeOne = nodeOne.next if nodeOne is not None else None
+        nodeTwo = nodeTwo.next if nodeTwo is not None else None
+        
+    # 12: Return the head of the new linked list (since newLinkedListHeadPointer is just a placeholder node with value 0, we only care about the next node which is the head of the new linked list)
+    return newLinkedListHeadPointer.next 
+```
+✅ **ITERATIVE ARITHMETICS:** _Initialise dummy head node, traverse both linked lists, compute sumOfValues = LL1 + LL2 + carry, use %10 to compute new values of the new nodes to link, use //10 to compute carry over value for next iteration, return head of the newly created linked list (dummy.next)_
+
+---
+
+## [🟨 Remove Kth Node From End](https://www.algoexpert.io/questions/Remove%20Kth%20Node%20From%20End)
+>* Write a function that takes in the head of a Singly Linked List and an integer `k` and removes the kth node from the end of the list.
+>* The removal should be done in place, meaning that the original data structure should be mutated (no new structure should be created).
+>* Furthermore, the input head of the linked list should remain the head of the linked list after the removal is done, even if the head is the node that's supposed to be removed.
+>* In other words, if the head is the node that's supposed to be removed, your function should simply mutate its `value` and `next` pointer.
+>* Note that your function doesn't need to return anything.
+>* You can assume that the input Linked List will always have at least two nodes and, more specifically, at least k nodes.
+>* Each `LinkedList` node has an integer `value` as well as a `next` node pointing to the next node in the list or to `None` if it's the tail of the list.
+
+- [x] Input:
+```python
+head = 0 -> 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9
+k = 4
+```
+- [x] Output: 
+```python
+0 -> 1 -> 2 -> 3 -> 4 -> 5 -> 7 -> 8 -> 9
+# The input linked lists is mutated in-place where the 4th node from the end (node value 6) has been removed
+```
+### **Two Pointers**
+```python
+class LinkedList:
+    def __init__(self, value):
+        self.value = value
+        self.next = None
+
+# O(n) Time | O(1) Space
+def removeKthNodeFromEnd(head, k):
+    # 1: Intialise two pointers for the linked list
+    counter = 1
+    first = head
+    second = head
+    
+    # 2: Move the second pointer down the linked list k-times
+    while counter <= k: 
+        second = second.next
+        counter += 1
+        
+    # 3: If k value is high enough to move the second pointer to the end of the linked lists already,
+    if second is None:
+        # 4: Immediately, perform linked list mutation to delete the head of the linked list as our answer
+        head.value = head.next.value
+        head.next = head.next.next
+        return
+    
+    # 5: Otherwise, keep moving both the first and second pointers at the same pace (.next) until the second pointer reaches the None value (or end of the list)
+    while second.next is not None: 
+        second = second.next
+        first = first.next # This is ensure the first pointer will naturally point at the k-th node from the end
+        
+    # 6: Perform linked list mutation to delete the k-th node from the end by changing the next pointer to skip the k-th node
+    first.next = first.next.next 
+```
+✅ **TWO POINTERS:** _Initially set two pointers (F & S), move the S pointer k number of times, if S points to None already, delete the head immediately, otherwise move F & S pointers at the same pace until S points at None so that F natrually points to the k-th node from end, delete the k-th node by mutating F.next = F.next.next_
+
+---
 # <div id='graphs'/> 📈 **Graphs**
 
 - Clone Graph - https://leetcode.com/problems/clone-graph/
@@ -840,7 +992,7 @@ matrix =
     [1, 0, 0, 0, 0, 1],
 ]
 ```
-### **Depth First Search (Iterative)**
+### **Depth First Search (Iterative using Stack)**
 ```python
 # O(w.h) Time | O(w.h) Space where w and are the width and height of the input matrix
 def removeIslands(matrix):
@@ -956,7 +1108,7 @@ Input: grid = [
 ]
 Output: 3
 ```
-### **Depth First Search**
+### **Depth First Search (Recursive)**
 ```python
 def numIslands(self, grid):
     """
@@ -984,7 +1136,7 @@ def numIslands(self, grid):
                 count += 1
     return count
 ```
-✅ **DEPTH FIRST SEARCH (ITERATIVE)**: _for each cell, if cell is 1 and unvisited, run dfs, increment count and mark each contiguous 1's as visited in auxiliary matrix_
+✅ **DEPTH FIRST SEARCH (RECURSIVE)**: _for each cell, if cell is 1 and unvisited, run dfs, increment count and mark each contiguous 1's as visited in auxiliary matrix_
 
 ---
 ## [🟨 Max Area of Island](https://leetcode.com/problems/max-area-of-island/)
@@ -1008,7 +1160,7 @@ Input: grid = [
 Output: 6
 Explanation: The answer is not 11, because the island must be connected 4-directionally.
 ```
-### [**Depth First Search (Iterative)**](https://leetcode.com/problems/max-area-of-island/solution/)
+### [**Depth First Search (Iterative using Stack)**](https://leetcode.com/problems/max-area-of-island/solution/)
 ```python
 def maxAreaOfIsland(self, grid):
     seen = set()
@@ -1143,7 +1295,7 @@ Output: [15, 16, 18, 10, 11]
 11 == 1 + 3 + 7
 ```
 
-### **DFS Recursion**
+### **Depth First Search (Recursive)**
 ```python
 
 # O(n) Time | O(n) Space
@@ -1219,7 +1371,7 @@ recursiveFunction(node.right, doSomething, ans)
   - etc...
   - Summing all of these depths yields 16.
 
-### **DFS Stack**
+### **Depth First Search (Iterative using Stack)**
 ```python
 
 class BinaryTree:
