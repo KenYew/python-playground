@@ -125,6 +125,37 @@ def twoNumberSum(array, target):
 ✅ **HASH TABLE:** _Use hash map to instantly check for difference value, map will add index of last occurrence of a num, don’t use same element twice_
 
 ---
+## [🟩 Maximum Subarray](https://leetcode.com/problems/maximum-subarray/)
+>* Given an integer array nums, find the contiguous subarray (containing at least one number) which has the largest sum and return its sum.
+>* A subarray is a contiguous part of an array.
+
+- [x] Input: `nums = [-2,1,-3,4,-1,2,1,-5,4]`
+- [x] Output: `6`
+- [x] Explanation: `[4,-1,2,1] has the largest sum = 6.`
+
+### **Kadane's Algorithm** 
+```python
+# O(n) Time | O(1) Space
+def maximumSubarraySum(self, arr):
+    # 1: Initialise maxSum and currentSum
+    maxSum = float("-inf")
+    currentSum = 0
+
+    # 2: Traverse through each value in the input array
+    for val in arr:
+        # 3: Add the new value of the current element to our currentSum
+        currentSum = currentSum + val
+        # 4: If currentSum is bigger than maxSum, update maxSum with the new bigger number from currentSum
+        if currentSum > maxSum:
+            maxSum = currentSum
+        # 5: If currentSum is less than zero, update currentSum to zero
+        if currentSum < 0:
+            currentSum = 0
+    return maxSum
+```
+✅ **KADANE'S ALGORITHM:**
+
+---
 ## [🟩 Best Time to Buy and Sell Stock](https://leetcode.com/problems/best-time-to-buy-and-sell-stock/)
 >* You are given an array prices where `prices[i]` is the price of a given stock on the ith day.
 >* You want to maximize your profit by choosing a single day to buy one stock and choosing a different day in the future to sell that stock.
@@ -136,23 +167,38 @@ def twoNumberSum(array, target):
   - `Buy on day 2 (price = 1) and sell on day 5 (price = 6), profit = 6-1 = 5.`
   - `Note that buying on day 2 and selling on day 1 is not allowed because you must buy before you sell.`
 
-### **Sliding Window**
+<img src="https://leetcode.com/media/original_images/121_profit_graph.png" width="500"  /><br/>
+The points of interest are the peaks and valleys in the given graph. We need to find the largest peak following the smallest valley. We can maintain two variables - minprice and maxprofit corresponding to the smallest valley and maximum profit (maximum difference between selling price and minprice) obtained so far respectively.
+
+### **Kadane's Algorithm**
 ```python
 # O(n) Time | O(1) Space
-def maxProfit(prices: List[int]) -> int:
-  if len(prices) <= 1:
-      return 0
-  buy_idx, sell_idx, min_idx, ans = 0, 1, 0, 0
-  while sell_idx < len(prices):
-      if prices[buy_idx] > prices[min_idx]:
-          buy_idx = min_idx
-      ans = max(ans, prices[sell_idx] - prices[buy_idx])
-      if prices[sell_idx] < prices[min_idx]:
-          min_idx = sell_idx
-      sell_idx += 1
-  return ans
+def maxProfit(prices):
+    minPrice = float("inf")
+    maxProfit = 0
+    
+    for price in prices: 
+        if price < minPrice:
+            minPrice = price
+        elif price - minPrice > maxProfit:
+            maxProfit = price - minPrice
+    return maxProfit
+
+# Kadane's Algorithm
+# O(n) Time | O(1) Space
+def maxProfit(prices):
+    if len(prices) < 1:
+        return 0
+    
+    minPrice = prices[0]
+    maxProfit = 0
+    for price in prices:
+        minPrice = min(minPrice, price)
+        profit = price - minPrice
+        maxProfit = max(maxProfit, profit)
+    return maxProfit
 ```
-✅ **SLIDING WINDOW:** _Find local min and search for local max using a sliding window_
+✅ **KADANE'S ALGORITHM:**
 
 ---
 ## [🟩 Contains Duplicate](https://leetcode.com/problems/contains-duplicate/)
@@ -192,30 +238,70 @@ def containsDuplicate(self, nums):
 ✅ **HASH SET:** _Use hash set to add and keep track of unique values in array, if value is seen in hash set, we found our duplicate_
 
 ---
-## [🟩 Maximum Subarray](https://leetcode.com/problems/maximum-subarray/)
->* Given an integer array nums, find the contiguous subarray (containing at least one number) which has the largest sum and return its sum.
->* A subarray is a contiguous part of an array.
-
-- [x] Input: `nums = [-2,1,-3,4,-1,2,1,-5,4]`
-- [x] Output: `6`
-- [x] Explanation: `[4,-1,2,1] has the largest sum = 6.`
-
-### [**Divide and Conquer**](https://leetcode.com/problems/maximum-subarray/discuss/1595195/C%2B%2BPython-7-Simple-Solutions-w-Explanation-or-Brute-Force-%2B-DP-%2B-Kadane-%2B-Divide-and-Conquer)
+## [🟩 Sorted Squared Array](https://www.algoexpert.io/questions/Sorted%20Squared%20Array)
+>* Write a function that takes in a non-empty array of integers that are sorted in ascending order.
+>* Return a new array of the same length with the squares of the original integers also sorted in ascending order.
+- [x] Input: `array = [1, 2, 3, 5, 6, 8, 9]`
+- [x] Output: `[1, 4, 9, 25, 36, 64, 81]`
+### **Two Pointers**
 ```python
-# O(nlogn) Time | O(logn) Space
-def maxSubArray(self, nums):
-    def maxSubArray(A, L, R):
-        if L > R: return -inf
-        mid, left_sum, right_sum, cur_sum = (L + R) // 2, 0, 0, 0
-        for i in range(mid-1, L-1, -1):
-            left_sum = max(left_sum, cur_sum := cur_sum + A[i])
-        cur_sum = 0
-        for i in range(mid+1, R+1):
-            right_sum = max(right_sum, cur_sum := cur_sum + A[i])
-        return max(maxSubArray(A, L, mid-1), maxSubArray(A, mid+1, R), left_sum + A[mid] + right_sum)
-    return maxSubArray(nums, 0, len(nums)-1)
+# O(n) Time | O(n) Space - where n is the length of the input array
+def sortedSquaredArray(array):
+    # 1: Initialise output array of size input array with dummy values
+    ans = [0 for _ in array]
+    # 2: Initialise two pointers on each end of the array
+    left, right = 0, len(array) - 1
+    # 3: Traversing idx pointer from end to beginning of the array because we want to write the largest to the smallest values
+    for idx in reversed(range(len(array))): 
+        # 4: If abs(left-most value) is > abs(right-most value) e.g.: [-4, 1, 2]
+        if abs(array[left]) > abs(array[right]):
+            # 5: Insert the square of the largest value at the current iteration idx (from n-th to 0)
+            ans[idx] = array[left] * array[left]
+            # 6: Then, increment the left pointer
+            left += 1
+        # 7: Else if abs(right-most value) is >= abs(left-most value) e.g.: [1, 2, 3]
+        else: 
+            # 8: Insert the square of the largest value at the current iteration idx (from n-th to 0)
+            ans[idx] = array[right] * array[right]
+            # 9: Then, decrement the right pointer
+            right -= 1
+    # 10: Finally, return the sorted squared array
+    return ans
 ```
-✅ **DIVIDE AND CONQUER:** _pattern: prev subarray cant be negative, dynamic programming: compute max sum for each prefix_
+✅ **TWO POINTERS:** _Initialise output array with 0's, and left and right pointers on each end of array. Traverse idx from end to beginning of the array, if abs(leftVal) > abs(rightVal), write the ans[idx] = leftVal ** 2 and increment left, else abs(rightVal) >= abs(leftVal), write the ans[idx] = rightVal **2 and decrement right._
+
+---
+## [🟨 Validate Subsequence](https://www.algoexpert.io/questions/Validate%20Subsequence)
+>* Given two non-empty arrays of integers, write a function that determines whether the second array is a subsequence of the first one.
+>* A subsequence of an array is a set of numbers that aren't necessarily adjacent in the array but that are in the same order as they appear in the array. 
+>* For instance, the numbers `[1, 3, 4]` form a subsequence of the array `[1, 2, 3, 4]`, and so do
+the numbers `[2, 4]`. 
+>* Note that a single number in an array and the array itself are both valid subsequences of the array.
+- [x] Input: `array = [5, 1, 22, 25, 6, -1, 8, 10], sequence = [1, 6, -1, 10]`
+- [x] Output: `true`
+
+### **Two Pointers**
+```python
+# O(n) Time | O(1) Space - where n is the length of the array
+def isValidSubsequence(array, sequence):
+    # 1: Initialise pointers for both the input array and input sequence
+    arrIdx = 0
+    seqIdx = 0
+    
+    # 2: While we have not finished traversing both the input array and input sequence,
+    while arrIdx < len(array) and seqIdx < len(sequence):
+        
+        # 3: If the current values in both array and seq match, increment the seqIdx to look for the next pair of equal numbers
+        if array[arrIdx] == sequence[seqIdx]:
+            seqIdx += 1
+
+        # 4: Otherwise, increment arrIdx and keep traversing the array to look for next pair of equal numbers
+        arrIdx += 1
+
+    # 5: Once we have incremented seqIdx enough times, return the Boolean answer of whether the sequence is valid (only if seqIdx == len(sequence))
+    return seqIdx == len(sequence)
+```
+✅ **TWO POINTERS:** _Initialise pointer for both input arrays (arr, seq). While both pointers have not fully traversed their arrays, if values from both array match, increment seqIdx, otherwise keep incrementing arrIdx. Return Boolean logic seqIdx == len(sequence)_
 
 ---
 ## [🟨 Smallest Difference](https://www.algoexpert.io/questions/Smallest%20Difference)
@@ -225,6 +311,7 @@ def maxSubArray(self, nums):
 - [x] Input: `arrayOne = [-1, 5, 10, 20, 28, 3], arrayTwo = [26, 134, 135, 15, 17]`
 - [x] Output: `[28, 26]`
 
+### **Two Pointers**
 ```python
 # O(nlog(n) + mlog(m)) time | O(1) space
 def smallestDifference(arrayOne, arrayTwo):
@@ -279,6 +366,7 @@ def smallestDifference(arrayOne, arrayTwo):
 - [x] Input: `array = [2, 1, 2, 2, 2, 3, 4, 2], toMove = 2`
 - [x] Output: `[1, 3, 4, 2, 2, 2, 2, 2]`
 
+### **Two Pointers**
 ```python
 # O(n) Time | O(1) Space - where n is the length of the input array
 def moveElementToEnd(array, toMove):
@@ -311,6 +399,7 @@ peak in the array.
 - [x] Output: `6`
 - [x] Explanation: `0, 10, 6, 5, -1 -3` form the longest peak
 
+### **Two Pointers**
 ```python
 # O(n) time | O(1) space  - where n is the length of the input array
 def longestPeak(array):
@@ -615,7 +704,7 @@ def validIPAddresses(string):
         if not isValidPart(currentIPAddressParts[0]): # then check of this sliced string is a valid IP (0-255) with not leading zeroes (e.g.: 01)
             continue # skip if 1st IP octet is invalid
         
-        # For thhe 2nd octet, we select a range (for j) after pointer i and spanning at most 3 digits (to honour the valid IP range of 0-255)
+        # For the 2nd octet, we select a range (for j) after pointer i and spanning at most 3 digits (to honour the valid IP range of 0-255)
         for j in range(i + 1, i + min(len(string) - i, 4)): 
             currentIPAddressParts[1] = string[i:j] # slice the input string starting from index i to j for 2nd IP octet
             if not isValidPart(currentIPAddressParts[1]):
