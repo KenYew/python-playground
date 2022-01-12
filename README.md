@@ -14,16 +14,17 @@
 # <div id='toc'/> 📋 **Table of Contents** 
 1. ### [🎹 **Arrays**](#arrays)
 0. ### [🔢 **Matrix**](#matrix)
+0.  ### [⏱ **Intervals**](#intervals)
 0. ### [🔤 **Strings**](#strings)
 0. ### [📝 **Linked Lists**](#linkedlists)
 0. ### [📈 **Graphs**](#graphs) 
 0. ### [🎄 **Trees**](#trees)
 0. ### [🏔 **Heaps**](#heaps)
 0. ### [🥞 **Stacks**](#stacks)
-0.  ### [⏱ **Intervals**](#intervals)
+
 0. ### [📚 **Sorting Algorithms**](#sort)
 0.  ### [🔎 **Search Algorithms**](#search)
-0.  ### [🌲 **Binary Search Trees**](#bst)
+0. ### [🌲 **Binary Search Trees**](#bst)
 0. ### [📱 **Dynamic Programming**](#dp)
 0. ### [♽ **Recursion**](#recursion)
 0. ### [⚡️ **Binaries**](#binaries)
@@ -68,13 +69,15 @@
 ## 📱 **Else**
 - `Map/Set for O(1) time & O(n) space`
 - `Sort input for O(nlogn) time and O(1) space`
+
+### 🔑 [Keywords to Algorithm](https://algo.monster/problems/keyword_to_algo)
 ---
 # <div id='arrays'/> 🎹 **Arrays**
 
 - ✅ Two Sum - https://leetcode.com/problems/two-sum/
 - ✅ Best Time to Buy and Sell Stock - https://leetcode.com/problems/best-time-to-buy-and-sell-stock/
 - ✅ Contains Duplicate - https://leetcode.com/problems/contains-duplicate/
-- Product of Array Except Self - https://leetcode.com/problems/product-of-array-except-self/
+- ✅ Product of Array Except Self - https://leetcode.com/problems/product-of-array-except-self/
 - ✅ Maximum Subarray - https://leetcode.com/problems/maximum-subarray/
 - Maximum Product Subarray - https://leetcode.com/problems/maximum-product-subarray/
 - Find Minimum in Rotated Sorted Array - https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/
@@ -89,6 +92,34 @@
 - [x] Input: `nums = [2, 7, 11, 15], target = 9`
 - [x] Output: `[0, 1]`
 - [x] Explanation: `Because nums[0] + nums[1] == 9, we return [0, 1].`
+
+### **Brute Force**
+```python
+# O(n^2) Time | O(1) Space
+def TwoSums(array, target):
+    for i in range(len(array) - 1): 
+        firstNum = array[i]
+        for j in range(i + 1, len(array)):
+            secondNum = array[j]
+            if firstNum + secondNum == targetSum:
+                return [firstNum, secondNum]
+    return []
+```
+
+### **Hash Table**
+```python
+# O(n) time | O(n) space
+def twoNumberSum(array, target): 
+	nums = {}
+	for num in array: 
+		potentialMatch = target - num
+		if potentialMatch in nums: 
+			return [potentialMatch, num]
+		else:
+			nums[num] = True
+	return []
+```
+✅ **HASH TABLE:** _Use hash map to instantly check for difference value, map will add index of last occurrence of a num, don’t use same element twice_
 
 ### **Two Pointers**
 ```python
@@ -108,21 +139,6 @@ def TwoSums(array, target):
     return -1 
 ```
 ✅ **TWO POINTERS:** _Sort the array, use two pointers on each end of the array and move pointers based on comparison between sum and targetNum_
-
-### **Hash Table**
-```python
-# O(n) time | O(n) space
-def twoNumberSum(array, target): 
-	nums = {}
-	for num in array: 
-		potentialMatch = target - num
-		if potentialMatch in nums: 
-			return [potentialMatch, num]
-		else:
-			nums[num] = True
-	return []
-```
-✅ **HASH TABLE:** _Use hash map to instantly check for difference value, map will add index of last occurrence of a num, don’t use same element twice_
 
 ---
 ## [🟩 Maximum Subarray](https://leetcode.com/problems/maximum-subarray/)
@@ -153,7 +169,6 @@ def maximumSubarraySum(self, arr):
             currentSum = 0
     return maxSum
 ```
-✅ **KADANE'S ALGORITHM:**
 
 ---
 ## [🟩 Best Time to Buy and Sell Stock](https://leetcode.com/problems/best-time-to-buy-and-sell-stock/)
@@ -198,7 +213,6 @@ def maxProfit(prices):
         maxProfit = max(maxProfit, profit)
     return maxProfit
 ```
-✅ **KADANE'S ALGORITHM:**
 
 ---
 ## [🟩 Contains Duplicate](https://leetcode.com/problems/contains-duplicate/)
@@ -302,6 +316,118 @@ def isValidSubsequence(array, sequence):
     return seqIdx == len(sequence)
 ```
 ✅ **TWO POINTERS:** _Initialise pointer for both input arrays (arr, seq). While both pointers have not fully traversed their arrays, if values from both array match, increment seqIdx, otherwise keep incrementing arrIdx. Return Boolean logic seqIdx == len(sequence)_
+
+---
+## [🟨 Array Of Products](https://www.algoexpert.io/questions/Array%20Of%20Products)
+>* Write a function that takes in a non-empty array of integers and returns an array of the same length, where each element in the output array is equal to the product of every other number in the input array.
+>* In other words, the value at `output [i]` is equal to the product of every number in the input array other than `input[i]`.
+>* Note that you're expected to solve this problem without using division.
+- [x] Input: `array = [5, 1, 4, 2]`
+- [x] Output: `[8, 40, 10, 20]`
+- [x] Explanation:
+```python
+8 is equal to 1 x 4 x 2
+40 is equal to 5 x 4 x 2
+10 is equal to 5 x 1 x 2
+20 is equal to 5 x 1 x 4
+```
+
+### **Brute Force**
+```python
+# O(n^2) Time | O(n) Space - where n is the length of the input array
+def arrayOfProducts(array):
+    result = []
+    for i in range(len(array)):
+        product = 1
+        for j in range(len(array)):
+            if i != j: 
+                product *= array[j] 
+        result.append(product)
+    return result
+```
+### **Two Pointers - Less Optimised**
+```python
+# O(n) Time | O(n) Space - where n is the length of the input array
+def arrayOfProducts(array):
+    """
+     *---L---->
+    [5, 1, 4, 2]
+    leftProducts = [1, 5, 5, 20]
+     <---R----*
+    [5, 1, 4, 2]
+    rightProducts = [8, 8, 2, 1]
+    products = [8, 40, 10, 20]
+    """
+    # 1: Initialise products arrays with 1s and size equals to input array
+    products = [1 for _ in range(len(array))]
+    leftProducts = [1 for _ in range(len(array))]
+    rightProducts = [1 for _ in range(len(array))]
+    
+    # 2: Initialise leftRunningProduct = 1 to enable multiplication of running products from left to right
+    leftRunningProduct = 1
+    # 3: Loop through each element from left to right,
+    for idx in range(len(array)): 
+        # 4: Set the values of the leftProducts array with the leftRunningProduct value
+        leftProducts[idx] = leftRunningProduct
+        # 5: Multiplying up each element from left to right in a leftRunningProduct variable
+        leftRunningProduct *= array[idx]
+
+    # 6: Initialise rightRunningProduct = 1 to enable multiplication of running products from right to left
+    rightRunningProduct = 1
+    # 7: Loop through each element from right to left,
+    for idx in reversed(range(len(array))): 
+        # 8: Set the values of the rightProducts array with the rightRunningProduct value
+        rightProducts[idx] = rightRunningProduct
+        # 9: Multiplying up each element from right to left in a rightRunningProduct variable
+        rightRunningProduct *= array[idx]
+        
+    # 10: Loop through each element from left to right,
+    for idx in range(len(array)): 
+        # 11: Multiply the elements of both leftProducts and rightProducts arrays
+        products[idx] = leftProducts[idx] * rightProducts[idx]
+
+    return products
+```
+### **Two Pointers - Optimised**
+```python
+# O(n) Time | O(n) Space - where n is the length of the input array
+def arrayOfProducts(array):
+    """
+     *---L---->
+    [5, 1, 4, 2]
+    products = [1, 5, 5, 20]
+     <---R----*
+    [5, 1, 4, 2]
+    products = [8, 40, 10, 20]
+    """
+    # 1: Initialise products array with 1s and size equals to input array
+    products = [1 for _ in range(len(array))]
+    
+    # 2: Initialise leftRunningProduct = 1 to enable multiplication of running products from left to right
+    leftRunningProduct = 1
+    # 3: Loop through each element from left to right,
+    for idx in range(len(array)):
+        # 4: Set the values of each element in the answer array with the leftRunningProduct value
+        products[idx] = leftRunningProduct
+        # 5: Multiplying up each element from left to right in a leftRunningProduct variable
+        leftRunningProduct *= array[idx]
+        
+    # 6: Initialise rightRunningProduct = 1 to enable multiplication of running products from right to left
+    rightRunningProduct = 1
+    # 7: Loop through each element from right to left,
+    for idx in reversed(range(len(array))): 
+        # 8: Set the values of each element in the answer array with the rightRunningProduct value
+        products[idx] *= rightRunningProduct
+        # 9: Multiplying up each element from right to left in a rightRunningProduct variable
+        rightRunningProduct *= array[idx]
+        
+    return products
+```
+✅ **TWO POINTERS:** 
+- Initialise the result array with 1s and equal to the size of the input array. 
+- Starting with leftRunningProduct = 1, loop through each element of the input array from left to right, setting each element of the result array with leftRunningProduct as leftRunningProduct multiplies up each element from left to right. 
+- Starting with rightRunningProduct = 1, loop through each element of the input array from right to left, multiplying each element of the result array with rightRunningProduct as rightRunningProduct multiplies up each element from right to left. 
+- Return the result array.
 
 ---
 ## [🟨 Smallest Difference](https://www.algoexpert.io/questions/Smallest%20Difference)
@@ -411,7 +537,7 @@ def longestPeak(array):
     while peakIdx < len(array) - 1: 
 
         # 3: Check previous and next values to see if current peakIdxValue forms a peak
-        isPeak = array[peakIdx - 1] < array[peakIdx] and array[peakIdx] > array[peakIdx + 1]
+        isPeak = array[peakIdx] > array[peakIdx - 1] and array[peakIdx] > array[peakIdx + 1]
 
         # 4: If they don't form a peak, keep incrementing peakIdx and skip current iteration
         if not isPeak: 
@@ -422,12 +548,12 @@ def longestPeak(array):
 
         # 6: For the left side of the peak, set the leftIdx to point to the subsequent previous value (peakIdx - 2) and then perform a while loop that keeps decrementing the leftIdx if the previous values are consecutively decreasing
         leftIdx = peakIdx - 2
-        while array[leftIdx] < array[leftIdx + 1] and leftIdx >= 0:
+        while leftIdx >= 0 and array[leftIdx + 1] > array[leftIdx]: # traverse until leftIdx = 0
             leftIdx -= 1
 
         # 7: For the right side of the peak, set the rightIdx to point to the subsequent next value (peakIdx + 2) and then perform a while loop that keeps incrementing the rightIdx if the next values are consecutively increasing
         rightIdx = peakIdx + 2
-        while rightIdx < len(array) and array[rightIdx] < array[rightIdx - 1]:
+        while rightIdx < len(array) and array[rightIdx - 1] > array[rightIdx]: # traverse until rightIdx = len(array) - 1
             rightIdx += 1
             
         # 8: Evaluate the total length of the peak by using the difference between the two pointers (accounting for zero-indexing)
@@ -466,32 +592,46 @@ def longestPeak(array):
 ```python
 # O(n^2) Time | O(n) Space
 def threeSum(nums: List[int]) -> List[List[int]]:
+    # 1: Sort the input array
     nums.sort()
     ans = []
     
+    # 2: Perform a single pass of the input array with idx as the pointer
     for idx, val in enumerate(nums): 
-        if idx > 0 and nums[idx] == nums[idx - 1]: # Skip iteration if there are two adjacent elements of the same value (e.g.: [-2, -2, 0, 0, 2, 2])
+        # EDGE 1: If there are two adjacent elements of the same value for indices after idx = 0, skip iteration to prevent checking for duplicates
+        if idx > 0 and nums[idx] == nums[idx - 1]:
             continue
-        
-        # Once the idx pointer (1st pointer) has been accounted for, we simply perform TwoSum (Two Pointer Approach)
+
+        # 3: With the idx pointer taking care of the 1st valueToSum, intialise left (next to idx) and right pointers
         left = idx + 1 # Left pointer (2nd pointer) needs to be next to the idx pointer (1st pointer)
         right = len(nums) - 1 # Right pointer (3rd pointer) is at the end of the array
-        while left < right: # While both pointers haven't traversed the entire list yet,
-            threeSum = nums[idx] + nums[left] + nums[right] # Compute threeSum
-            if threeSum < 0: # if threeSum is smaller than 0, our threeSum is too SMALL, so incrememt the left pointer to increase the threeSum
+
+        # 4: Perform 2Sum algorithm, while both pointers haven't traversed the entire array yet,
+        while left < right: 
+            # 5: Compute threeSum with idx, left and right pointers
+            threeSum = nums[idx] + nums[left] + nums[right] 
+            # 6: If threeSum < 0, threeSum is too small, so left pointer is incremented to increase value of threeSum
+            if threeSum < 0: 
                 left += 1
-            elif threeSum > 0: # if threeSum is bigger than 0, our threeSum is too BIG, so decrement the right pointer to decrease the threeSum 
+            # 7: If threeSum > 0, threeSum is too big, so right pointer is decremented to decrease value of threeSum
+            elif threeSum > 0:  
                 right -= 1
-            else: # else, we have found the threeSum that equates to 0, so we append the answer
+            # 8: Else, we have found the threeSum that equates to 0, so we append the answer
+            else: 
                 ans.append([nums[idx], nums[left], nums[right]])
-                left += 1 # keep traversing to find the next threeSum
-                right -= 1
 
                 # EDGE CASE TO SKIP DUPLICATES
                 #  [-3 -2, -2, 0, 0, 2, 2]
                 # [ IDX L               R]
-                while nums[left] == nums[left - 1] and left < right: # Keep moving the left pointer if there are two adjacent elements of the same value and while the pointers haven't traversed the entire list yet,
+                # EDGE 2: If two adjacent elements have the same value while the left and right pointers haven't finished traversing the entire array yet, keep moving the pointers to prevent checking for duiplicates
+                while left < right and nums[left] == nums[left + 1]:
                     left += 1
+                while left < right and nums[right] == nums[right - 1]:
+                    right -= 1
+
+                # 9: Move left and right pointers inwards once to continue traversing the array for next potential threeSum
+                left += 1 
+                right -= 1
     return ans
 ```
 ✅ **TWO POINTERS:** 
@@ -604,6 +744,66 @@ def spiralTraverse(array):
 ✅ **TWO POINTERS:** _Keep track of visited cells; keep track of boundaries, layer-by-layer_
 
 ---
+# <div id='heaps'/> 🏔 **Heaps**
+
+- Merge K Sorted Lists - https://leetcode.com/problems/merge-k-sorted-lists/
+- Top K Frequent Elements - https://leetcode.com/problems/top-k-frequent-elements/
+- Find Median from Data Stream - https://leetcode.com/problems/find-median-from-data-stream/
+### [📋 **Back to Table of Contents**](#toc)
+---
+# <div id='intervals'/> ⏱ **Intervals**
+
+- Insert Interval - https://leetcode.com/problems/insert-interval/
+- ✅ Merge Intervals - https://leetcode.com/problems/merge-intervals/
+- Non-overlapping Intervals - https://leetcode.com/problems/non-overlapping-intervals/
+- Meeting Rooms (Leetcode Premium) - https://leetcode.com/problems/meeting-rooms/
+- Meeting Rooms II (Leetcode Premium) - https://leetcode.com/problems/meeting-rooms-ii/
+### [📋 **Back to Table of Contents**](#toc)
+---
+## [🟨 Merge Intervals](https://leetcode.com/problems/merge-intervals/)
+> Given an array of intervals where `intervals[i] = [starti, endi]`, merge all overlapping intervals, and return an array of the non-overlapping intervals that cover all the intervals in the input.
+
+- [x] Input: `intervals = [[1,3],[2,6],[8,10],[15,18]]`
+- [x] Output: `[[1,6],[8,10],[15,18]]`
+- [x] Explanation: `Since intervals [1,3] and [2,6] overlaps, merge them into [1,6].`
+
+### **Sort, Check and Mutate**
+```python
+# O(nlogn) Time | O(n) Space
+def mergeOverlappingIntervals(intervals):
+    # 1: Sort the input array of intervals based on the 1st elements of each interval
+    sortedIntervals = sorted(intervals, key=lambda x: x[0])
+    
+    # 2: Initialise currentInterval with the 1st sorted interval and append it to the answer mergedIntervals since we need at least 1 interval to compare with
+    mergedIntervals = []
+    currentInterval = sortedIntervals[0] 
+    mergedIntervals.append(currentInterval) 
+    
+    # 3: Loop through each interval in the sortedIntervals array,
+    for nextInterval in sortedIntervals:
+        # 4: Decompose currentInterval into 2 variables (e.g.: currentInterval = [1, 2] gives _ = 1 and currentIntervalEnd = 2)
+        _, currentIntervalEnd = currentInterval 
+        # 5: Decompose nextInterval into 2 variables (e.g.: nextInterval = [3, 5] gives nextIntervalStart = 3 and nextIntervalEnd = 5)
+        nextIntervalStart, nextIntervalEnd = nextInterval 
+        
+        # 6: Check if two intervals are overlapping by comparing the intervalEnd value of the current interval is bigger or equal than the intervalStart value of the next interval
+        if currentIntervalEnd >= nextIntervalStart:
+            # 7: Mutate the currentIntervalEnd to be the highest number between the intervalEnd values of the currentInterval and nextInterval
+            currentInterval[1] = max(currentIntervalEnd, nextIntervalEnd)
+        else: 
+            # 8: Else if there are no overlapping, then immediately append the interval to the answer
+            currentInterval = nextInterval
+            mergedIntervals.append(currentInterval)
+            
+    return mergedIntervals
+```
+✅ **SORT, CHECK AND MUTATE:** _Sort intervals by start values, compare end value and start value of adjacent intervals to check for overlap, mutate end value of answer interval to encapsulate merges, iterate checks for all intervals_
+### **Problem similar to:**
+- 252 Meeting Rooms
+- 253 Meetings Rooms II
+- 435 Non-overlapping Intervals
+
+---
 # <div id='strings'/> 🔤 **Strings**
 
 - Longest Substring Without Repeating Characters - https://leetcode.com/problems/longest-substring-without-repeating-characters/
@@ -617,30 +817,6 @@ def spiralTraverse(array):
 - Palindromic Substrings - https://leetcode.com/problems/palindromic-substrings/
 - Encode and Decode Strings (Leetcode Premium) - https://leetcode.com/problems/encode-and-decode-strings/
 ### [📋 **Back to Table of Contents**](#toc)
----
-## [🟨 Group Anagrams](https://leetcode.com/problems/group-anagrams/)
->* Given an array of strings `strs`, group the **anagrams** together. You can return the answer in **any order**.
->* An **Anagram** is a word or phrase formed by rearranging the letters of a different word or phrase, typically using all the original letters exactly once.
-
-- [x] Input: `strs = ["eat","tea","tan","ate","nat","bat"]`
-- [x] Output: `[["bat"],["nat","tan"],["ate","eat","tea"]]`
-
-### **Hash Map**
-```python
-# O(w * nlog(n)) time | O(w * n) space
-# w - the number of words
-# n - the length of the longest word
-def groupAnagrams(words):
-    anagrams = {}
-    for word in words: 
-        sortedWord = "".join(sorted(word))
-        if sortedWord in anagrams:
-            anagrams[sortedWord].append(word)
-        else:
-            anagrams[sortedWord] = [word]
-    return list(anagrams.values())
-```
-✅ **HASH MAP:** _Loop and sort each word, append `sortedWord/word` key/value pairs in `anagrams_dict`, if sortedWord is in `anagrams_dict`, set `anagrams_dict[sortedWord].append(word)`, return `anagram_dict.values()`_
 
 ---
 ## [🟩 Caesar Cipher Encryptor](https://www.algoexpert.io/questions/Caesar%20Cipher%20Encryptor)
@@ -673,6 +849,31 @@ def getNewLetter(letter, key):
 ✅ **ORD/CHR AND MODULO:** 
 - `ASCII: A = 96, Z = 122`
 - _Loop each letter, convert letter into ASCII + KEY using ORD, then re-convert using CHR while handling for Z->A wrapping using MODULO 122_
+
+---
+## [🟨 Group Anagrams](https://leetcode.com/problems/group-anagrams/)
+>* Given an array of strings `strs`, group the **anagrams** together. You can return the answer in **any order**.
+>* An **Anagram** is a word or phrase formed by rearranging the letters of a different word or phrase, typically using all the original letters exactly once.
+
+- [x] Input: `strs = ["eat","tea","tan","ate","nat","bat"]`
+- [x] Output: `[["bat"],["nat","tan"],["ate","eat","tea"]]`
+
+### **Hash Map**
+```python
+# O(w * nlog(n)) time | O(w * n) space
+# w - the number of words
+# n - the length of the longest word
+def groupAnagrams(words):
+    anagrams = {}
+    for word in words: 
+        sortedWord = "".join(sorted(word))
+        if sortedWord in anagrams:
+            anagrams[sortedWord].append(word)
+        else:
+            anagrams[sortedWord] = [word]
+    return list(anagrams.values())
+```
+✅ **HASH MAP:** _Loop and sort each word, append `sortedWord/word` key/value pairs in `anagrams_dict`, if sortedWord is in `anagrams_dict`, set `anagrams_dict[sortedWord].append(word)`, return `anagram_dict.values()`_
 
 ---
 ## [🟨 Valid IP Addresses](https://www.algoexpert.io/questions/Valid%20IP%20Addresses)
@@ -727,13 +928,15 @@ def isValidPart(string):
     return len(string) == len(str(stringAsInt)) # Checks if there are any leading 0's
 ```
 ✅ **THREE POINTERS**: _Set 3 pointers i, j, k for each IP dots, create 3 FOR loops for each pointer to slice string into 4 possible IP octets and check if the octets are valid (0-255) using a helper function. If all 4 octets are valid, then join the valid octets with '.' and append to answers array._
+
+---
 # <div id='linkedlists'/> 📝 **Linked Lists**
 
 - Reverse a Linked List - https://leetcode.com/problems/reverse-linked-list/
 - Detect Cycle in a Linked List - https://leetcode.com/problems/linked-list-cycle/
 - ✅ Merge Two Sorted Lists - https://leetcode.com/problems/merge-two-sorted-lists/
 - Merge K Sorted Lists - https://leetcode.com/problems/merge-k-sorted-lists/
-- Remove Nth Node From End Of List - https://leetcode.com/problems/remove-nth-node-from-end-of-list/
+- ✅ Remove Nth Node From End Of List - https://leetcode.com/problems/remove-nth-node-from-end-of-list/
 - Reorder List - https://leetcode.com/problems/reorder-list/
 ### [📋 **Back to Table of Contents**](#toc)
 ---
@@ -1678,61 +1881,6 @@ def findMaxSum(tree):
 ✅ **DFS RECURSION WITH BACKTRACKING MAX COMPUTATIONS:** _Recursively call findMaxSum to perform DFS on all child nodes until the leaf node. Then, backtrack and compute maxChildSumAsBranch, maxSumAsBranch, maxSumAsRootNode and maxPathSum using max functions. Return tuple with maxSumAsBranch and maxPathSum values after all recursive calls._
 
 ---
-# <div id='heaps'/> 🏔 **Heaps**
-
-- Merge K Sorted Lists - https://leetcode.com/problems/merge-k-sorted-lists/
-- Top K Frequent Elements - https://leetcode.com/problems/top-k-frequent-elements/
-- Find Median from Data Stream - https://leetcode.com/problems/find-median-from-data-stream/
-### [📋 **Back to Table of Contents**](#toc)
----
-# <div id='intervals'/> ⏱ **Intervals**
-
-- Insert Interval - https://leetcode.com/problems/insert-interval/
-- ✅ Merge Intervals - https://leetcode.com/problems/merge-intervals/
-- Non-overlapping Intervals - https://leetcode.com/problems/non-overlapping-intervals/
-- Meeting Rooms (Leetcode Premium) - https://leetcode.com/problems/meeting-rooms/
-- Meeting Rooms II (Leetcode Premium) - https://leetcode.com/problems/meeting-rooms-ii/
-### [📋 **Back to Table of Contents**](#toc)
----
-## [🟨 Merge Intervals](https://leetcode.com/problems/merge-intervals/)
-> Given an array of intervals where `intervals[i] = [starti, endi]`, merge all overlapping intervals, and return an array of the non-overlapping intervals that cover all the intervals in the input.
-
-- [x] Input: `intervals = [[1,3],[2,6],[8,10],[15,18]]`
-- [x] Output: `[[1,6],[8,10],[15,18]]`
-- [x] Explanation: `Since intervals [1,3] and [2,6] overlaps, merge them into [1,6].`
-
-### **Sort, Check and Mutate**
-```python
-# O(nlogn) Time | O(n) Space
-def mergeOverlappingIntervals(intervals):
-    # Sorting the array of intervals based on the 1st elements of arrays
-    sortedIntervals = sorted(intervals, key=lambda x: x[0])
-    
-    mergedIntervals = []
-    currentInterval = sortedIntervals[0] 
-    mergedIntervals.append(currentInterval) # At least 1 interval is required for the algorithm to work
-    
-    for nextInterval in sortedIntervals:
-        # Decomposing currentInterval into 2 variables (e.g.: currentInterval = [1, 2] gives _ = 1 and currentIntervalEnd = 2)
-        _, currentIntervalEnd = currentInterval 
-        # Decomposing nextInterval into 2 variables (e.g.: nextInterval = [3, 5] gives nextIntervalStart = 3 and nextIntervalEnd = 5)
-        nextIntervalStart, nextIntervalEnd = nextInterval 
-        
-        # This check determines if two intervals are overlapping by comparing the intervalEnd value of the current interval is bigger or equal than the intervalStart value of the next interval
-        if currentIntervalEnd >= nextIntervalStart:
-            currentInterval[1] = max(currentIntervalEnd, nextIntervalEnd) # mutate the currentIntervalEnd to be the highest number between the intervalEnd values of the currentInterval and nextInterval
-        else: 
-            currentInterval = nextInterval # if there are no overlapping, then immediately append the interval to answer
-            mergedIntervals.append(currentInterval)
-            
-    return mergedIntervals
-```
-✅ **SORT, CHECK AND MUTATE:** _Sort intervals by start values, compare end value and start value of adjacent intervals to check for overlap, mutate end value of answer interval to encapsulate merges, iterate checks for all intervals_
-### **Problem similar to:**
-- 252 Meeting Rooms
-- 253 Meetings Rooms II
-- 435 Non-overlapping Intervals
----
 # <div id='bst'/> 🌲 **Binary Search Trees**
 ## [🟩 Find Closest Value in BST](https://www.algoexpert.io/questions/Find%20Closest%20Value%20In%20BST)
 >* Write a function that takes in a Binary Search Tree (BST) and a target integer value and returns the closest value to that target value contained in the BST.
@@ -1946,7 +2094,7 @@ def helper(self, s1, s2, i, j):
     else:
 ```
 ✅ **RECURSION:** _if first chars are equal find lcs of remaining of each, else max of: lcs of first and remain of 2nd and lcs of 2nd remain of first, cache result; nested forloop to compute the cache without recursion_ 
-### [**Bottom up dynamic programming**](https://leetcode.com/problems/longest-common-subsequence/discuss/436719/Python-very-detailed-solution-with-explanation-and-walkthrough-step-by-step.)
+### [**Bottom Up Dynamic Programming**](https://leetcode.com/problems/longest-common-subsequence/discuss/436719/Python-very-detailed-solution-with-explanation-and-walkthrough-step-by-step.)
 ```python
 # O(mn * min(m,n)) Time | O(mn * min(m,n)) Space
 # Use a nested loop that visits the array systematically. The only thing we have to worry about is that when we fill in a cell L[i,j], we need to already know the values it depends on, namely in this case L[i+1,j], L[i,j+1], and L[i+1,j+1]. For this reason we'll traverse the array backwards, from the last row working up to the first and from the last column working up to the first.
@@ -1964,7 +2112,6 @@ def longestCommonSubsequence(s1: str, s2: str) -> int:
 
     return LCS[m][n] # LCS[-1][-1] to return List[str] instead
 ```
-✅ **BOTTOM UP DP:** _TBD_
 
 ---
 # <div id='binaries'/> ⚡️ **Binaries**

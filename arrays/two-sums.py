@@ -1,3 +1,24 @@
+# O(n^2) Time | O(1) Space
+def TwoSums(array, target):
+    for i in range(len(array) - 1): 
+        firstNum = array[i]
+        for j in range(i + 1, len(array)):
+            secondNum = array[j]
+            if firstNum + secondNum == targetSum:
+                return [firstNum, secondNum]
+    return []
+
+# O(n) time | O(n) space
+def twoNumberSum(array, target): 
+	nums = {}
+	for num in array: 
+		potentialMatch = target - num
+		if potentialMatch in nums: 
+			return [potentialMatch, num]
+		else:
+			nums[num] = True
+	return []
+
 # O(nlogn) Time | O(1) Space
 def TwoSums(array, target):
     left = 0
