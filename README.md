@@ -243,6 +243,18 @@ def containsDuplicate(nums):
         seen.add(num)
     return False
 ```
+
+### **Space Optimized**
+```python
+# O(n) Time | O(1) Space - where n is the length of the input
+def containsDuplicate(nums):
+    for num in nums: 
+        absNum = abs(num)
+        if nums[absNum - 1] < 0:
+            return absNum
+        nums[absNum - 1] *= -1
+    return -1
+```
 ### **One-Liner**
 ```python
 # One-liner solution
@@ -1138,6 +1150,47 @@ def removeKthNodeFromEnd(head, k):
     first.next = first.next.next 
 ```
 ✅ **TWO POINTERS:** _Initially set two pointers (F & S), move the S pointer k number of times, if S points to None already, delete the head immediately, otherwise move F & S pointers at the same pace until S points at None so that F natrually points to the k-th node from end, delete the k-th node by mutating F.next = F.next.next_
+
+---
+
+## [🟥 Reverse Linked List](https://www.algoexpert.io/questions/Reverse%20Linked%20List)
+>* Write a function that takes in the head of a $\pgly Linked List, reverses the list in place (i.e., doesn't create a brand new list), and returns its new head.
+>* Each `LinkedList` node has an integer `value` as well as a `next` node pointing to the next node in the list or to None / null if it's the tail of the list.
+>* You can assume that the input Linked List will always have at least one node; in other words, the head will never be `None`
+
+- [x] Input:
+```python
+head = 0 -> 1 -> 2 -> 3 -> 4 -> 5 # The head node with value 0
+```
+- [x] Output: 
+```python
+5 -> 4 -> 3 -> 2 -> 1 -> 0 # The new head node with value 5
+```
+### **Iterative Mutation**
+```python
+class LinkedList:
+    def __init__(self, value):
+        self.value = value
+        self.next = None
+
+# O(n) Time | O(1) Space - where n is the number of nodes in the linked list
+def reverseLinkedList(head):
+    # 1: Initialise previousNode and currentNode with None and input head respectively
+    previousNode, currentNode = None, head
+    # 2: While we are still traversing and have not reached the end of the linked list,
+    while currentNode is not None: 
+        # 3: Set next to be the currentNode's next pointer
+        next = currentNode.next
+        # 4: Connect currentNode's next pointer to previousNode
+        currentNode.next = previousNode
+        # 5: Update previousNode to be currentNode now
+        previousNode = currentNode
+        # 6: Update currentNode to be the next node to keep traversing
+        currentNode = next
+    # 7: Return the new head of the reversed linked list
+    return previousNode
+```
+✅ **ITERATIVE MUTATION:** _Iterate through the linked list while maintaining currentNode and previousNode, iteratively reverse, return new head of list_
 
 ---
 # <div id='graphs'/> 📈 **Graphs**
