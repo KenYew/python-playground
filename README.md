@@ -888,6 +888,70 @@ def groupAnagrams(words):
 ✅ **HASH MAP:** _Loop and sort each word, append `sortedWord/word` key/value pairs in `anagrams_dict`, if sortedWord is in `anagrams_dict`, set `anagrams_dict[sortedWord].append(word)`, return `anagram_dict.values()`_
 
 ---
+## [🟨 Balanced Brackets](https://www.algoexpert.io/questions/Balanced%20Brackets)
+>* Write a function that takes in a string made up of brackets (`(`, `[`, `{`, `)`, `]`, and `}`) and other optional characters. 
+>* The function should return a boolean representing whether the string is balanced with regards to brackets.
+>* A string is said to be balanced if it has as many opening brackets of a certain types as it has closing brackets of that type and if no bracket is unmatched. 
+>* Note that an opening bracket can't match a corresponding closing bracket that comes before it, and similarly, a closing bracket can't match a corresponding opening bracket that comes after it. 
+>* Also, brackets can't overlap each other as in `[(])`
+
+- [x] Input: `string = "([])(){}(())()()"`
+- [x] Output: `true`
+### **Dictionaries and Stacks**
+```python
+def isValidParentheses(string):
+    # 1: Initialise a mapping of parentheses (where left brackets are keys and right brackets are values)
+    dict = {'(':')', '{':'}','[':']'}
+    stack = []
+    
+    # 2: Loop through every character of the input string
+    for char in string:
+        # 3: If the character is a left bracket (, {, [, it is a valid key in dict, so we append it to the stack
+        if char in dict: 
+            stack.append(char)
+        # 4: Else if it's a right bracket ), }, ], check if stack is empty or check if the brackets are matching 
+        elif len(stack) == 0 or dict[stack.pop()] != char: 
+            return False
+    # 5: Finally, check if the stack still contains any unmatched left bracket
+    return len(stack) == 0
+```
+
+### **Dictionaries and Stacks (Optimized)**
+```python
+# O(n) Time | O(n) Space
+def balancedBrackets(string):
+    # 1: Initialise variables and dictionaries of brackets
+    openingBrackets = "([{"
+    closingBrackets = ")]}"
+    matchingBrackets = {")": "(", "]": "[", "}": "{"}
+    stack = []
+    
+    # 2: Loop through every character of the input string
+    for char in string: 
+        # 3: If currentChar is any of the openingBrackets, append it to the stack
+        if char in openingBrackets:
+            stack.append(char)
+        # 4: Else if currentChar is any of the closingBrackets, perform a series of checks
+        elif char in closingBrackets: 
+            # 5: If the stack is empty (while our 1st char was a closing bracket), this string is not a balanced bracket, return False
+            if len(stack) == 0:
+                return False
+            # 6: If opening bracket at the final element of the stack is equal to the closing bracket of currentChar, pop the stack.
+            # When looking up the dictionary using currentChar (being a closing bracket in this case) as the key, we obtain its equivalent openingBracket value. But if the final element of the stack is also equal to this openingBracket value, we cancel out these balanced brackets by popping the stack.
+            if stack[-1] == matchingBrackets[char]:
+                stack.pop()
+
+            # 7: Else if the final element of the stack is not equals to any matching brackets from currentChar, this string is not a balanced bracket, return False
+            else:
+                return False
+
+    # 8: Else finally, return the Boolean based on whether the stack is empty or not. 
+    return len(stack) == 0
+```
+
+✅ **DICTIONARIES AND STACKS:** _Initialise dictionary of matching brackets. Loop through each character of input string. If char is openingBrackets, append to stack. If char is closingBrackets, do a series of checks. If stack is empty, return False. If opening bracket at the final element of stack matches with the closing bracket of currentChar, pop the stack, else return False. Else finally, return len(stack) == 0_
+
+---
 ## [🟨 Valid IP Addresses](https://www.algoexpert.io/questions/Valid%20IP%20Addresses)
 >* You're given a string of length 12 or smaller, containing only digits. Write a function that returns all the possible IP addresses that can be created by inserting three `.`s in the string.
 >* An IP address is a sequence of four positive integers that are separated by `.`s, where each individual integer is within the range `0 - 255`, inclusive.
@@ -1206,6 +1270,184 @@ def reverseLinkedList(head):
 ### [📋 **Back to Table of Contents**](#toc)
 
 ---
+
+## [🟨 Single Cycle Check](https://www.algoexpert.io/questions/Single%20Cycle%20Check)
+>* You're given an array of integers where each integer represents a jump of its value in the array. 
+>* For instance, the integer `2` represents a jump of two indices forward in the array; the integer `-3` represents a jump of three indices backward in the array.
+>* If a jump spills past the array's bounds, it wraps over to the other side. For instance, a jump of `-1` at index `0` brings us to the last index in the array. 
+>* Similarly, a jump of `1` at the last index in the array brings us to index `0`
+>* Write a function that returns a boolean representing whether the jumps in the array form a single cycle. 
+>* A single cycle occurs if, starting at any index in the array and following the jumps, every element in the array is visited exactly once before landing back on the starting index.
+
+- [x] Input: `array = [2, 3, 1, -4, -4, 2]`
+- [x] Output: `true`
+### **Depth First Search (Recursive)**
+```python
+# O(n) Time | O(1) Space
+def hasSingleCycle(array):
+    # 1: Initialise currentIdx pointer to traverse array
+    numElementsVisited = 0
+    currentIdx = 0 
+    # 2: While we still have elements to visit (counted by length of array),
+    while numElementsVisited < len(array): 
+
+        # 3: Check if we still have elements to traverse and we already found ourselves back at the index 0, return False as we have multiple cycles!
+        if numElementsVisited > 0 and currentIdx == 0:
+            return False
+        
+        # 4: Otherwise, we keep traversing the array by incrementing the numElementsVisited
+        numElementsVisited += 1
+        
+        # 5: Update the currentIdx using a helper function to get the next index
+        currentIdx = getNextIdx(currentIdx, array)
+
+    # 9: Once we have visited all elements, check if the currentIdx has looped back to the beginning index (which verifies a single cycle) and return the corresponding Boolean
+    return currentIdx == 0 
+
+def getNextIdx(currentIdx, array):
+    # 6: Get the jump value based on the current value of the input array. 
+    # This is used to determine the next index to jump to.
+    jump = array[currentIdx]
+    # 7: Set the nextIdx to jump by adding currentIdx + jumpValue. 
+    # Use %len(array) to wrap back around the array when jump goes out of bounds of the array.
+    nextIdx = (currentIdx + jump) % len(array)
+    # 8: Return the next index to jump only if nextIdx is positive, otherwise, return nextIdx + len(array) instead. 
+    return nextIdx if nextIdx >= 0 else nextIdx + len(array) 
+    # We want to prevent returning problematic -ve indices so we return nextIdx + len(array) to convert -ve indices to +ve indices which wraps around the arrays when jump value is too large of a -ve value.
+```
+✅ **DEPTH FIRST SEARCH (RECURSIVE):** _Traverse the array with numElementsVisited == len(array) counter, if we currentIdx == 0 while we're still traversing, return False. Otherwise, keep incrementing numElementsVisited. Update currentIdx with nextIdx = (currentIdx + array[currentIdx]) % len(array). Return currentIdx == 0 after visiting all elements._
+
+---
+
+## [🟨 Cycle In Graph](https://www.algoexpert.io/questions/Cycle%20In%20Graph)
+>* You're given a list of edges representing an unweighted, directed graph with at least one node. Write a function that returns a boolean representing whether the given graph contains a cycle.
+>* For the purpose of this question, a cycle is defined as any number of vertices, including just one vertex, that are connected in a closed chain. A cycle can also be defined as a chain of at least one vertex in which the first vertex is the same as the last.
+>* The given list is what's called an adjacency list, and it represents a graph. The number of vertices in the graph is equal to the length of `edges`, where each index `i` in `edges` contains vertex `i`'s outbound edges, in no particular order. 
+>* Each individual edge is represented by a positive integer that denotes an index (a destination vertex) in the list that this vertex is connected to. 
+>* Note that these edges are directed, meaning that you can only travel from a particular vertex to its destination, not the other way around (unless the destination vertex itself has an outbound edge to the original vertex).
+>* Also note that this graph may contain self-loops. A self-loop is an edge that has the same destination and origin; in other words, it's an edge that connects a vertex to itself. For the purpose of this question, a self-loop is considered a cycle.
+
+- [x] Input: 
+```python
+edges = [
+    [1, 3],
+    [2, 3, 4],
+    [0],
+    [],
+    [2, 5],
+    [],
+]
+```
+- [x] Output: 
+```python
+true
+# There are multiple cycles in this graph:
+# 1: 0 -> 1 -> 2 -> 0
+# 2: 0 -> 1 -> 4 -> 2 -> 0
+# 3: 1 -> 2 -> 0 -> 1
+# These are just 3 examples; there are more.
+```
+### **Depth First Search (Recursive)**
+```python
+# O(v + e) Time | O(v) Space
+# where v is the number of vertices and e is the nunmber of edges in the graph
+def cycleInGraph(edges):
+    numberOfNodes = len(edges)
+    visited = [False for _ in range(numberOfNodes)]
+    currentlyInStack = [False for _ in range(numberOfNodes)]
+    
+    for node in range(numberOfNodes):
+        if visited[node]:
+            continue
+        
+        containsCycle = isNodeInCycle(node, edges, visited, currentlyInStack)
+        if containsCycle:
+            return True
+        
+    return False
+
+def isNodeInCycle(node, edges, visited, currentlyInStack):
+    visited[node] = True
+    currentlyInStack[node] = True
+    
+    neighbours = edges[node]
+    for neighbour in neighbours:
+        if not visited[neighbour]:
+            containsCycle = isNodeInCycle(neighbour, edges, visited, currentlyInStack)
+            if containsCycle:
+                return True
+        elif currentlyInStack[neighbour]:
+            return True
+        
+    currentlyInStack[node] = False
+    return False
+```
+✅ **DEPTH FIRST SEARCH (RECURSIVE):** 
+
+---
+## [🟨 Youngest Common Ancestor](https://www.algoexpert.io/questions/Youngest%20Common%20Ancestor)
+>* You're given three inputs, all of which are instances of an `AncestralTree` class that have an `ancestor` property pointing to their youngest ancestor. 
+>* The first input is the top ancestor in an ancestral tree (i.e., the only instance that has no ancestor--its
+`ancestor` property points to `None`, and the other two inputs are descendants in the ancestral tree.
+>* Write a function that returns the youngest common ancestor to the two descendants.
+>* Note that a descendant is considered its own ancestor. So in the simple ancestral tree below, the youngest common ancestor to nodes A and B is node A.
+
+```python
+# The youngest common ancestor to nodes A and B is node A.
+      A
+    /    
+  B        
+```
+
+- [x] Input: 
+```python
+# The nodes are from the ancestral tree below.
+topAncestor = node A
+descendantOne = node E
+descendantTwo = node I
+           A
+        /    \
+      B        C
+     /  \     /  \
+   D     E   F    G 
+  / \    
+ H   I  
+```
+- [x] Output: `node B`
+### **DFS Recursion**
+```python
+class AncestralTree:
+    def __init__(self, name):
+        self.name = name
+        self.ancestor = None
+
+# O(h) Time | O(1) Space - where h is the height of the ancestral tree
+def getYoungestCommonAncestor(topAncestor, descendantOne, descendantTwo):
+    depthOne = getDescendantDepth(descendantOne, topAncestor)
+    depthTwo = getDescendantDepth(descendantTwo, topAncestor)
+    if depthOne > depthTwo: 
+        return backtrackAncestralTree(descendantOne, descendantTwo, depthOne - depthTwo)
+    else:
+        return backtrackAncestralTree(descendantOne, descendantTwo, depthTwo - depthOne)
+
+def getDescendantDepth(descendant, topAncestor):
+    depth = 0
+    while descendant != topAncestor: 
+        depth += 1
+        descendant = descendant.ancestor
+    return depth
+
+def backtrackAncestralTree(lowerDescendant, higherDescendant, diff):
+    while diff > 0: 
+        lowerDescendant = lowerDescendant.ancestor
+        diff -= 1
+    while lowerDescendant != higherDescendant:
+        lowerDescendant = lowerDescendant.ancestor
+        higherDescendant = higherDescendant.ancestor
+    return lowerDescendant
+```
+
+---
 ## [🟨 River Sizes](https://www.algoexpert.io/questions/River%20Sizes)
 >* You're given a two-dimensional array (a matrix) of potentially unequal height and width containing only `0`'s and `1`'s. Each `0` represents land, and each `1` represents part of a river. A river consists of any number of `1`'s that are either horizontally or vertically adjacent (but not diagonally adjacent). The number of adjacent 1s forming a river determine its size.
 >* Note that a river can twist. In other words, it doesn't have to be a straight vertical line or
@@ -1337,7 +1579,7 @@ matrix =
     [1, 0, 0, 0, 0, 1],
 ]
 ```
-### **Depth First Search (Iterative using Stack)**
+### **Depth First Search (Iterative Stack)**
 ```python
 # O(w.h) Time | O(w.h) Space where w and are the width and height of the input matrix
 def removeIslands(matrix):
@@ -1505,7 +1747,7 @@ Input: grid = [
 Output: 6
 Explanation: The answer is not 11, because the island must be connected 4-directionally.
 ```
-### [**Depth First Search (Iterative using Stack)**](https://leetcode.com/problems/max-area-of-island/solution/)
+### [**Depth First Search (Iterative Stack)**](https://leetcode.com/problems/max-area-of-island/solution/)
 ```python
 def maxAreaOfIsland(self, grid):
     seen = set()
@@ -1528,69 +1770,6 @@ def maxAreaOfIsland(self, grid):
     return ans
 ```
 ✅ **DEPTH FIRST SEARCH (ITERATIVE)**: _for each cell, if cell is 1 and unvisited, run dfs, increment count and mark each contiguous 1's as visited in auxiliary matrix_
-
----
-## [🟨 Youngest Common Ancestor](https://www.algoexpert.io/questions/Youngest%20Common%20Ancestor)
->* You're given three inputs, all of which are instances of an `AncestralTree` class that have an `ancestor` property pointing to their youngest ancestor. 
->* The first input is the top ancestor in an ancestral tree (i.e., the only instance that has no ancestor--its
-`ancestor` property points to `None`, and the other two inputs are descendants in the ancestral tree.
->* Write a function that returns the youngest common ancestor to the two descendants.
->* Note that a descendant is considered its own ancestor. So in the simple ancestral tree below, the youngest common ancestor to nodes A and B is node A.
-
-```python
-# The youngest common ancestor to nodes A and B is node A.
-      A
-    /    
-  B        
-```
-
-- [x] Input: 
-```python
-# The nodes are from the ancestral tree below.
-topAncestor = node A
-descendantOne = node E
-descendantTwo = node I
-           A
-        /    \
-      B        C
-     /  \     /  \
-   D     E   F    G 
-  / \    
- H   I  
-```
-- [x] Output: `node B`
-### **DFS Recursion**
-```python
-class AncestralTree:
-    def __init__(self, name):
-        self.name = name
-        self.ancestor = None
-
-# O(h) Time | O(1) Space - where h is the height of the ancestral tree
-def getYoungestCommonAncestor(topAncestor, descendantOne, descendantTwo):
-    depthOne = getDescendantDepth(descendantOne, topAncestor)
-    depthTwo = getDescendantDepth(descendantTwo, topAncestor)
-    if depthOne > depthTwo: 
-        return backtrackAncestralTree(descendantOne, descendantTwo, depthOne - depthTwo)
-    else:
-        return backtrackAncestralTree(descendantOne, descendantTwo, depthTwo - depthOne)
-
-def getDescendantDepth(descendant, topAncestor):
-    depth = 0
-    while descendant != topAncestor: 
-        depth += 1
-        descendant = descendant.ancestor
-    return depth
-
-def backtrackAncestralTree(lowerDescendant, higherDescendant, diff):
-    while diff > 0: 
-        lowerDescendant = lowerDescendant.ancestor
-        diff -= 1
-    while lowerDescendant != higherDescendant:
-        lowerDescendant = lowerDescendant.ancestor
-        higherDescendant = higherDescendant.ancestor
-    return lowerDescendant
-```
 
 ---
 # <div id='trees'/> 🎄 **Trees**

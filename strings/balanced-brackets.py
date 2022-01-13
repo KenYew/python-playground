@@ -1,4 +1,4 @@
-def isValidParentheses(string):
+def balancedBrackets(string):
     # 1: Initialise a mapping of parentheses (where left brackets are keys and right brackets are values)
     dict = {'(':')', '{':'}','[':']'}
     stack = []
@@ -14,5 +14,24 @@ def isValidParentheses(string):
     # 5: Finally, check if the stack still contains any unmatched left bracket
     return len(stack) == 0
 
+# O(n) Time | O(n) Space
+def balancedBrackets(string):
+    openingBrackets = "([{"
+    closingBrackets = ")]}"
+    matchingBrackets = {")": "(", "]": "[", "}": "{"}
+    stack = []
+    
+    for char in string: 
+        if char in openingBrackets:
+            stack.append(char)
+        elif char in closingBrackets: 
+            if len(stack) == 0:
+                return False
+            if stack[-1] == matchingBrackets[char]:
+                stack.pop()
+            else:
+                return False
+    return len(stack) == 0
+
 string = "()[]{}"
-print(isValidParentheses(string))
+print(balancedBrackets(string))
