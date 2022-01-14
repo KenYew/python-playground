@@ -1,3 +1,15 @@
+<style>
+details > summary {
+  padding: 4px;
+  width: 100px;
+  background-color: #3c3d3c;
+  border: none;
+  box-shadow: 1px 1px 2px #101010;
+  cursor: pointer;
+}
+</style>
+
+
 <img src="https://www.python.org/static/community_logos/python-logo-generic.svg" width="500px"/><br/>
 
 # **💻 Python Coding Patterns**
@@ -92,6 +104,8 @@
 - [x] Input: `nums = [2, 7, 11, 15], target = 9`
 - [x] Output: `[0, 1]`
 - [x] Explanation: `Because nums[0] + nums[1] == 9, we return [0, 1].`
+<details><summary><b>Solution</b></summary>
+<p>
 
 ### **Brute Force**
 ```python
@@ -119,7 +133,13 @@ def twoNumberSum(array, target):
 			nums[num] = True
 	return []
 ```
+</p>
+</details>
+
 ✅ **HASH TABLE:** _Use hash map to instantly check for difference value, map will add index of last occurrence of a num, don’t use same element twice_
+
+<details><summary><b>Solution</b></summary>
+<p>
 
 ### **Two Pointers**
 ```python
@@ -138,7 +158,11 @@ def TwoSums(array, target):
             return [array[left], array[right]]
     return -1 
 ```
+</p>
+</details>
+
 ✅ **TWO POINTERS:** _Sort the array, use two pointers on each end of the array and move pointers based on comparison between sum and targetNum_
+
 
 ---
 ## [🟩 Maximum Subarray](https://leetcode.com/problems/maximum-subarray/)
@@ -148,6 +172,8 @@ def TwoSums(array, target):
 - [x] Input: `nums = [-2,1,-3,4,-1,2,1,-5,4]`
 - [x] Output: `6`
 - [x] Explanation: `[4,-1,2,1] has the largest sum = 6.`
+<details><summary><b>Solution</b></summary>
+<p>
 
 ### **Kadane's Algorithm** 
 ```python
@@ -169,6 +195,8 @@ def maximumSubarraySum(self, arr):
             currentSum = 0
     return maxSum
 ```
+</p>
+</details>
 
 ---
 ## [🟩 Best Time to Buy and Sell Stock](https://leetcode.com/problems/best-time-to-buy-and-sell-stock/)
@@ -184,6 +212,8 @@ def maximumSubarraySum(self, arr):
 
 <img src="https://leetcode.com/media/original_images/121_profit_graph.png" width="500"  /><br/>
 The points of interest are the peaks and valleys in the given graph. We need to find the largest peak following the smallest valley. We can maintain two variables - minprice and maxprofit corresponding to the smallest valley and maximum profit (maximum difference between selling price and minprice) obtained so far respectively.
+<details><summary><b>Solution</b></summary>
+<p>
 
 ### **Kadane's Algorithm**
 ```python
@@ -213,12 +243,16 @@ def maxProfit(prices):
         maxProfit = max(maxProfit, profit)
     return maxProfit
 ```
+</p>
+</details>
 
 ---
 ## [🟩 Contains Duplicate](https://leetcode.com/problems/contains-duplicate/)
 > Given an integer array `nums`, return `true` if any value appears **at least twice** in the array, and return `false` if every element is distinct.
 - [x] Input: `nums = [1,2,3,1]`
 - [x] Output: `true`
+<details><summary><b>Solution</b></summary>
+<p>
 
 ### **Brute Force**
 ```python
@@ -261,6 +295,9 @@ def containsDuplicate(nums):
 def containsDuplicate(self, nums):
     return len(nums) > len(set(nums))
 ```
+</p>
+</details>
+
 ✅ **HASH SET:** _Use hash set to add and keep track of unique values in array, if value is seen in hash set, we found our duplicate_
 
 ---
@@ -269,6 +306,9 @@ def containsDuplicate(self, nums):
 >* Return a new array of the same length with the squares of the original integers also sorted in ascending order.
 - [x] Input: `array = [1, 2, 3, 5, 6, 8, 9]`
 - [x] Output: `[1, 4, 9, 25, 36, 64, 81]`
+<details><summary><b>Solution</b></summary>
+<p>
+
 ### **Two Pointers**
 ```python
 # O(n) Time | O(n) Space - where n is the length of the input array
@@ -294,6 +334,9 @@ def sortedSquaredArray(array):
     # 10: Finally, return the sorted squared array
     return ans
 ```
+</p>
+</details>
+
 ✅ **TWO POINTERS:** _Initialise output array with 0's, and left and right pointers on each end of array. Traverse idx from end to beginning of the array, if abs(leftVal) > abs(rightVal), write the ans[idx] = leftVal ** 2 and increment left, else abs(rightVal) >= abs(leftVal), write the ans[idx] = rightVal **2 and decrement right._
 
 ---
@@ -305,6 +348,8 @@ the numbers `[2, 4]`.
 >* Note that a single number in an array and the array itself are both valid subsequences of the array.
 - [x] Input: `array = [5, 1, 22, 25, 6, -1, 8, 10], sequence = [1, 6, -1, 10]`
 - [x] Output: `true`
+<details><summary><b>Solution</b></summary>
+<p>
 
 ### **Two Pointers**
 ```python
@@ -327,6 +372,9 @@ def isValidSubsequence(array, sequence):
     # 5: Once we have incremented seqIdx enough times, return the Boolean answer of whether the sequence is valid (only if seqIdx == len(sequence))
     return seqIdx == len(sequence)
 ```
+</p>
+</details>
+
 ✅ **TWO POINTERS:** _Initialise pointer for both input arrays (arr, seq). While both pointers have not fully traversed their arrays, if values from both array match, increment seqIdx, otherwise keep incrementing arrIdx. Return Boolean logic seqIdx == len(sequence)_
 
 ---
@@ -343,6 +391,8 @@ def isValidSubsequence(array, sequence):
 10 is equal to 5 x 1 x 2
 20 is equal to 5 x 1 x 4
 ```
+<details><summary><b>Solution</b></summary>
+<p>
 
 ### **Brute Force**
 ```python
@@ -435,6 +485,9 @@ def arrayOfProducts(array):
         
     return products
 ```
+</p>
+</details>
+
 ✅ **TWO POINTERS:** 
 - Initialise the result array with 1s and equal to the size of the input array. 
 - Starting with leftRunningProduct = 1, loop through each element of the input array from left to right, setting each element of the result array with leftRunningProduct as leftRunningProduct multiplies up each element from left to right. 
@@ -448,6 +501,8 @@ def arrayOfProducts(array):
 >* You can assume that there will only be one pair of numbers with the smallest difference.
 - [x] Input: `arrayOne = [-1, 5, 10, 20, 28, 3], arrayTwo = [26, 134, 135, 15, 17]`
 - [x] Output: `[28, 26]`
+<details><summary><b>Solution</b></summary>
+<p>
 
 ### **Two Pointers**
 ```python
@@ -490,6 +545,9 @@ def smallestDifference(arrayOne, arrayTwo):
             smallestPair = [firstNum, secondNum] # store also the smallest pair of nums in this iteration
     return smallestPair
 ```
+</p>
+</details>
+
 ✅ **TWO POINTERS:** 
 1. Sort both input array1 and array2. 
 2. While idx1 and idx2 pointers have not fully traversed their arrays,
@@ -503,6 +561,8 @@ def smallestDifference(arrayOne, arrayTwo):
 >* The function should perform this in place (i.e., it should mutate the input array) and doesn't need to maintain the order of the other integers.
 - [x] Input: `array = [2, 1, 2, 2, 2, 3, 4, 2], toMove = 2`
 - [x] Output: `[1, 3, 4, 2, 2, 2, 2, 2]`
+<details><summary><b>Solution</b></summary>
+<p>
 
 ### **Two Pointers**
 ```python
@@ -525,6 +585,9 @@ def moveElementToEnd(array, toMove):
         left += 1
     return array
 ```
+</p>
+</details>
+
 ✅ **TWO POINTERS:** _Initialise two pointers (left & right) on each end. While left < right, nested while rightVal == toMoveNum, decrement right to ensure rightVal points to a swappable num != toMoveNum. Keep incrementing left. If leftVal == toMoveNum, perform swap._
 
 ---
@@ -536,6 +599,8 @@ peak in the array.
 - [x] Input: `array = [1, 2, 3, 3, 4, 0, 10, 6, 5, -1, -3, 2, 3]`
 - [x] Output: `6`
 - [x] Explanation: `0, 10, 6, 5, -1 -3` form the longest peak
+<details><summary><b>Solution</b></summary>
+<p>
 
 ### **Two Pointers**
 ```python
@@ -579,6 +644,9 @@ def longestPeak(array):
         
     return longestPeakLength
 ```
+</p>
+</details>
+
 ✅ **TWO POINTERS:** 
 1. Intialise peakIdx to traverse the array and find a potential peak.
 2. If peak is found, set leftIdx and rightIdx to be peakIdx - 2 and peakIdx + 2 to. 
@@ -588,9 +656,6 @@ def longestPeak(array):
 6. Update peakIdx to be rightIdx to find the next potential longest peak. 
 7. Return max(longestPeakLength, currentPeakLength)
 
-
-
-
 ---
 ## [🟨 3Sum](https://leetcode.com/problems/3sum/)
 > Given an integer array nums, return all the triplets `[nums[i], nums[j], nums[k]` such that `i != j`, `i != k`, and `j != k`, and `nums[i] + nums[j] + nums[k] == 0`.
@@ -599,6 +664,8 @@ def longestPeak(array):
 
 - [x] Input: `nums = []` or `nums = [0]`
 - [x] Output: `[]`
+<details><summary><b>Solution</b></summary>
+<p>
 
 ### [**Two Pointers**](https://leetcode.com/problems/two-sum/discuss/737092/Sum-MegaPost-Python3-Solution-with-a-detailed-explanation)
 ```python
@@ -646,10 +713,15 @@ def threeSum(nums: List[int]) -> List[List[int]]:
                 right -= 1
     return ans
 ```
+</p>
+</details>
+
 ✅ **TWO POINTERS:** 
 - `ThreeSum: A + B + C = 0` 
 - _Sort input array, perform a FOR loop for A, then set Two Pointers (L & R) for B and C. Increment L if sum is too small and decrement R if sum is too big._
 - _To prevent duplicates, if A == prevA, skip FOR loop iteration. If B == prevB, increment L in the TwoPointer WHILE loop_
+<details><summary><b>Solution</b></summary>
+<p>
 
 ### **TargetSum Variant**
 ```python
@@ -692,6 +764,9 @@ def threeNumberSum(array, targetSum):
                 right -= 1
     return ans
 ```
+</p>
+</details>
+
 ✅ **TWO POINTERS:** 
 - `ThreeSum: A + B + C = 0` 
 - _Sort input array, perform a FOR loop for A, then set Two Pointers (L & R) for B and C. Increment L if sum is too small and decrement R if sum is too big. When targetSum is found, find the next targetSum by traversing both L & R inwards._
@@ -710,6 +785,8 @@ def threeNumberSum(array, targetSum):
 
 - [x] Input: `matrix = [[1,2,3],[4,5,6],[7,8,9]]`
 - [x] Output: `[1,2,3,6,9,8,7,4,5]`
+<details><summary><b>Solution</b></summary>
+<p>
 
 <img src="https://assets.leetcode.com/uploads/2020/11/13/spiral1.jpg" width="250" align="left" /><br/>
 <img src="https://assets.leetcode.com/uploads/2020/11/13/spiral.jpg" width="300"  /><br/>
@@ -753,6 +830,9 @@ def spiralTraverse(array):
     
     return ans
 ```
+</p>
+</details>
+
 ✅ **TWO POINTERS:** _Keep track of visited cells; keep track of boundaries, layer-by-layer_
 
 ---
@@ -778,6 +858,8 @@ def spiralTraverse(array):
 - [x] Input: `intervals = [[1,3],[2,6],[8,10],[15,18]]`
 - [x] Output: `[[1,6],[8,10],[15,18]]`
 - [x] Explanation: `Since intervals [1,3] and [2,6] overlaps, merge them into [1,6].`
+<details><summary><b>Solution</b></summary>
+<p>
 
 ### **Sort, Check and Mutate**
 ```python
@@ -809,6 +891,9 @@ def mergeOverlappingIntervals(intervals):
             
     return mergedIntervals
 ```
+</p>
+</details>
+
 ✅ **SORT, CHECK AND MUTATE:** _Sort intervals by start values, compare end value and start value of adjacent intervals to check for overlap, mutate end value of answer interval to encapsulate merges, iterate checks for all intervals_
 ### **Problem similar to:**
 - 252 Meeting Rooms
@@ -839,6 +924,8 @@ input string by k positions in the alphabet, where k is the key.
 
 - [x] Input: `string = xyz, key = 2`
 - [x] Output: `zab`
+<details><summary><b>Solution</b></summary>
+<p>
 
 ### **ORD/CHR String Manipulation with Modulo Wrapping**
 ```python
@@ -858,6 +945,9 @@ def getNewLetter(letter, key):
 	else:
 		return chr(96 + newLetterCode % 122)
 ```
+</p>
+</details>
+
 ✅ **ORD/CHR AND MODULO:** 
 - `ASCII: A = 96, Z = 122`
 - _Loop each letter, convert letter into ASCII + KEY using ORD, then re-convert using CHR while handling for Z->A wrapping using MODULO 122_
@@ -869,6 +959,8 @@ def getNewLetter(letter, key):
 
 - [x] Input: `strs = ["eat","tea","tan","ate","nat","bat"]`
 - [x] Output: `[["bat"],["nat","tan"],["ate","eat","tea"]]`
+<details><summary><b>Solution</b></summary>
+<p>
 
 ### **Hash Map**
 ```python
@@ -885,6 +977,9 @@ def groupAnagrams(words):
             anagrams[sortedWord] = [word]
     return list(anagrams.values())
 ```
+</p>
+</details>
+
 ✅ **HASH MAP:** _Loop and sort each word, append `sortedWord/word` key/value pairs in `anagrams_dict`, if sortedWord is in `anagrams_dict`, set `anagrams_dict[sortedWord].append(word)`, return `anagram_dict.values()`_
 
 ---
@@ -897,6 +992,9 @@ def groupAnagrams(words):
 
 - [x] Input: `string = "([])(){}(())()()"`
 - [x] Output: `true`
+<details><summary><b>Solution</b></summary>
+<p>
+
 ### **Dictionaries and Stacks**
 ```python
 def isValidParentheses(string):
@@ -948,6 +1046,8 @@ def balancedBrackets(string):
     # 8: Else finally, return the Boolean based on whether the stack is empty or not. 
     return len(stack) == 0
 ```
+</p>
+</details>
 
 ✅ **DICTIONARIES AND STACKS:** _Initialise dictionary of matching brackets. Loop through each character of input string. If char is openingBrackets, append to stack. If char is closingBrackets, do a series of checks. If stack is empty, return False. If opening bracket at the final element of stack matches with the closing bracket of currentChar, pop the stack, else return False. Else finally, return len(stack) == 0_
 
@@ -962,6 +1062,8 @@ def balancedBrackets(string):
 
 - [x] Input: `string = "1921680"`
 - [x] Output: `['1.9.216.80', '1.92.16.80', '1.92.168.0', '19.2.16.80', '19.2.168.0', '19.21.6.80', '19.21.68.0', '19.216.8.0', '192.1.6.80', '192.1.68.0', '192.16.8.0']`
+<details><summary><b>Solution</b></summary>
+<p>
 
 ### **Three Pointers**
 ```python
@@ -1003,6 +1105,9 @@ def isValidPart(string):
         return False
     return len(string) == len(str(stringAsInt)) # Checks if there are any leading 0's
 ```
+</p>
+</details>
+
 ✅ **THREE POINTERS**: _Set 3 pointers i, j, k for each IP dots, create 3 FOR loops for each pointer to slice string into 4 possible IP octets and check if the octets are valid (0-255) using a helper function. If all 4 octets are valid, then join the valid octets with '.' and append to answers array._
 
 ---
@@ -1024,6 +1129,8 @@ def isValidPart(string):
 
 - [x] Input: `list1 = [1,2,4], list2 = [1,3,4]`
 - [x] Output: `[1,1,2,3,4,4]`
+<details><summary><b>Solution</b></summary>
+<p>
 
 <img src="https://assets.leetcode.com/uploads/2020/10/03/merge_ex1.jpg" width="500"/>
 
@@ -1059,6 +1166,9 @@ def mergeLinkedLists(headOne, headTwo):
         p1Prev.next = p2 # in this case, p1Prev is the final node of the 1st linked list and its next value should immediately connect to the 2nd linked list at p2
     return headOne if headOne.value < headTwo.value else headTwo # return the correct head of the linkedlist with the smaller value
 ```
+</p>
+</details>
+
 ✅ **ITERATIVELY IN-PLACE:** 
 - _Create 3 pointers (p1Prev, p1, p2)_
 - _If NodeL1 < NodeL2, keep moving prev and p1 to the next nodes._
@@ -1086,6 +1196,9 @@ linkedListTwo = 9 -> 4 -> 5
 # linkedListTwo represents 549
 # Hence, 1742 + 549 = 2291
 ```
+<details><summary><b>Solution</b></summary>
+<p>
+
 ### **Iterative Arithmetics**
 ```python
 class LinkedList:
@@ -1156,6 +1269,9 @@ def sumOfLinkedLists(linkedListOne, linkedListTwo):
     # 12: Return the head of the new linked list (since newLinkedListHeadPointer is just a placeholder node with value 0, we only care about the next node which is the head of the new linked list)
     return newLinkedListHeadPointer.next 
 ```
+</p>
+</details>
+
 ✅ **ITERATIVE ARITHMETICS:** _Initialise dummy head node, traverse both linked lists, compute sumOfValues = LL1 + LL2 + carry, use %10 to compute new values of the new nodes to link, use //10 to compute carry over value for next iteration, return head of the newly created linked list (dummy.next)_
 
 ---
@@ -1179,6 +1295,9 @@ k = 4
 0 -> 1 -> 2 -> 3 -> 4 -> 5 -> 7 -> 8 -> 9
 # The input linked lists is mutated in-place where the 4th node from the end (node value 6) has been removed
 ```
+<details><summary><b>Solution</b></summary>
+<p>
+
 ### **Two Pointers**
 ```python
 class LinkedList:
@@ -1213,6 +1332,9 @@ def removeKthNodeFromEnd(head, k):
     # 6: Perform linked list mutation to delete the k-th node from the end by changing the next pointer to skip the k-th node
     first.next = first.next.next 
 ```
+</p>
+</details>
+
 ✅ **TWO POINTERS:** _Initially set two pointers (F & S), move the S pointer k number of times, if S points to None already, delete the head immediately, otherwise move F & S pointers at the same pace until S points at None so that F natrually points to the k-th node from end, delete the k-th node by mutating F.next = F.next.next_
 
 ---
@@ -1230,6 +1352,9 @@ head = 0 -> 1 -> 2 -> 3 -> 4 -> 5 # The head node with value 0
 ```python
 5 -> 4 -> 3 -> 2 -> 1 -> 0 # The new head node with value 5
 ```
+<details><summary><b>Solution</b></summary>
+<p>
+
 ### **Iterative Mutation**
 ```python
 class LinkedList:
@@ -1254,6 +1379,9 @@ def reverseLinkedList(head):
     # 7: Return the new head of the reversed linked list
     return previousNode
 ```
+</p>
+</details>
+
 ✅ **ITERATIVE MUTATION:** _Iterate through the linked list while maintaining currentNode and previousNode, iteratively reverse, return new head of list_
 
 ---
@@ -1281,6 +1409,9 @@ def reverseLinkedList(head):
 
 - [x] Input: `array = [2, 3, 1, -4, -4, 2]`
 - [x] Output: `true`
+<details><summary><b>Solution</b></summary>
+<p>
+
 ### **Depth First Search (Recursive)**
 ```python
 # O(n) Time | O(1) Space
@@ -1315,6 +1446,9 @@ def getNextIdx(currentIdx, array):
     return nextIdx if nextIdx >= 0 else nextIdx + len(array) 
     # We want to prevent returning problematic -ve indices so we return nextIdx + len(array) to convert -ve indices to +ve indices which wraps around the arrays when jump value is too large of a -ve value.
 ```
+</p>
+</details>
+
 ✅ **DEPTH FIRST SEARCH (RECURSIVE):** _Traverse the array with numElementsVisited == len(array) counter, if we currentIdx == 0 while we're still traversing, return False. Otherwise, keep incrementing numElementsVisited. Update currentIdx with nextIdx = (currentIdx + array[currentIdx]) % len(array). Return currentIdx == 0 after visiting all elements._
 
 ---
@@ -1347,6 +1481,9 @@ true
 # 3: 1 -> 2 -> 0 -> 1
 # These are just 3 examples; there are more.
 ```
+<details><summary><b>Solution</b></summary>
+<p>
+
 ### **Depth First Search (Recursive)**
 ```python
 # O(v + e) Time | O(v) Space
@@ -1382,6 +1519,9 @@ def isNodeInCycle(node, edges, visited, currentlyInStack):
     currentlyInStack[node] = False
     return False
 ```
+</p>
+</details>
+
 ✅ **DEPTH FIRST SEARCH (RECURSIVE):** 
 
 ---
@@ -1414,6 +1554,9 @@ descendantTwo = node I
  H   I  
 ```
 - [x] Output: `node B`
+<details><summary><b>Solution</b></summary>
+<p>
+
 ### **DFS Recursion**
 ```python
 class AncestralTree:
@@ -1446,6 +1589,8 @@ def backtrackAncestralTree(lowerDescendant, higherDescendant, diff):
         higherDescendant = higherDescendant.ancestor
     return lowerDescendant
 ```
+</p>
+</details>
 
 ---
 ## [🟨 River Sizes](https://www.algoexpert.io/questions/River%20Sizes)
@@ -1472,6 +1617,9 @@ Explanation: matrix = [ # The rivers can be clearly seen here:
     [1,  , 1, 1,  ]
   ]
 ```
+<details><summary><b>Solution</b></summary>
+<p>
+
 ### **Depth First Search (Iterative)**
 ```python
 # O(n) Time - we only need to traverse all of the elements in the matrix once
@@ -1542,6 +1690,9 @@ def getUnvisitedNeighbours(i, j, matrix, visited):
         unvisitedNeighbours.append([i, j + 1]) # append the node (with indices) of the right neighbour
     return unvisitedNeighbours # finally, return the array containing nodes of all unvisited adjacent neighbours
 ```
+</p>
+</details>
+
 ✅ **DEPTH FIRST SEARCH (ITERATIVE)**: _for each cell, if cell is 1 and unvisited, run dfs, increment count and mark each contiguous 1's as visited in auxiliary matrix_
 
 ---
@@ -1579,6 +1730,9 @@ matrix =
     [1, 0, 0, 0, 0, 1],
 ]
 ```
+<details><summary><b>Solution</b></summary>
+<p>
+
 ### **Depth First Search (Iterative Stack)**
 ```python
 # O(w.h) Time | O(w.h) Space where w and are the width and height of the input matrix
@@ -1670,6 +1824,9 @@ def getNeighbors(matrix, row, col):
     return neighbors
 
 ```
+</p>
+</details>
+
 ✅ **DEPTH FIRST SEARCH (ITERATIVE)**: _Loop through only cells at the border, if cell is 1, run iterative dfs using a stack, mutate 1s into 2s, check for neighbours for any 1s to push to stack for next dfs iteration. Then, loop through all cells again and mutate 1s to 0s and 2s to 1s and return the mutated matrix in place._
 
 ---
@@ -1695,6 +1852,9 @@ Input: grid = [
 ]
 Output: 3
 ```
+<details><summary><b>Solution</b></summary>
+<p>
+
 ### **Depth First Search (Recursive)**
 ```python
 def numIslands(self, grid):
@@ -1769,6 +1929,9 @@ def maxAreaOfIsland(self, grid):
                 ans = max(ans, shape)
     return ans
 ```
+</p>
+</details>
+
 ✅ **DEPTH FIRST SEARCH (ITERATIVE)**: _for each cell, if cell is 1 and unvisited, run dfs, increment count and mark each contiguous 1's as visited in auxiliary matrix_
 
 ---
@@ -1818,6 +1981,8 @@ Output: [15, 16, 18, 10, 11]
 10 == 1 + 3 + 6
 11 == 1 + 3 + 7
 ```
+<details><summary><b>Solution</b></summary>
+<p>
 
 ### **Depth First Search (Recursive)**
 ```python
@@ -1854,6 +2019,9 @@ def calculateBranchSums(node, runningSum, sums):
     calculateBranchSums(node.left, newRunningSum, sums)
     calculateBranchSums(node.right, newRunningSum, sums)
 ```
+</p>
+</details>
+
 ✅ **DFS RECURSION:** _Recursively call the calculateBranchSums helper function to traverse down the branch (both left and right), summing up nodes and append the totalSum when a leaf node is reached (node.left and node.right are None)_
 
 ### 🧠 Key Anatomy of DFS
@@ -1894,6 +2062,8 @@ recursiveFunction(node.right, doSomething, ans)
   - The depth of the node with value 5 is 2.
   - etc...
   - Summing all of these depths yields 16.
+<details><summary><b>Solution</b></summary>
+<p>
 
 ### **Depth First Search (Iterative using Stack)**
 ```python
@@ -1930,6 +2100,9 @@ def nodeDepths(root):
 
     return sumofDepths # 8: Return total sum of depths after all dictionaries are popped from stack
 ```
+</p>
+</details>
+
 ✅ **DFS STACK:** _Use stack of nodeDicts to keep track each node object and their depth (stored as key-value pairs). Pop the stack and aggregate sumOfDepths value. To traverse down the BT, push in new nodeDicts (left and right) into Stack and increment depth value. Return sumOfDepths when all nodes are popped from stack._
 
 ---
@@ -1957,6 +2130,8 @@ def nodeDepths(root):
             / \    
            9   8    
 ```
+<details><summary><b>Solution</b></summary>
+<p>
 
 ### **BFS Queue**
 ```python
@@ -1989,6 +2164,9 @@ def invertBinaryTree(tree):
 def swapLeftAndRight(tree): # helper function to swap node.left and node.right objects of the current node
     tree.left, tree.right = tree.right, tree.left
 ```
+</p>
+</details>
+
 ✅ **BFS QUEUE:** _Use queue of BT nodes to keep track of nodes in FIFO order. Pop the currentNode from the queue and execute a helper function to swap its node.left and node.right childs. To traverse down the BT, push in new node.left and node.right of currentNode into queue. Return root of the mutated BT when all nodes are popped from queue._
 
 ---
@@ -2011,6 +2189,9 @@ def swapLeftAndRight(tree): # helper function to swap node.left and node.right o
 ```
 - [x] Output: 6
 - [x] Explanation: 9 -> 8 -> 7 -> 3 -> 4 -> 5 -> 6. There are 6 edges between the first node and the last node of this tree's longest path.  
+<details><summary><b>Solution</b></summary>
+<p>
+
 ### **DFS Recursion with Backtracking Max Computations**
 ```python
 class BinaryTree:
@@ -2055,6 +2236,9 @@ def getTreeInfo(tree):
     
     return TreeInfo(currentDiameter, currentHeight) # 4: Return TreeInfo object with diameter and height properties
 ```
+</p>
+</details>
+
 ✅ **DFS RECURSION WITH BACKTRACKING MAX COMPUTATIONS:** _Create a TreeInfo class to store diameter and height properties. Recursively call getTreeInfo to perform DFS on all child nodes until the leaf node. Then, backtrack and compute diameter and height values using max functions. Return TreeInfo object with the final diameter and height values after all recursive calls._
 
 ---
@@ -2073,6 +2257,9 @@ def getTreeInfo(tree):
 ```
 - [x] Output: 18
 - [x] Explanation: The optimal path is 5 -> 2 -> 1 -> 3 -> 7 with a path sum of 5 + 2 + 1 + 3 + 7 = 18
+<details><summary><b>Solution</b></summary>
+<p>
+
 ### [**DFS Recursion with Backtracking Max Computations**](https://leetcode.com/problems/binary-tree-maximum-path-sum/discuss/603423/Python-Recursion-stack-thinking-process-diagram)
 ```python
 class BinaryTree:
@@ -2109,6 +2296,8 @@ def findMaxSum(tree):
     
     return (maxSumAsBranch, maxPathSum) # 3: Return tuple with MaxSumAsBranch, maxPathSum values
 ```
+</p>
+</details>
 
 ✅ **DFS RECURSION WITH BACKTRACKING MAX COMPUTATIONS:** _Recursively call findMaxSum to perform DFS on all child nodes until the leaf node. Then, backtrack and compute maxChildSumAsBranch, maxSumAsBranch, maxSumAsRootNode and maxPathSum using max functions. Return tuple with maxSumAsBranch and maxPathSum values after all recursive calls._
 
@@ -2136,6 +2325,8 @@ tree =
 target = 12      
 ```
 - [x] Output: 13
+<details><summary><b>Solution</b></summary>
+<p>
 
 ### **Binary Search Tree**
 ```python
@@ -2161,6 +2352,8 @@ class BST:
         self.left = None
         self.right = None
 ```
+</p>
+</details>
 
 ---
 ## [🟨 BST Construction](https://www.algoexpert.io/questions/BST%20Construction)
@@ -2202,6 +2395,8 @@ remove(10):
  1             14
 contains(15): true
 ```
+<details><summary><b>Solution</b></summary>
+<p>
 
 ### **Binary Search Tree**
 ```python
@@ -2279,6 +2474,8 @@ class BST:
         else: 
             return self.left.getMinValue()
 ```
+</p>
+</details>
 
 ---
 # <div id='dp'/> 📱 **Dynamic Programming**
@@ -2305,6 +2502,8 @@ class BST:
 
 - [x] Input: `str1 = "ZXVVYZW", str2 = "XKYKZPW"`
 - [x] Output: `["X", "Y", "Z", "W"]`
+<details><summary><b>Solution</b></summary>
+<p>
 
 ### [**Recursion**](https://leetcode.com/problems/longest-common-subsequence/discuss/436719/Python-very-detailed-solution-with-explanation-and-walkthrough-step-by-step.)
 ```python
@@ -2325,7 +2524,13 @@ def helper(self, s1, s2, i, j):
         return 1 + self.helper(s1, s2, i + 1, j + 1)
     else:
 ```
+</p>
+</details>
+
 ✅ **RECURSION:** _if first chars are equal find lcs of remaining of each, else max of: lcs of first and remain of 2nd and lcs of 2nd remain of first, cache result; nested forloop to compute the cache without recursion_ 
+<details><summary><b>Solution</b></summary>
+<p>
+
 ### [**Bottom Up Dynamic Programming**](https://leetcode.com/problems/longest-common-subsequence/discuss/436719/Python-very-detailed-solution-with-explanation-and-walkthrough-step-by-step.)
 ```python
 # O(mn * min(m,n)) Time | O(mn * min(m,n)) Space
@@ -2344,6 +2549,9 @@ def longestCommonSubsequence(s1: str, s2: str) -> int:
 
     return LCS[m][n] # LCS[-1][-1] to return List[str] instead
 ```
+
+</p>
+</details>
 
 ---
 # <div id='binaries'/> ⚡️ **Binaries**
