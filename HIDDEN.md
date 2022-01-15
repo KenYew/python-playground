@@ -1361,22 +1361,34 @@ class LinkedList:
     def __init__(self, value):
         self.value = value
         self.next = None
-
+"""
+Key: p1 - previousNode, p2 - currentNode, p3 - currentNode.next
+Step 1:
+p1      p2   p3
+None -> 0 -> 1 -> 2 -> 3 -> 4 -> 5 -> None
+Step 4 - 7:
+        p1   p2   p3
+None -> 0 <- 1 -> 2 -> 3 -> 4 -> 5 -> None
+Step 8:
+                                 p1   p2   p3
+None -> 0 <- 1 <- 2 <- 3 <- 4 <- 5 -> None
+"""
 # O(n) Time | O(1) Space - where n is the number of nodes in the linked list
 def reverseLinkedList(head):
     # 1: Initialise previousNode and currentNode with None and input head respectively
     previousNode, currentNode = None, head
-    # 2: While we are still traversing and have not reached the end of the linked list,
+    # 2: While currentNode has not reached None yet (end of the linkedlist),
     while currentNode is not None: 
-        # 3: Set next to be the currentNode's next pointer
+        # 3: Store the next node of currentNode in a temporary next variable (p3)
         next = currentNode.next
-        # 4: Connect currentNode's next pointer to previousNode
+        # 4: Connect currentNode.next to the previousNode so that we create a reversal
         currentNode.next = previousNode
-        # 5: Update previousNode to be currentNode now
+        # 5: To prepare for the next iteration, we need to shift the previousNode and currentNode forward so that we can reverse the next node
+        # 6: Update previousNode to be currentNode
         previousNode = currentNode
-        # 6: Update currentNode to be the next node to keep traversing
+        # 7: Update currentNode to be the temporary next variable (p3) we stored earlier
         currentNode = next
-    # 7: Return the new head of the reversed linked list
+    # 8: Return the new head of the reversed linked list
     return previousNode
 ```
 </p>
@@ -1557,40 +1569,110 @@ descendantTwo = node I
 <details><summary><b>Solution</b></summary>
 <p>
 
-### **DFS Recursion**
+### **DFS Iterative**
 ```python
 class AncestralTree:
     def __init__(self, name):
         self.name = name
         self.ancestor = None
 
-# O(h) Time | O(1) Space - where h is the height of the ancestral tree
+# O(d) Time | O(1) Space - where d is the depth of descendants
+# O(d) Time because we only need to traverse the number of depths of the lowest descendant node at most
+# O(1) Space because we are not using any recursion stack or storing any extra memory in arrays, we are computing the AncestralTree in-place
 def getYoungestCommonAncestor(topAncestor, descendantOne, descendantTwo):
+    # 1: Calculate how deep the descendant nodes are located in the AncestralTree using a helper function
     depthOne = getDescendantDepth(descendantOne, topAncestor)
     depthTwo = getDescendantDepth(descendantTwo, topAncestor)
+    
+    # 5: If depth of descendantOne is deeper than that of descendantTwo,
     if depthOne > depthTwo: 
+        # 6: Pass the lowerDescendant node, higherDescendant node and their difference in depths to helper function
         return backtrackAncestralTree(descendantOne, descendantTwo, depthOne - depthTwo)
-    else:
-        return backtrackAncestralTree(descendantOne, descendantTwo, depthTwo - depthOne)
-
-def getDescendantDepth(descendant, topAncestor):
+    else: # 7: Else if depthTwo >= depthOne, pass the higherDescendant node, lowerDescendant node and their difference in depths to helper function
+        return backtrackAncestralTree(descendantTwo, descendantOne, depthTwo - depthOne)
+    
+def getDescendantDepth(descendant, topAncestor): 
     depth = 0
+    # 2: While we have not traversed all the way up to the top-most ancestor from the descendant node,
     while descendant != topAncestor: 
-        depth += 1
-        descendant = descendant.ancestor
+        # 3: Increment the depth (bottom-up) and update descendant to be the next top ancestor node
+        depth += 1 
+        descendant = descendant.ancestor 
+    # 4: Return total depth between descendant node and top-most ancestor node
     return depth
 
 def backtrackAncestralTree(lowerDescendant, higherDescendant, diff):
+    # 8: While their difference in depths are greater than zero,
     while diff > 0: 
+        # 9: Traverse the lowerDescendant node up the Ancestral tree by calling the ancestor property
         lowerDescendant = lowerDescendant.ancestor
+        # 10: Decrement diff to iterate the traversal of the lowerDescendant node up the AncestralTree until difference in depths is zero (or in other words, both nodes are now at the same level of the AncestralTree)
         diff -= 1
-    while lowerDescendant != higherDescendant:
+        
+    # 11: Now that both descendant nodes are at the same level, determine the next youngest common ancestor (YCA) of both nodes.
+    # 12: While both descendant nodes are not equal to each other (YCA not determined yet), 
+    while lowerDescendant != higherDescendant: 
+        # 13: Keep traversing both nodes at the same time until they both reached the youngest common ancestor
         lowerDescendant = lowerDescendant.ancestor
         higherDescendant = higherDescendant.ancestor
-    return lowerDescendant
+    # 14: At this point, lowerDescendant = higherDescendant = YoungestCommonAncestor, so just return any descendant node
+    return lowerDescendant # return higherDescendant is also fine
 ```
 </p>
 </details>
+
+✅ **DEPTH FIRST SEARCH (ITERATIVE):** 
+1. Calculate both the depth of descendantOne and descendantTwo nodes from the topAncestor using a while loop and a depth += 1 incrementor. 
+2. Pass the descendantOne, descendantTwo and differenceInDepths into backtrackAncestralTree helper function. 
+3. In this helper function, while differenceInDepths > 0, move the lowerDescendant up (by calling the ancestor property) until both nodes are at the same level of AncestralTree. 
+4. Finally, determine the youngest common ancestor of both nodes by moving both nodes up at the same time while lowerDescendant != higherDescendant. 
+5. Return any descendant node once both descendant nodes have reached their youngest common ancestor node.
+
+<details><summary><b>Solution</b></summary>
+<p>
+
+### **DFS Iterative**
+```python
+class BinaryTree:
+    def __init__(self, value):
+        self.value = value
+        self.left = None
+        self.right = None
+         
+# O(n) Time | O(h) Space - where n is the number of nodes and h is the height of the binary tree
+def getYoungestCommonAncestor(root, descendantOne, descendantTwo): 
+    # 1: Base Case: If the root also happens to be either descendantOne or descendantTwo node, return root as the YCA
+    # Since we perform DFS from the root down to its children, if current root == descendantOne or root == descendantTwo, then the current root must be their YCA.
+    if root is None or root == descendantOne or root == descendantTwo: 
+        return root
+    
+    # 2: Recursively call function on the left and right child nodes to traverse down the tree
+    leftNode = getYoungestCommonAncestor(root.left, descendantOne, descendantTwo)
+    rightNode = getYoungestCommonAncestor(root.right, descendantOne, descendantTwo)
+    
+    # 3: If leftNode from left subtree and rightNode from right subtree are both returning actual values (non-null), root is the YCA.
+    # If left subtree contains one of descendant (descendantOne or descendantTwo) and right subtree contains the remaining descendant (descendantTwo or descendantOne) then the root is their YCA.
+    if leftNode is not None and rightNode is not None:
+        return root
+    
+    # 4: If leftNode from left subtree is returning an actual value but that from right is returning None, leftNode is the YCA.
+    # If left subtree contains both descendantOne and descendantTwo then return left as their YCA.
+    if leftNode is not None: 
+        return leftNode
+    # 5: If rightNode from right subtree is returning an actual value but that from left is returning None, rightNode is the YCA.
+    # If right subtree contains both descendantOne and descendantTwo then return right as their YCA.
+    else:
+        return rightNode
+```
+</p>
+</details>
+
+✅ **DEPTH FIRST SEARCH (RECURSIVE):** 
+1. Perform DFS from root down to every single children nodes by recursively calling itself while passing in node.left, node.right, descendantOne and descendantTwo nodes.
+2. If root is None or root == descendantOne or root == descendantTwo, return root.
+3. If leftNode is not None and rightNode is not None, return root.
+4. If leftNode is not None, return leftNode
+5. Else if right node is not None, return rightNode 
 
 ---
 ## [🟨 River Sizes](https://www.algoexpert.io/questions/River%20Sizes)
@@ -1883,6 +1965,9 @@ def numIslands(self, grid):
                 count += 1
     return count
 ```
+</p>
+</details>
+
 ✅ **DEPTH FIRST SEARCH (RECURSIVE)**: _for each cell, if cell is 1 and unvisited, run dfs, increment count and mark each contiguous 1's as visited in auxiliary matrix_
 
 ---
@@ -1907,6 +1992,9 @@ Input: grid = [
 Output: 6
 Explanation: The answer is not 11, because the island must be connected 4-directionally.
 ```
+<details><summary><b>Solution</b></summary>
+<p>
+
 ### [**Depth First Search (Iterative Stack)**](https://leetcode.com/problems/max-area-of-island/solution/)
 ```python
 def maxAreaOfIsland(self, grid):
@@ -1952,6 +2040,56 @@ def maxAreaOfIsland(self, grid):
 - Add and Search Word - https://leetcode.com/problems/add-and-search-word-data-structure-design/
 - Word Search II - https://leetcode.com/problems/word-search-ii/
 ### [📋 **Back to Table of Contents**](#toc)
+
+---
+#### ♽ Recursive DFS
+```python
+# 1: Base edge case to break the depth first search when we have arrived None child nodes of the leaf node
+if node is None:
+    return
+
+# 2: When reaching a leaf node
+if node.left is None and node.right is None:
+
+# 3: Recursive function call to traverse down the tree and passing computed values down
+recursiveFunction(node.left, doSomething, ans)
+recursiveFunction(node.right, doSomething, ans)
+```
+#### 📚 Stack DFS
+```python
+# 1: Initialise a stack with root node
+stack = [root]
+
+# 2: Iterate all elements of the stack in LIFO order
+while len(stack) > 0: 
+    node = stack.pop() # Pop the top-most element 
+
+# 3: Base edge case to break the depth first search when we have arrived None child nodes of the leaf node
+if node is None:
+    return
+ 
+# 4: Push child nodes to stack to traverse down the tree
+stack.append(node.left)
+stack.append(node.right)
+```
+
+#### 🌲 Queue BFS
+```python
+# 1: Initialise a queue with root node
+queue = [root]
+
+# 2: Iterate all elements of the queue in FIFO order
+while len(queue) > 0: 
+    node = queue.pop(0) # Pop the bottom-most element 
+
+# 3: Base edge case to break the depth first search when we have arrived None child nodes of the leaf node
+if node is None:
+    return
+ 
+# 4: Push child nodes to queue to traverse down the tree
+queue.append(node.left)
+queue.append(node.right)
+```
 
 ---
 ## [🟩 Branch Sums](https://www.algoexpert.io/questions/Branch%20Sums)
@@ -2023,20 +2161,6 @@ def calculateBranchSums(node, runningSum, sums):
 </details>
 
 ✅ **DFS RECURSION:** _Recursively call the calculateBranchSums helper function to traverse down the branch (both left and right), summing up nodes and append the totalSum when a leaf node is reached (node.left and node.right are None)_
-
-### 🧠 Key Anatomy of DFS
-```python
-# 1: Base edge case to return if node is None, which can occur when parent node has only 1 child
-if node is None:
-    return
-
-# 2: When reaching a leaf node
-if node.left is None and node.right is None:
-
-# 3: Recursive function call to traverse down the tree and passing computed values down
-recursiveFunction(node.left, doSomething, ans)
-recursiveFunction(node.right, doSomething, ans)
-```
 
 ---
 ## [🟩 Node Depths](https://www.algoexpert.io/questions/Node%20Depths)
@@ -2209,38 +2333,93 @@ class TreeInfo:
 # Average case: When the tree is balanced
 # O(n) Time | O(h) Space - where n is the number of nodes in the BT and h is the height of the BT
 def binaryTreeDiameter(tree):
-    return getTreeInfo(tree).diameter
+    maxDiameter, _ = findDiameter(tree)
+    return maxDiameter
 
-def getTreeInfo(tree):
-    # Once we've reached the branch end leaf node after DFS recursive calls, return TreeInfo(0, 0) object 
+def findDiameter(tree): 
+    # 1: Set the base case for when we reach the branch end of the binary tree with None child nodes
     if tree is None:
-        return TreeInfo(0, 0)
+        return (0, 0)
+
+    # 2: Recursively call findDiameter helper function passing in tree.left and tree.right to DFS traverse down until branch end before computations in Step 3
+    leftTreeDiameter, leftTreeHeight = findDiameter(tree.left)
+    rightTreeDiameter, rightTreeHeight = findDiameter(tree.right)
     
-    # ============================================
-    # RECURSIVE DFS CALLS TO REACH LEAF NODE FIRST
-    # ============================================
-    # 2: Recursively call the function itself while passing in tree.left and tree.right as inputs 
-    # The recursive function calls of child nodes will traverse down until the branch end (DFS) before executing the below code
-    leftTreeInfo = getTreeInfo(tree.left) # for child nodes to the left
-    rightTreeInfo = getTreeInfo(tree.right) # for child nodes to the right
+    # 3: From the branch end, backtrack with the following max computations:
+    # Set currentDiameter to whichever value is larger for 3 cases
+    currentDiameter = max(leftTreeHeight + rightTreeHeight, leftTreeDiameter, rightTreeDiameter)
+    # Set currentHeight that increments by 1 plus whichever value is larger for 2 cases 
+    currentHeight = 1 + max(leftTreeHeight, rightTreeHeight) # Value 1 enables the edges to be aggregated as we backtrack
     
-    # ===========================================================
-    # BACKTRACK USING MAX COMPUTATIONS FROM LEAF BACK TO THE ROOT
-    # ===========================================================
-    # 3: Once recursive DFS until the branch end is complete, backtrack with the following computations:
-    currentDiameter = max(leftTreeInfo.height + rightTreeInfo.height, leftTreeInfo.diameter, rightTreeInfo.diameter)
-    currentHeight = 1 + max(leftTreeInfo.height, rightTreeInfo.height) # Increment height by 1 per level traversal by recursive DFS
-    # Note: currentDiameter = max(longestPathThroughRoot, maxDiameterSoFar)
-    # where: longestPathThroughRoot = leftTreeInfo.height + rightTreeInfo.height
-    #        maxDiameterSoFar = max(leftTreeInfo.diameter, rightTreeInfo.diameter)
-    
-    return TreeInfo(currentDiameter, currentHeight) # 4: Return TreeInfo object with diameter and height properties
+    # 4: Return a tuple of currentDiameter and currentHeight integers
+    return (currentDiameter, currentHeight)
 ```
 </p>
 </details>
 
-✅ **DFS RECURSION WITH BACKTRACKING MAX COMPUTATIONS:** _Create a TreeInfo class to store diameter and height properties. Recursively call getTreeInfo to perform DFS on all child nodes until the leaf node. Then, backtrack and compute diameter and height values using max functions. Return TreeInfo object with the final diameter and height values after all recursive calls._
+✅ **DFS RECURSION WITH BACKTRACKING MAX COMPUTATIONS:** _Recursively call findDiameter to perform DFS on all child nodes until the leaf node. Then, backtrack and compute diameter and height values using max functions. Return tuple with the final diameter and height values after all recursive calls._
+- `currentDiameter` = max(leftTreeHeight + rightTreeHeight, leftTreeDiameter, rightTreeDiameter)
+- `currentHeight` = 1 + max(leftTreeHeight, rightTreeHeight)
 
+---
+## [🟨 Height Balanced Binary Tree](https://www.algoexpert.io/questions/Height%20Balanced%20Binary%20Tree)
+>* You're given the root node of a Binary Tree. Write a function that returns `true` if this Binary Tree is height balanced and `false` if it isn't.
+>* A Binary Tree is height balanced if for each node in the tree, the difference between the height of its left subtree and the height of its right subtree is at most `1`
+>* Each `BinaryTree` node has an integer `value`, a `left` child node, and a `right` child node.
+>* Children nodes can either be `BinaryTree` nodes themselves or `None`
+
+- [x] Input: 
+```python
+tree = 
+         1
+      /    \
+     2      3      
+    /  \     \   
+  4     5     6  
+       / \    
+      7   8      
+```
+- [x] Output: `true`
+<details><summary><b>Solution</b></summary>
+<p>
+
+```python
+class BinaryTree:
+    def __init__(self, value): 
+        self.value = value
+        self.left = None
+        self.right = None
+        
+# O(n) Time | O(h) Space - where n is the number of nodes and h is the height of the binary tree
+def heightBalancedBinaryTree(tree):
+    isBalanced, _ = checkBalanced(tree)
+    return isBalanced
+
+def checkBalanced(tree): 
+    # 1: Set the base case for when we reach the branch end of the binary tree with None child nodes
+    if tree is None:
+        return (True, -1)
+    
+    # 2: Recursively call checkBalanced helper function passing in tree.left and tree.right to DFS traverse down until branch end before computations in Step 3
+    isLeftTreeBalanced, leftTreeHeight = checkBalanced(tree.left)
+    isRightTreeBalanced, rightTreeHeight = checkBalanced(tree.right) 
+
+    # 3: From the branch end, backtrack with the following logical and max computations:
+    # The tree is only balanced if left tree is balanced, right tree is balanced and the difference between the height of its left subtree and the height of its right subtree is at most 1
+    isBalanced = isLeftTreeBalanced and isRightTreeBalanced and (abs(leftTreeHeight - rightTreeHeight) <= 1)
+    # Set height to whichever value is larger between left or right subtree 
+    height = 1 + max(leftTreeHeight, rightTreeHeight) # Add 1 to keep track of total height after n recursive calls
+    
+    # 4: Return a tuple of isBalanced Boolean and height integer
+    return (isBalanced, height)
+```
+</p>
+</details>
+
+✅ **DFS RECURSION WITH BACKTRACKING MAX COMPUTATIONS:** _Recursively call checkBalanced to perform DFS on all child nodes until the leaf node. Then, backtrack and compute isBalanced `Boolean` and height `int` using logical and max functions respectively. Return tuple with isBalanced `Boolean` and height `int` after all recursive calls._
+- `isBalanced` = isLeftTreeBalanced and isRightTreeBalanced and (abs(leftTreeHeight - rightTreeHeight) <= 1)
+- `height` = 1 + max(leftTreeHeight, rightTreeHeight)
+  
 ---
 ## [🟥 Binary Tree Maximum Path Sum](https://leetcode.com/problems/binary-tree-maximum-path-sum/)
 >* Write a function that takes in a Binary Tree and returns its max path sum.
@@ -2267,40 +2446,46 @@ class BinaryTree:
         self.value = value
         self.left = None
         self.right = None
-
+        
 def maxPathSum(tree):
     _, maxSum = findMaxSum(tree)
     return maxSum
-
-def findMaxSum(tree):
-    if tree is None:
+    
+def findMaxSum(node): 
+    if node is None: 
         return (0, float("-inf"))
     
-    # ============================================
-    # RECURSIVE DFS CALLS TO REACH LEAF NODE FIRST
-    # ============================================
+    # ====================================================
+    # STEP 1: RECURSIVE DFS CALLS TO REACH LEAF NODE FIRST
+    # ====================================================
     # 1: Recursively call the function itself while passing in tree.left and tree.right as inputs 
     # The recursive function calls of child nodes will traverse down until the branch end (DFS) before executing the below code
-    leftMaxSumAsBranch, leftMaxPathSum = findMaxSum(tree.left)
-    rightMaxSumAsBranch, rightMaxPathSum = findMaxSum(tree.right)
+    leftBranchSum, leftPathSum = findMaxSum(node.left)
+    rightBranchSum, rightPathSum = findMaxSum(node.right)
+    
+    value = node.value
     
     # ===================================================================
     # STEP 2: BACKTRACK USING MAX COMPUTATIONS FROM LEAF BACK TO THE ROOT
     # ===================================================================
-    # 2: Once recursive DFS until the branch end is complete, backtrack with the following computations:
-    maxChildSumAsBranch = max(leftMaxSumAsBranch, rightMaxSumAsBranch)
-    value = tree.value
-    maxSumAsBranch = max(maxChildSumAsBranch + value, value)
-    maxSumAsRootNode = max(leftMaxSumAsBranch + value + rightMaxSumAsBranch, maxSumAsBranch)
-    maxPathSum = max(leftMaxPathSum, rightMaxPathSum, maxSumAsRootNode)
+    # 2: Once recursive DFS until the branch end is complete, backtrack with the following max computations:
+    maxChildSum = max(leftBranchSum, rightBranchSum)
+    maxBranchSum = max(maxChildSum + value, value)
+    maxRootSum = max(leftBranchSum + value + rightBranchSum, maxBranchSum)
+    maxPathSum = max(leftPathSum, rightPathSum, maxRootSum)
     
-    return (maxSumAsBranch, maxPathSum) # 3: Return tuple with MaxSumAsBranch, maxPathSum values
+    # 3: Return tuple with maxBranchSum, maxPathSum values
+    return (maxBranchSum, maxPathSum)
 ```
 </p>
 </details>
 
-✅ **DFS RECURSION WITH BACKTRACKING MAX COMPUTATIONS:** _Recursively call findMaxSum to perform DFS on all child nodes until the leaf node. Then, backtrack and compute maxChildSumAsBranch, maxSumAsBranch, maxSumAsRootNode and maxPathSum using max functions. Return tuple with maxSumAsBranch and maxPathSum values after all recursive calls._
-
+✅ **DFS RECURSION WITH BACKTRACKING MAX COMPUTATIONS:** _Recursively call findMaxSum to perform DFS on all child nodes until the leaf node. Then, backtrack and compute maxChildSum, maxBranchSum, maxRootSum and maxPathSum using max functions. Return tuple with maxBranchSum and maxPathSum values after all recursive calls._
+- `maxChildSum` = max(leftBranchSum, rightBranchSum)
+- `maxBranchSum` = max(`maxChildSum` + value, value)
+- `maxRootSum` = max(leftBranchSum + value + rightBranchSum, `maxBranchSum`)
+- `maxPathSum` = max(leftPathSum, rightPathSum, `maxRootSum`)
+    
 ---
 # <div id='bst'/> 🌲 **Binary Search Trees**
 ## [🟩 Find Closest Value in BST](https://www.algoexpert.io/questions/Find%20Closest%20Value%20In%20BST)

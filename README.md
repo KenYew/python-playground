@@ -93,6 +93,7 @@
 - [x] Output: `[0, 1]`
 - [x] Explanation: `Because nums[0] + nums[1] == 9, we return [0, 1].`
 
+
 ### **Brute Force**
 ```python
 # O(n^2) Time | O(1) Space
@@ -119,7 +120,10 @@ def twoNumberSum(array, target):
 			nums[num] = True
 	return []
 ```
+
 ✅ **HASH TABLE:** _Use hash map to instantly check for difference value, map will add index of last occurrence of a num, don’t use same element twice_
+
+
 
 ### **Two Pointers**
 ```python
@@ -138,7 +142,9 @@ def TwoSums(array, target):
             return [array[left], array[right]]
     return -1 
 ```
+
 ✅ **TWO POINTERS:** _Sort the array, use two pointers on each end of the array and move pointers based on comparison between sum and targetNum_
+
 
 ---
 ## [🟩 Maximum Subarray](https://leetcode.com/problems/maximum-subarray/)
@@ -148,6 +154,7 @@ def TwoSums(array, target):
 - [x] Input: `nums = [-2,1,-3,4,-1,2,1,-5,4]`
 - [x] Output: `6`
 - [x] Explanation: `[4,-1,2,1] has the largest sum = 6.`
+
 
 ### **Kadane's Algorithm** 
 ```python
@@ -185,6 +192,7 @@ def maximumSubarraySum(self, arr):
 <img src="https://leetcode.com/media/original_images/121_profit_graph.png" width="500"  /><br/>
 The points of interest are the peaks and valleys in the given graph. We need to find the largest peak following the smallest valley. We can maintain two variables - minprice and maxprofit corresponding to the smallest valley and maximum profit (maximum difference between selling price and minprice) obtained so far respectively.
 
+
 ### **Kadane's Algorithm**
 ```python
 # O(n) Time | O(1) Space
@@ -219,6 +227,7 @@ def maxProfit(prices):
 > Given an integer array `nums`, return `true` if any value appears **at least twice** in the array, and return `false` if every element is distinct.
 - [x] Input: `nums = [1,2,3,1]`
 - [x] Output: `true`
+
 
 ### **Brute Force**
 ```python
@@ -261,6 +270,7 @@ def containsDuplicate(nums):
 def containsDuplicate(self, nums):
     return len(nums) > len(set(nums))
 ```
+
 ✅ **HASH SET:** _Use hash set to add and keep track of unique values in array, if value is seen in hash set, we found our duplicate_
 
 ---
@@ -269,6 +279,8 @@ def containsDuplicate(self, nums):
 >* Return a new array of the same length with the squares of the original integers also sorted in ascending order.
 - [x] Input: `array = [1, 2, 3, 5, 6, 8, 9]`
 - [x] Output: `[1, 4, 9, 25, 36, 64, 81]`
+
+
 ### **Two Pointers**
 ```python
 # O(n) Time | O(n) Space - where n is the length of the input array
@@ -294,6 +306,7 @@ def sortedSquaredArray(array):
     # 10: Finally, return the sorted squared array
     return ans
 ```
+
 ✅ **TWO POINTERS:** _Initialise output array with 0's, and left and right pointers on each end of array. Traverse idx from end to beginning of the array, if abs(leftVal) > abs(rightVal), write the ans[idx] = leftVal ** 2 and increment left, else abs(rightVal) >= abs(leftVal), write the ans[idx] = rightVal **2 and decrement right._
 
 ---
@@ -305,6 +318,7 @@ the numbers `[2, 4]`.
 >* Note that a single number in an array and the array itself are both valid subsequences of the array.
 - [x] Input: `array = [5, 1, 22, 25, 6, -1, 8, 10], sequence = [1, 6, -1, 10]`
 - [x] Output: `true`
+
 
 ### **Two Pointers**
 ```python
@@ -327,6 +341,7 @@ def isValidSubsequence(array, sequence):
     # 5: Once we have incremented seqIdx enough times, return the Boolean answer of whether the sequence is valid (only if seqIdx == len(sequence))
     return seqIdx == len(sequence)
 ```
+
 ✅ **TWO POINTERS:** _Initialise pointer for both input arrays (arr, seq). While both pointers have not fully traversed their arrays, if values from both array match, increment seqIdx, otherwise keep incrementing arrIdx. Return Boolean logic seqIdx == len(sequence)_
 
 ---
@@ -343,6 +358,7 @@ def isValidSubsequence(array, sequence):
 10 is equal to 5 x 1 x 2
 20 is equal to 5 x 1 x 4
 ```
+
 
 ### **Brute Force**
 ```python
@@ -435,6 +451,7 @@ def arrayOfProducts(array):
         
     return products
 ```
+
 ✅ **TWO POINTERS:** 
 - Initialise the result array with 1s and equal to the size of the input array. 
 - Starting with leftRunningProduct = 1, loop through each element of the input array from left to right, setting each element of the result array with leftRunningProduct as leftRunningProduct multiplies up each element from left to right. 
@@ -448,6 +465,7 @@ def arrayOfProducts(array):
 >* You can assume that there will only be one pair of numbers with the smallest difference.
 - [x] Input: `arrayOne = [-1, 5, 10, 20, 28, 3], arrayTwo = [26, 134, 135, 15, 17]`
 - [x] Output: `[28, 26]`
+
 
 ### **Two Pointers**
 ```python
@@ -490,6 +508,7 @@ def smallestDifference(arrayOne, arrayTwo):
             smallestPair = [firstNum, secondNum] # store also the smallest pair of nums in this iteration
     return smallestPair
 ```
+
 ✅ **TWO POINTERS:** 
 1. Sort both input array1 and array2. 
 2. While idx1 and idx2 pointers have not fully traversed their arrays,
@@ -503,6 +522,7 @@ def smallestDifference(arrayOne, arrayTwo):
 >* The function should perform this in place (i.e., it should mutate the input array) and doesn't need to maintain the order of the other integers.
 - [x] Input: `array = [2, 1, 2, 2, 2, 3, 4, 2], toMove = 2`
 - [x] Output: `[1, 3, 4, 2, 2, 2, 2, 2]`
+
 
 ### **Two Pointers**
 ```python
@@ -525,6 +545,7 @@ def moveElementToEnd(array, toMove):
         left += 1
     return array
 ```
+
 ✅ **TWO POINTERS:** _Initialise two pointers (left & right) on each end. While left < right, nested while rightVal == toMoveNum, decrement right to ensure rightVal points to a swappable num != toMoveNum. Keep incrementing left. If leftVal == toMoveNum, perform swap._
 
 ---
@@ -536,6 +557,7 @@ peak in the array.
 - [x] Input: `array = [1, 2, 3, 3, 4, 0, 10, 6, 5, -1, -3, 2, 3]`
 - [x] Output: `6`
 - [x] Explanation: `0, 10, 6, 5, -1 -3` form the longest peak
+
 
 ### **Two Pointers**
 ```python
@@ -579,6 +601,7 @@ def longestPeak(array):
         
     return longestPeakLength
 ```
+
 ✅ **TWO POINTERS:** 
 1. Intialise peakIdx to traverse the array and find a potential peak.
 2. If peak is found, set leftIdx and rightIdx to be peakIdx - 2 and peakIdx + 2 to. 
@@ -588,9 +611,6 @@ def longestPeak(array):
 6. Update peakIdx to be rightIdx to find the next potential longest peak. 
 7. Return max(longestPeakLength, currentPeakLength)
 
-
-
-
 ---
 ## [🟨 3Sum](https://leetcode.com/problems/3sum/)
 > Given an integer array nums, return all the triplets `[nums[i], nums[j], nums[k]` such that `i != j`, `i != k`, and `j != k`, and `nums[i] + nums[j] + nums[k] == 0`.
@@ -599,6 +619,7 @@ def longestPeak(array):
 
 - [x] Input: `nums = []` or `nums = [0]`
 - [x] Output: `[]`
+
 
 ### [**Two Pointers**](https://leetcode.com/problems/two-sum/discuss/737092/Sum-MegaPost-Python3-Solution-with-a-detailed-explanation)
 ```python
@@ -646,10 +667,12 @@ def threeSum(nums: List[int]) -> List[List[int]]:
                 right -= 1
     return ans
 ```
+
 ✅ **TWO POINTERS:** 
 - `ThreeSum: A + B + C = 0` 
 - _Sort input array, perform a FOR loop for A, then set Two Pointers (L & R) for B and C. Increment L if sum is too small and decrement R if sum is too big._
 - _To prevent duplicates, if A == prevA, skip FOR loop iteration. If B == prevB, increment L in the TwoPointer WHILE loop_
+
 
 ### **TargetSum Variant**
 ```python
@@ -692,6 +715,7 @@ def threeNumberSum(array, targetSum):
                 right -= 1
     return ans
 ```
+
 ✅ **TWO POINTERS:** 
 - `ThreeSum: A + B + C = 0` 
 - _Sort input array, perform a FOR loop for A, then set Two Pointers (L & R) for B and C. Increment L if sum is too small and decrement R if sum is too big. When targetSum is found, find the next targetSum by traversing both L & R inwards._
@@ -710,6 +734,7 @@ def threeNumberSum(array, targetSum):
 
 - [x] Input: `matrix = [[1,2,3],[4,5,6],[7,8,9]]`
 - [x] Output: `[1,2,3,6,9,8,7,4,5]`
+
 
 <img src="https://assets.leetcode.com/uploads/2020/11/13/spiral1.jpg" width="250" align="left" /><br/>
 <img src="https://assets.leetcode.com/uploads/2020/11/13/spiral.jpg" width="300"  /><br/>
@@ -753,6 +778,7 @@ def spiralTraverse(array):
     
     return ans
 ```
+
 ✅ **TWO POINTERS:** _Keep track of visited cells; keep track of boundaries, layer-by-layer_
 
 ---
@@ -778,6 +804,7 @@ def spiralTraverse(array):
 - [x] Input: `intervals = [[1,3],[2,6],[8,10],[15,18]]`
 - [x] Output: `[[1,6],[8,10],[15,18]]`
 - [x] Explanation: `Since intervals [1,3] and [2,6] overlaps, merge them into [1,6].`
+
 
 ### **Sort, Check and Mutate**
 ```python
@@ -809,6 +836,7 @@ def mergeOverlappingIntervals(intervals):
             
     return mergedIntervals
 ```
+
 ✅ **SORT, CHECK AND MUTATE:** _Sort intervals by start values, compare end value and start value of adjacent intervals to check for overlap, mutate end value of answer interval to encapsulate merges, iterate checks for all intervals_
 ### **Problem similar to:**
 - 252 Meeting Rooms
@@ -840,6 +868,7 @@ input string by k positions in the alphabet, where k is the key.
 - [x] Input: `string = xyz, key = 2`
 - [x] Output: `zab`
 
+
 ### **ORD/CHR String Manipulation with Modulo Wrapping**
 ```python
 # O(n) Time | O(n) Space
@@ -858,6 +887,7 @@ def getNewLetter(letter, key):
 	else:
 		return chr(96 + newLetterCode % 122)
 ```
+
 ✅ **ORD/CHR AND MODULO:** 
 - `ASCII: A = 96, Z = 122`
 - _Loop each letter, convert letter into ASCII + KEY using ORD, then re-convert using CHR while handling for Z->A wrapping using MODULO 122_
@@ -869,6 +899,7 @@ def getNewLetter(letter, key):
 
 - [x] Input: `strs = ["eat","tea","tan","ate","nat","bat"]`
 - [x] Output: `[["bat"],["nat","tan"],["ate","eat","tea"]]`
+
 
 ### **Hash Map**
 ```python
@@ -885,6 +916,7 @@ def groupAnagrams(words):
             anagrams[sortedWord] = [word]
     return list(anagrams.values())
 ```
+
 ✅ **HASH MAP:** _Loop and sort each word, append `sortedWord/word` key/value pairs in `anagrams_dict`, if sortedWord is in `anagrams_dict`, set `anagrams_dict[sortedWord].append(word)`, return `anagram_dict.values()`_
 
 ---
@@ -897,6 +929,8 @@ def groupAnagrams(words):
 
 - [x] Input: `string = "([])(){}(())()()"`
 - [x] Output: `true`
+
+
 ### **Dictionaries and Stacks**
 ```python
 def isValidParentheses(string):
@@ -963,6 +997,7 @@ def balancedBrackets(string):
 - [x] Input: `string = "1921680"`
 - [x] Output: `['1.9.216.80', '1.92.16.80', '1.92.168.0', '19.2.16.80', '19.2.168.0', '19.21.6.80', '19.21.68.0', '19.216.8.0', '192.1.6.80', '192.1.68.0', '192.16.8.0']`
 
+
 ### **Three Pointers**
 ```python
 # O(1) Time | O(1) Space
@@ -1003,6 +1038,7 @@ def isValidPart(string):
         return False
     return len(string) == len(str(stringAsInt)) # Checks if there are any leading 0's
 ```
+
 ✅ **THREE POINTERS**: _Set 3 pointers i, j, k for each IP dots, create 3 FOR loops for each pointer to slice string into 4 possible IP octets and check if the octets are valid (0-255) using a helper function. If all 4 octets are valid, then join the valid octets with '.' and append to answers array._
 
 ---
@@ -1024,6 +1060,7 @@ def isValidPart(string):
 
 - [x] Input: `list1 = [1,2,4], list2 = [1,3,4]`
 - [x] Output: `[1,1,2,3,4,4]`
+
 
 <img src="https://assets.leetcode.com/uploads/2020/10/03/merge_ex1.jpg" width="500"/>
 
@@ -1059,6 +1096,7 @@ def mergeLinkedLists(headOne, headTwo):
         p1Prev.next = p2 # in this case, p1Prev is the final node of the 1st linked list and its next value should immediately connect to the 2nd linked list at p2
     return headOne if headOne.value < headTwo.value else headTwo # return the correct head of the linkedlist with the smaller value
 ```
+
 ✅ **ITERATIVELY IN-PLACE:** 
 - _Create 3 pointers (p1Prev, p1, p2)_
 - _If NodeL1 < NodeL2, keep moving prev and p1 to the next nodes._
@@ -1086,6 +1124,8 @@ linkedListTwo = 9 -> 4 -> 5
 # linkedListTwo represents 549
 # Hence, 1742 + 549 = 2291
 ```
+
+
 ### **Iterative Arithmetics**
 ```python
 class LinkedList:
@@ -1156,6 +1196,7 @@ def sumOfLinkedLists(linkedListOne, linkedListTwo):
     # 12: Return the head of the new linked list (since newLinkedListHeadPointer is just a placeholder node with value 0, we only care about the next node which is the head of the new linked list)
     return newLinkedListHeadPointer.next 
 ```
+
 ✅ **ITERATIVE ARITHMETICS:** _Initialise dummy head node, traverse both linked lists, compute sumOfValues = LL1 + LL2 + carry, use %10 to compute new values of the new nodes to link, use //10 to compute carry over value for next iteration, return head of the newly created linked list (dummy.next)_
 
 ---
@@ -1179,6 +1220,8 @@ k = 4
 0 -> 1 -> 2 -> 3 -> 4 -> 5 -> 7 -> 8 -> 9
 # The input linked lists is mutated in-place where the 4th node from the end (node value 6) has been removed
 ```
+
+
 ### **Two Pointers**
 ```python
 class LinkedList:
@@ -1213,6 +1256,7 @@ def removeKthNodeFromEnd(head, k):
     # 6: Perform linked list mutation to delete the k-th node from the end by changing the next pointer to skip the k-th node
     first.next = first.next.next 
 ```
+
 ✅ **TWO POINTERS:** _Initially set two pointers (F & S), move the S pointer k number of times, if S points to None already, delete the head immediately, otherwise move F & S pointers at the same pace until S points at None so that F natrually points to the k-th node from end, delete the k-th node by mutating F.next = F.next.next_
 
 ---
@@ -1230,30 +1274,45 @@ head = 0 -> 1 -> 2 -> 3 -> 4 -> 5 # The head node with value 0
 ```python
 5 -> 4 -> 3 -> 2 -> 1 -> 0 # The new head node with value 5
 ```
+
+
 ### **Iterative Mutation**
 ```python
 class LinkedList:
     def __init__(self, value):
         self.value = value
         self.next = None
-
+"""
+Key: p1 - previousNode, p2 - currentNode, p3 - currentNode.next
+Step 1:
+p1      p2   p3
+None -> 0 -> 1 -> 2 -> 3 -> 4 -> 5 -> None
+Step 4 - 7:
+        p1   p2   p3
+None -> 0 <- 1 -> 2 -> 3 -> 4 -> 5 -> None
+Step 8:
+                                 p1   p2   p3
+None -> 0 <- 1 <- 2 <- 3 <- 4 <- 5 -> None
+"""
 # O(n) Time | O(1) Space - where n is the number of nodes in the linked list
 def reverseLinkedList(head):
     # 1: Initialise previousNode and currentNode with None and input head respectively
     previousNode, currentNode = None, head
-    # 2: While we are still traversing and have not reached the end of the linked list,
+    # 2: While currentNode has not reached None yet (end of the linkedlist),
     while currentNode is not None: 
-        # 3: Set next to be the currentNode's next pointer
+        # 3: Store the next node of currentNode in a temporary next variable (p3)
         next = currentNode.next
-        # 4: Connect currentNode's next pointer to previousNode
+        # 4: Connect currentNode.next to the previousNode so that we create a reversal
         currentNode.next = previousNode
-        # 5: Update previousNode to be currentNode now
+        # 5: To prepare for the next iteration, we need to shift the previousNode and currentNode forward so that we can reverse the next node
+        # 6: Update previousNode to be currentNode
         previousNode = currentNode
-        # 6: Update currentNode to be the next node to keep traversing
+        # 7: Update currentNode to be the temporary next variable (p3) we stored earlier
         currentNode = next
-    # 7: Return the new head of the reversed linked list
+    # 8: Return the new head of the reversed linked list
     return previousNode
 ```
+
 ✅ **ITERATIVE MUTATION:** _Iterate through the linked list while maintaining currentNode and previousNode, iteratively reverse, return new head of list_
 
 ---
@@ -1281,6 +1340,8 @@ def reverseLinkedList(head):
 
 - [x] Input: `array = [2, 3, 1, -4, -4, 2]`
 - [x] Output: `true`
+
+
 ### **Depth First Search (Recursive)**
 ```python
 # O(n) Time | O(1) Space
@@ -1315,6 +1376,7 @@ def getNextIdx(currentIdx, array):
     return nextIdx if nextIdx >= 0 else nextIdx + len(array) 
     # We want to prevent returning problematic -ve indices so we return nextIdx + len(array) to convert -ve indices to +ve indices which wraps around the arrays when jump value is too large of a -ve value.
 ```
+
 ✅ **DEPTH FIRST SEARCH (RECURSIVE):** _Traverse the array with numElementsVisited == len(array) counter, if we currentIdx == 0 while we're still traversing, return False. Otherwise, keep incrementing numElementsVisited. Update currentIdx with nextIdx = (currentIdx + array[currentIdx]) % len(array). Return currentIdx == 0 after visiting all elements._
 
 ---
@@ -1347,6 +1409,8 @@ true
 # 3: 1 -> 2 -> 0 -> 1
 # These are just 3 examples; there are more.
 ```
+
+
 ### **Depth First Search (Recursive)**
 ```python
 # O(v + e) Time | O(v) Space
@@ -1382,6 +1446,7 @@ def isNodeInCycle(node, edges, visited, currentlyInStack):
     currentlyInStack[node] = False
     return False
 ```
+
 ✅ **DEPTH FIRST SEARCH (RECURSIVE):** 
 
 ---
@@ -1414,38 +1479,107 @@ descendantTwo = node I
  H   I  
 ```
 - [x] Output: `node B`
-### **DFS Recursion**
+
+
+### **DFS Iterative**
 ```python
 class AncestralTree:
     def __init__(self, name):
         self.name = name
         self.ancestor = None
 
-# O(h) Time | O(1) Space - where h is the height of the ancestral tree
+# O(d) Time | O(1) Space - where d is the depth of descendants
+# O(d) Time because we only need to traverse the number of depths of the lowest descendant node at most
+# O(1) Space because we are not using any recursion stack or storing any extra memory in arrays, we are computing the AncestralTree in-place
 def getYoungestCommonAncestor(topAncestor, descendantOne, descendantTwo):
+    # 1: Calculate how deep the descendant nodes are located in the AncestralTree using a helper function
     depthOne = getDescendantDepth(descendantOne, topAncestor)
     depthTwo = getDescendantDepth(descendantTwo, topAncestor)
+    
+    # 5: If depth of descendantOne is deeper than that of descendantTwo,
     if depthOne > depthTwo: 
+        # 6: Pass the lowerDescendant node, higherDescendant node and their difference in depths to helper function
         return backtrackAncestralTree(descendantOne, descendantTwo, depthOne - depthTwo)
-    else:
-        return backtrackAncestralTree(descendantOne, descendantTwo, depthTwo - depthOne)
-
-def getDescendantDepth(descendant, topAncestor):
+    else: # 7: Else if depthTwo >= depthOne, pass the higherDescendant node, lowerDescendant node and their difference in depths to helper function
+        return backtrackAncestralTree(descendantTwo, descendantOne, depthTwo - depthOne)
+    
+def getDescendantDepth(descendant, topAncestor): 
     depth = 0
+    # 2: While we have not traversed all the way up to the top-most ancestor from the descendant node,
     while descendant != topAncestor: 
-        depth += 1
-        descendant = descendant.ancestor
+        # 3: Increment the depth (bottom-up) and update descendant to be the next top ancestor node
+        depth += 1 
+        descendant = descendant.ancestor 
+    # 4: Return total depth between descendant node and top-most ancestor node
     return depth
 
 def backtrackAncestralTree(lowerDescendant, higherDescendant, diff):
+    # 8: While their difference in depths are greater than zero,
     while diff > 0: 
+        # 9: Traverse the lowerDescendant node up the Ancestral tree by calling the ancestor property
         lowerDescendant = lowerDescendant.ancestor
+        # 10: Decrement diff to iterate the traversal of the lowerDescendant node up the AncestralTree until difference in depths is zero (or in other words, both nodes are now at the same level of the AncestralTree)
         diff -= 1
-    while lowerDescendant != higherDescendant:
+        
+    # 11: Now that both descendant nodes are at the same level, determine the next youngest common ancestor (YCA) of both nodes.
+    # 12: While both descendant nodes are not equal to each other (YCA not determined yet), 
+    while lowerDescendant != higherDescendant: 
+        # 13: Keep traversing both nodes at the same time until they both reached the youngest common ancestor
         lowerDescendant = lowerDescendant.ancestor
         higherDescendant = higherDescendant.ancestor
-    return lowerDescendant
+    # 14: At this point, lowerDescendant = higherDescendant = YoungestCommonAncestor, so just return any descendant node
+    return lowerDescendant # return higherDescendant is also fine
 ```
+
+✅ **DEPTH FIRST SEARCH (ITERATIVE):** 
+1. Calculate both the depth of descendantOne and descendantTwo nodes from the topAncestor using a while loop and a depth += 1 incrementor. 
+2. Pass the descendantOne, descendantTwo and differenceInDepths into backtrackAncestralTree helper function. 
+3. In this helper function, while differenceInDepths > 0, move the lowerDescendant up (by calling the ancestor property) until both nodes are at the same level of AncestralTree. 
+4. Finally, determine the youngest common ancestor of both nodes by moving both nodes up at the same time while lowerDescendant != higherDescendant. 
+5. Return any descendant node once both descendant nodes have reached their youngest common ancestor node.
+
+
+
+### **DFS Iterative**
+```python
+class BinaryTree:
+    def __init__(self, value):
+        self.value = value
+        self.left = None
+        self.right = None
+         
+# O(n) Time | O(h) Space - where n is the number of nodes and h is the height of the binary tree
+def getYoungestCommonAncestor(root, descendantOne, descendantTwo): 
+    # 1: Base Case: If the root also happens to be either descendantOne or descendantTwo node, return root as the YCA
+    # Since we perform DFS from the root down to its children, if current root == descendantOne or root == descendantTwo, then the current root must be their YCA.
+    if root is None or root == descendantOne or root == descendantTwo: 
+        return root
+    
+    # 2: Recursively call function on the left and right child nodes to traverse down the tree
+    leftNode = getYoungestCommonAncestor(root.left, descendantOne, descendantTwo)
+    rightNode = getYoungestCommonAncestor(root.right, descendantOne, descendantTwo)
+    
+    # 3: If leftNode from left subtree and rightNode from right subtree are both returning actual values (non-null), root is the YCA.
+    # If left subtree contains one of descendant (descendantOne or descendantTwo) and right subtree contains the remaining descendant (descendantTwo or descendantOne) then the root is their YCA.
+    if leftNode is not None and rightNode is not None:
+        return root
+    
+    # 4: If leftNode from left subtree is returning an actual value but that from right is returning None, leftNode is the YCA.
+    # If left subtree contains both descendantOne and descendantTwo then return left as their YCA.
+    if leftNode is not None: 
+        return leftNode
+    # 5: If rightNode from right subtree is returning an actual value but that from left is returning None, rightNode is the YCA.
+    # If right subtree contains both descendantOne and descendantTwo then return right as their YCA.
+    else:
+        return rightNode
+```
+
+✅ **DEPTH FIRST SEARCH (RECURSIVE):** 
+1. Perform DFS from root down to every single children nodes by recursively calling itself while passing in node.left, node.right, descendantOne and descendantTwo nodes.
+2. If root is None or root == descendantOne or root == descendantTwo, return root.
+3. If leftNode is not None and rightNode is not None, return root.
+4. If leftNode is not None, return leftNode
+5. Else if right node is not None, return rightNode 
 
 ---
 ## [🟨 River Sizes](https://www.algoexpert.io/questions/River%20Sizes)
@@ -1472,6 +1606,8 @@ Explanation: matrix = [ # The rivers can be clearly seen here:
     [1,  , 1, 1,  ]
   ]
 ```
+
+
 ### **Depth First Search (Iterative)**
 ```python
 # O(n) Time - we only need to traverse all of the elements in the matrix once
@@ -1542,6 +1678,7 @@ def getUnvisitedNeighbours(i, j, matrix, visited):
         unvisitedNeighbours.append([i, j + 1]) # append the node (with indices) of the right neighbour
     return unvisitedNeighbours # finally, return the array containing nodes of all unvisited adjacent neighbours
 ```
+
 ✅ **DEPTH FIRST SEARCH (ITERATIVE)**: _for each cell, if cell is 1 and unvisited, run dfs, increment count and mark each contiguous 1's as visited in auxiliary matrix_
 
 ---
@@ -1579,6 +1716,8 @@ matrix =
     [1, 0, 0, 0, 0, 1],
 ]
 ```
+
+
 ### **Depth First Search (Iterative Stack)**
 ```python
 # O(w.h) Time | O(w.h) Space where w and are the width and height of the input matrix
@@ -1670,6 +1809,7 @@ def getNeighbors(matrix, row, col):
     return neighbors
 
 ```
+
 ✅ **DEPTH FIRST SEARCH (ITERATIVE)**: _Loop through only cells at the border, if cell is 1, run iterative dfs using a stack, mutate 1s into 2s, check for neighbours for any 1s to push to stack for next dfs iteration. Then, loop through all cells again and mutate 1s to 0s and 2s to 1s and return the mutated matrix in place._
 
 ---
@@ -1695,6 +1835,8 @@ Input: grid = [
 ]
 Output: 3
 ```
+
+
 ### **Depth First Search (Recursive)**
 ```python
 def numIslands(self, grid):
@@ -1723,6 +1865,7 @@ def numIslands(self, grid):
                 count += 1
     return count
 ```
+
 ✅ **DEPTH FIRST SEARCH (RECURSIVE)**: _for each cell, if cell is 1 and unvisited, run dfs, increment count and mark each contiguous 1's as visited in auxiliary matrix_
 
 ---
@@ -1747,6 +1890,8 @@ Input: grid = [
 Output: 6
 Explanation: The answer is not 11, because the island must be connected 4-directionally.
 ```
+
+
 ### [**Depth First Search (Iterative Stack)**](https://leetcode.com/problems/max-area-of-island/solution/)
 ```python
 def maxAreaOfIsland(self, grid):
@@ -1769,6 +1914,7 @@ def maxAreaOfIsland(self, grid):
                 ans = max(ans, shape)
     return ans
 ```
+
 ✅ **DEPTH FIRST SEARCH (ITERATIVE)**: _for each cell, if cell is 1 and unvisited, run dfs, increment count and mark each contiguous 1's as visited in auxiliary matrix_
 
 ---
@@ -1789,6 +1935,56 @@ def maxAreaOfIsland(self, grid):
 - Add and Search Word - https://leetcode.com/problems/add-and-search-word-data-structure-design/
 - Word Search II - https://leetcode.com/problems/word-search-ii/
 ### [📋 **Back to Table of Contents**](#toc)
+
+---
+#### ♽ Recursive DFS
+```python
+# 1: Base edge case to break the depth first search when we have arrived None child nodes of the leaf node
+if node is None:
+    return
+
+# 2: When reaching a leaf node
+if node.left is None and node.right is None:
+
+# 3: Recursive function call to traverse down the tree and passing computed values down
+recursiveFunction(node.left, doSomething, ans)
+recursiveFunction(node.right, doSomething, ans)
+```
+#### 📚 Stack DFS
+```python
+# 1: Initialise a stack with root node
+stack = [root]
+
+# 2: Iterate all elements of the stack in LIFO order
+while len(stack) > 0: 
+    node = stack.pop() # Pop the top-most element 
+
+# 3: Base edge case to break the depth first search when we have arrived None child nodes of the leaf node
+if node is None:
+    return
+ 
+# 4: Push child nodes to stack to traverse down the tree
+stack.append(node.left)
+stack.append(node.right)
+```
+
+#### 🌲 Queue BFS
+```python
+# 1: Initialise a queue with root node
+queue = [root]
+
+# 2: Iterate all elements of the queue in FIFO order
+while len(queue) > 0: 
+    node = queue.pop(0) # Pop the bottom-most element 
+
+# 3: Base edge case to break the depth first search when we have arrived None child nodes of the leaf node
+if node is None:
+    return
+ 
+# 4: Push child nodes to queue to traverse down the tree
+queue.append(node.left)
+queue.append(node.right)
+```
 
 ---
 ## [🟩 Branch Sums](https://www.algoexpert.io/questions/Branch%20Sums)
@@ -1818,6 +2014,7 @@ Output: [15, 16, 18, 10, 11]
 10 == 1 + 3 + 6
 11 == 1 + 3 + 7
 ```
+
 
 ### **Depth First Search (Recursive)**
 ```python
@@ -1854,21 +2051,8 @@ def calculateBranchSums(node, runningSum, sums):
     calculateBranchSums(node.left, newRunningSum, sums)
     calculateBranchSums(node.right, newRunningSum, sums)
 ```
+
 ✅ **DFS RECURSION:** _Recursively call the calculateBranchSums helper function to traverse down the branch (both left and right), summing up nodes and append the totalSum when a leaf node is reached (node.left and node.right are None)_
-
-### 🧠 Key Anatomy of DFS
-```python
-# 1: Base edge case to return if node is None, which can occur when parent node has only 1 child
-if node is None:
-    return
-
-# 2: When reaching a leaf node
-if node.left is None and node.right is None:
-
-# 3: Recursive function call to traverse down the tree and passing computed values down
-recursiveFunction(node.left, doSomething, ans)
-recursiveFunction(node.right, doSomething, ans)
-```
 
 ---
 ## [🟩 Node Depths](https://www.algoexpert.io/questions/Node%20Depths)
@@ -1894,6 +2078,7 @@ recursiveFunction(node.right, doSomething, ans)
   - The depth of the node with value 5 is 2.
   - etc...
   - Summing all of these depths yields 16.
+
 
 ### **Depth First Search (Iterative using Stack)**
 ```python
@@ -1930,6 +2115,7 @@ def nodeDepths(root):
 
     return sumofDepths # 8: Return total sum of depths after all dictionaries are popped from stack
 ```
+
 ✅ **DFS STACK:** _Use stack of nodeDicts to keep track each node object and their depth (stored as key-value pairs). Pop the stack and aggregate sumOfDepths value. To traverse down the BT, push in new nodeDicts (left and right) into Stack and increment depth value. Return sumOfDepths when all nodes are popped from stack._
 
 ---
@@ -1957,6 +2143,7 @@ def nodeDepths(root):
             / \    
            9   8    
 ```
+
 
 ### **BFS Queue**
 ```python
@@ -1989,6 +2176,7 @@ def invertBinaryTree(tree):
 def swapLeftAndRight(tree): # helper function to swap node.left and node.right objects of the current node
     tree.left, tree.right = tree.right, tree.left
 ```
+
 ✅ **BFS QUEUE:** _Use queue of BT nodes to keep track of nodes in FIFO order. Pop the currentNode from the queue and execute a helper function to swap its node.left and node.right childs. To traverse down the BT, push in new node.left and node.right of currentNode into queue. Return root of the mutated BT when all nodes are popped from queue._
 
 ---
@@ -2011,6 +2199,8 @@ def swapLeftAndRight(tree): # helper function to swap node.left and node.right o
 ```
 - [x] Output: 6
 - [x] Explanation: 9 -> 8 -> 7 -> 3 -> 4 -> 5 -> 6. There are 6 edges between the first node and the last node of this tree's longest path.  
+
+
 ### **DFS Recursion with Backtracking Max Computations**
 ```python
 class BinaryTree:
@@ -2028,35 +2218,88 @@ class TreeInfo:
 # Average case: When the tree is balanced
 # O(n) Time | O(h) Space - where n is the number of nodes in the BT and h is the height of the BT
 def binaryTreeDiameter(tree):
-    return getTreeInfo(tree).diameter
+    maxDiameter, _ = findDiameter(tree)
+    return maxDiameter
 
-def getTreeInfo(tree):
-    # Once we've reached the branch end leaf node after DFS recursive calls, return TreeInfo(0, 0) object 
+def findDiameter(tree): 
+    # 1: Set the base case for when we reach the branch end of the binary tree with None child nodes
     if tree is None:
-        return TreeInfo(0, 0)
-    
-    # ============================================
-    # RECURSIVE DFS CALLS TO REACH LEAF NODE FIRST
-    # ============================================
-    # 2: Recursively call the function itself while passing in tree.left and tree.right as inputs 
-    # The recursive function calls of child nodes will traverse down until the branch end (DFS) before executing the below code
-    leftTreeInfo = getTreeInfo(tree.left) # for child nodes to the left
-    rightTreeInfo = getTreeInfo(tree.right) # for child nodes to the right
-    
-    # ===========================================================
-    # BACKTRACK USING MAX COMPUTATIONS FROM LEAF BACK TO THE ROOT
-    # ===========================================================
-    # 3: Once recursive DFS until the branch end is complete, backtrack with the following computations:
-    currentDiameter = max(leftTreeInfo.height + rightTreeInfo.height, leftTreeInfo.diameter, rightTreeInfo.diameter)
-    currentHeight = 1 + max(leftTreeInfo.height, rightTreeInfo.height) # Increment height by 1 per level traversal by recursive DFS
-    # Note: currentDiameter = max(longestPathThroughRoot, maxDiameterSoFar)
-    # where: longestPathThroughRoot = leftTreeInfo.height + rightTreeInfo.height
-    #        maxDiameterSoFar = max(leftTreeInfo.diameter, rightTreeInfo.diameter)
-    
-    return TreeInfo(currentDiameter, currentHeight) # 4: Return TreeInfo object with diameter and height properties
-```
-✅ **DFS RECURSION WITH BACKTRACKING MAX COMPUTATIONS:** _Create a TreeInfo class to store diameter and height properties. Recursively call getTreeInfo to perform DFS on all child nodes until the leaf node. Then, backtrack and compute diameter and height values using max functions. Return TreeInfo object with the final diameter and height values after all recursive calls._
+        return (0, 0)
 
+    # 2: Recursively call findDiameter helper function passing in tree.left and tree.right to DFS traverse down until branch end before computations in Step 3
+    leftTreeDiameter, leftTreeHeight = findDiameter(tree.left)
+    rightTreeDiameter, rightTreeHeight = findDiameter(tree.right)
+    
+    # 3: From the branch end, backtrack with the following max computations:
+    # Set currentDiameter to whichever value is larger for 3 cases
+    currentDiameter = max(leftTreeHeight + rightTreeHeight, leftTreeDiameter, rightTreeDiameter)
+    # Set currentHeight that increments by 1 plus whichever value is larger for 2 cases 
+    currentHeight = 1 + max(leftTreeHeight, rightTreeHeight) # Value 1 enables the edges to be aggregated as we backtrack
+    
+    # 4: Return a tuple of currentDiameter and currentHeight integers
+    return (currentDiameter, currentHeight)
+```
+
+✅ **DFS RECURSION WITH BACKTRACKING MAX COMPUTATIONS:** _Recursively call findDiameter to perform DFS on all child nodes until the leaf node. Then, backtrack and compute diameter and height values using max functions. Return tuple with the final diameter and height values after all recursive calls._
+- `currentDiameter` = max(leftTreeHeight + rightTreeHeight, leftTreeDiameter, rightTreeDiameter)
+- `currentHeight` = 1 + max(leftTreeHeight, rightTreeHeight)
+
+---
+## [🟨 Height Balanced Binary Tree](https://www.algoexpert.io/questions/Height%20Balanced%20Binary%20Tree)
+>* You're given the root node of a Binary Tree. Write a function that returns `true` if this Binary Tree is height balanced and `false` if it isn't.
+>* A Binary Tree is height balanced if for each node in the tree, the difference between the height of its left subtree and the height of its right subtree is at most `1`
+>* Each `BinaryTree` node has an integer `value`, a `left` child node, and a `right` child node.
+>* Children nodes can either be `BinaryTree` nodes themselves or `None`
+
+- [x] Input: 
+```python
+tree = 
+         1
+      /    \
+     2      3      
+    /  \     \   
+  4     5     6  
+       / \    
+      7   8      
+```
+- [x] Output: `true`
+
+
+```python
+class BinaryTree:
+    def __init__(self, value): 
+        self.value = value
+        self.left = None
+        self.right = None
+        
+# O(n) Time | O(h) Space - where n is the number of nodes and h is the height of the binary tree
+def heightBalancedBinaryTree(tree):
+    isBalanced, _ = checkBalanced(tree)
+    return isBalanced
+
+def checkBalanced(tree): 
+    # 1: Set the base case for when we reach the branch end of the binary tree with None child nodes
+    if tree is None:
+        return (True, -1)
+    
+    # 2: Recursively call checkBalanced helper function passing in tree.left and tree.right to DFS traverse down until branch end before computations in Step 3
+    isLeftTreeBalanced, leftTreeHeight = checkBalanced(tree.left)
+    isRightTreeBalanced, rightTreeHeight = checkBalanced(tree.right) 
+
+    # 3: From the branch end, backtrack with the following logical and max computations:
+    # The tree is only balanced if left tree is balanced, right tree is balanced and the difference between the height of its left subtree and the height of its right subtree is at most 1
+    isBalanced = isLeftTreeBalanced and isRightTreeBalanced and (abs(leftTreeHeight - rightTreeHeight) <= 1)
+    # Set height to whichever value is larger between left or right subtree 
+    height = 1 + max(leftTreeHeight, rightTreeHeight) # Add 1 to keep track of total height after n recursive calls
+    
+    # 4: Return a tuple of isBalanced Boolean and height integer
+    return (isBalanced, height)
+```
+
+✅ **DFS RECURSION WITH BACKTRACKING MAX COMPUTATIONS:** _Recursively call checkBalanced to perform DFS on all child nodes until the leaf node. Then, backtrack and compute isBalanced `Boolean` and height `int` using logical and max functions respectively. Return tuple with isBalanced `Boolean` and height `int` after all recursive calls._
+- `isBalanced` = isLeftTreeBalanced and isRightTreeBalanced and (abs(leftTreeHeight - rightTreeHeight) <= 1)
+- `height` = 1 + max(leftTreeHeight, rightTreeHeight)
+  
 ---
 ## [🟥 Binary Tree Maximum Path Sum](https://leetcode.com/problems/binary-tree-maximum-path-sum/)
 >* Write a function that takes in a Binary Tree and returns its max path sum.
@@ -2073,6 +2316,8 @@ def getTreeInfo(tree):
 ```
 - [x] Output: 18
 - [x] Explanation: The optimal path is 5 -> 2 -> 1 -> 3 -> 7 with a path sum of 5 + 2 + 1 + 3 + 7 = 18
+
+
 ### [**DFS Recursion with Backtracking Max Computations**](https://leetcode.com/problems/binary-tree-maximum-path-sum/discuss/603423/Python-Recursion-stack-thinking-process-diagram)
 ```python
 class BinaryTree:
@@ -2080,38 +2325,44 @@ class BinaryTree:
         self.value = value
         self.left = None
         self.right = None
-
+        
 def maxPathSum(tree):
     _, maxSum = findMaxSum(tree)
     return maxSum
-
-def findMaxSum(tree):
-    if tree is None:
+    
+def findMaxSum(node): 
+    if node is None: 
         return (0, float("-inf"))
     
-    # ============================================
-    # RECURSIVE DFS CALLS TO REACH LEAF NODE FIRST
-    # ============================================
+    # ====================================================
+    # STEP 1: RECURSIVE DFS CALLS TO REACH LEAF NODE FIRST
+    # ====================================================
     # 1: Recursively call the function itself while passing in tree.left and tree.right as inputs 
     # The recursive function calls of child nodes will traverse down until the branch end (DFS) before executing the below code
-    leftMaxSumAsBranch, leftMaxPathSum = findMaxSum(tree.left)
-    rightMaxSumAsBranch, rightMaxPathSum = findMaxSum(tree.right)
+    leftBranchSum, leftPathSum = findMaxSum(node.left)
+    rightBranchSum, rightPathSum = findMaxSum(node.right)
+    
+    value = node.value
     
     # ===================================================================
     # STEP 2: BACKTRACK USING MAX COMPUTATIONS FROM LEAF BACK TO THE ROOT
     # ===================================================================
-    # 2: Once recursive DFS until the branch end is complete, backtrack with the following computations:
-    maxChildSumAsBranch = max(leftMaxSumAsBranch, rightMaxSumAsBranch)
-    value = tree.value
-    maxSumAsBranch = max(maxChildSumAsBranch + value, value)
-    maxSumAsRootNode = max(leftMaxSumAsBranch + value + rightMaxSumAsBranch, maxSumAsBranch)
-    maxPathSum = max(leftMaxPathSum, rightMaxPathSum, maxSumAsRootNode)
+    # 2: Once recursive DFS until the branch end is complete, backtrack with the following max computations:
+    maxChildSum = max(leftBranchSum, rightBranchSum)
+    maxBranchSum = max(maxChildSum + value, value)
+    maxRootSum = max(leftBranchSum + value + rightBranchSum, maxBranchSum)
+    maxPathSum = max(leftPathSum, rightPathSum, maxRootSum)
     
-    return (maxSumAsBranch, maxPathSum) # 3: Return tuple with MaxSumAsBranch, maxPathSum values
+    # 3: Return tuple with maxBranchSum, maxPathSum values
+    return (maxBranchSum, maxPathSum)
 ```
 
-✅ **DFS RECURSION WITH BACKTRACKING MAX COMPUTATIONS:** _Recursively call findMaxSum to perform DFS on all child nodes until the leaf node. Then, backtrack and compute maxChildSumAsBranch, maxSumAsBranch, maxSumAsRootNode and maxPathSum using max functions. Return tuple with maxSumAsBranch and maxPathSum values after all recursive calls._
-
+✅ **DFS RECURSION WITH BACKTRACKING MAX COMPUTATIONS:** _Recursively call findMaxSum to perform DFS on all child nodes until the leaf node. Then, backtrack and compute maxChildSum, maxBranchSum, maxRootSum and maxPathSum using max functions. Return tuple with maxBranchSum and maxPathSum values after all recursive calls._
+- `maxChildSum` = max(leftBranchSum, rightBranchSum)
+- `maxBranchSum` = max(`maxChildSum` + value, value)
+- `maxRootSum` = max(leftBranchSum + value + rightBranchSum, `maxBranchSum`)
+- `maxPathSum` = max(leftPathSum, rightPathSum, `maxRootSum`)
+    
 ---
 # <div id='bst'/> 🌲 **Binary Search Trees**
 ## [🟩 Find Closest Value in BST](https://www.algoexpert.io/questions/Find%20Closest%20Value%20In%20BST)
@@ -2136,6 +2387,7 @@ tree =
 target = 12      
 ```
 - [x] Output: 13
+
 
 ### **Binary Search Tree**
 ```python
@@ -2202,6 +2454,7 @@ remove(10):
  1             14
 contains(15): true
 ```
+
 
 ### **Binary Search Tree**
 ```python
@@ -2306,6 +2559,7 @@ class BST:
 - [x] Input: `str1 = "ZXVVYZW", str2 = "XKYKZPW"`
 - [x] Output: `["X", "Y", "Z", "W"]`
 
+
 ### [**Recursion**](https://leetcode.com/problems/longest-common-subsequence/discuss/436719/Python-very-detailed-solution-with-explanation-and-walkthrough-step-by-step.)
 ```python
 """
@@ -2325,7 +2579,10 @@ def helper(self, s1, s2, i, j):
         return 1 + self.helper(s1, s2, i + 1, j + 1)
     else:
 ```
+
 ✅ **RECURSION:** _if first chars are equal find lcs of remaining of each, else max of: lcs of first and remain of 2nd and lcs of 2nd remain of first, cache result; nested forloop to compute the cache without recursion_ 
+
+
 ### [**Bottom Up Dynamic Programming**](https://leetcode.com/problems/longest-common-subsequence/discuss/436719/Python-very-detailed-solution-with-explanation-and-walkthrough-step-by-step.)
 ```python
 # O(mn * min(m,n)) Time | O(mn * min(m,n)) Space
@@ -2344,6 +2601,7 @@ def longestCommonSubsequence(s1: str, s2: str) -> int:
 
     return LCS[m][n] # LCS[-1][-1] to return List[str] instead
 ```
+
 
 ---
 # <div id='binaries'/> ⚡️ **Binaries**
