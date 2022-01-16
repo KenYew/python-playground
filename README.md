@@ -13,21 +13,20 @@
 ---
 # <div id='toc'/> 📋 **Table of Contents** 
 1. ### [🎹 **Arrays**](#arrays)
-0. ### [🔢 **Matrix**](#matrix)
-0.  ### [⏱ **Intervals**](#intervals)
-0. ### [🔤 **Strings**](#strings)
-0. ### [📝 **Linked Lists**](#linkedlists)
-0. ### [📈 **Graphs**](#graphs) 
-0. ### [🎄 **Trees**](#trees)
-0. ### [🏔 **Heaps**](#heaps)
-0. ### [🥞 **Stacks**](#stacks)
-
-0. ### [📚 **Sorting Algorithms**](#sort)
-0.  ### [🔎 **Search Algorithms**](#search)
-0. ### [🌲 **Binary Search Trees**](#bst)
-0. ### [📱 **Dynamic Programming**](#dp)
-0. ### [♽ **Recursion**](#recursion)
-0. ### [⚡️ **Binaries**](#binaries)
+1. ### [🔢 **Matrix**](#matrix)
+1. ### [⏱ **Intervals**](#intervals)
+1. ### [🔤 **Strings**](#strings)
+1. ### [📝 **Linked Lists**](#linkedlists)
+1. ### [📈 **Graphs**](#graphs) 
+1. ### [🎄 **Trees**](#trees)
+1. ### [🌲 **Binary Search Trees**](#bst)
+1. ### [📚 **Sorting Algorithms**](#sort)
+1. ### [🔎 **Search Algorithms**](#search)
+1. ### [🥞 **Stacks**](#stacks)
+1. ### [🏔 **Heaps**](#heaps)
+1. ### [📱 **Dynamic Programming**](#dp)
+1. ### [♽ **Recursion**](#recursion)
+1. ### [⚡️ **Binaries**](#binaries)
 
 ---
 # 📱 [Coding Patterns](https://seanprashad.com/leetcode-patterns/)
@@ -93,7 +92,6 @@
 - [x] Output: `[0, 1]`
 - [x] Explanation: `Because nums[0] + nums[1] == 9, we return [0, 1].`
 
-
 ### **Brute Force**
 ```python
 # O(n^2) Time | O(1) Space
@@ -122,7 +120,6 @@ def twoNumberSum(array, target):
 ```
 
 ✅ **HASH TABLE:** _Use hash map to instantly check for difference value, map will add index of last occurrence of a num, don’t use same element twice_
-
 
 
 ### **Two Pointers**
@@ -154,7 +151,6 @@ def TwoSums(array, target):
 - [x] Input: `nums = [-2,1,-3,4,-1,2,1,-5,4]`
 - [x] Output: `6`
 - [x] Explanation: `[4,-1,2,1] has the largest sum = 6.`
-
 
 ### **Kadane's Algorithm** 
 ```python
@@ -192,7 +188,6 @@ def maximumSubarraySum(self, arr):
 <img src="https://leetcode.com/media/original_images/121_profit_graph.png" width="500"  /><br/>
 The points of interest are the peaks and valleys in the given graph. We need to find the largest peak following the smallest valley. We can maintain two variables - minprice and maxprofit corresponding to the smallest valley and maximum profit (maximum difference between selling price and minprice) obtained so far respectively.
 
-
 ### **Kadane's Algorithm**
 ```python
 # O(n) Time | O(1) Space
@@ -227,7 +222,6 @@ def maxProfit(prices):
 > Given an integer array `nums`, return `true` if any value appears **at least twice** in the array, and return `false` if every element is distinct.
 - [x] Input: `nums = [1,2,3,1]`
 - [x] Output: `true`
-
 
 ### **Brute Force**
 ```python
@@ -280,7 +274,6 @@ def containsDuplicate(self, nums):
 - [x] Input: `array = [1, 2, 3, 5, 6, 8, 9]`
 - [x] Output: `[1, 4, 9, 25, 36, 64, 81]`
 
-
 ### **Two Pointers**
 ```python
 # O(n) Time | O(n) Space - where n is the length of the input array
@@ -318,7 +311,6 @@ the numbers `[2, 4]`.
 >* Note that a single number in an array and the array itself are both valid subsequences of the array.
 - [x] Input: `array = [5, 1, 22, 25, 6, -1, 8, 10], sequence = [1, 6, -1, 10]`
 - [x] Output: `true`
-
 
 ### **Two Pointers**
 ```python
@@ -358,7 +350,6 @@ def isValidSubsequence(array, sequence):
 10 is equal to 5 x 1 x 2
 20 is equal to 5 x 1 x 4
 ```
-
 
 ### **Brute Force**
 ```python
@@ -466,7 +457,6 @@ def arrayOfProducts(array):
 - [x] Input: `arrayOne = [-1, 5, 10, 20, 28, 3], arrayTwo = [26, 134, 135, 15, 17]`
 - [x] Output: `[28, 26]`
 
-
 ### **Two Pointers**
 ```python
 # O(nlog(n) + mlog(m)) time | O(1) space
@@ -523,7 +513,6 @@ def smallestDifference(arrayOne, arrayTwo):
 - [x] Input: `array = [2, 1, 2, 2, 2, 3, 4, 2], toMove = 2`
 - [x] Output: `[1, 3, 4, 2, 2, 2, 2, 2]`
 
-
 ### **Two Pointers**
 ```python
 # O(n) Time | O(1) Space - where n is the length of the input array
@@ -557,7 +546,6 @@ peak in the array.
 - [x] Input: `array = [1, 2, 3, 3, 4, 0, 10, 6, 5, -1, -3, 2, 3]`
 - [x] Output: `6`
 - [x] Explanation: `0, 10, 6, 5, -1 -3` form the longest peak
-
 
 ### **Two Pointers**
 ```python
@@ -620,7 +608,6 @@ def longestPeak(array):
 - [x] Input: `nums = []` or `nums = [0]`
 - [x] Output: `[]`
 
-
 ### [**Two Pointers**](https://leetcode.com/problems/two-sum/discuss/737092/Sum-MegaPost-Python3-Solution-with-a-detailed-explanation)
 ```python
 # O(n^2) Time | O(n) Space
@@ -672,7 +659,6 @@ def threeSum(nums: List[int]) -> List[List[int]]:
 - `ThreeSum: A + B + C = 0` 
 - _Sort input array, perform a FOR loop for A, then set Two Pointers (L & R) for B and C. Increment L if sum is too small and decrement R if sum is too big._
 - _To prevent duplicates, if A == prevA, skip FOR loop iteration. If B == prevB, increment L in the TwoPointer WHILE loop_
-
 
 ### **TargetSum Variant**
 ```python
@@ -735,7 +721,6 @@ def threeNumberSum(array, targetSum):
 - [x] Input: `matrix = [[1,2,3],[4,5,6],[7,8,9]]`
 - [x] Output: `[1,2,3,6,9,8,7,4,5]`
 
-
 <img src="https://assets.leetcode.com/uploads/2020/11/13/spiral1.jpg" width="250" align="left" /><br/>
 <img src="https://assets.leetcode.com/uploads/2020/11/13/spiral.jpg" width="300"  /><br/>
 
@@ -782,13 +767,6 @@ def spiralTraverse(array):
 ✅ **TWO POINTERS:** _Keep track of visited cells; keep track of boundaries, layer-by-layer_
 
 ---
-# <div id='heaps'/> 🏔 **Heaps**
-
-- Merge K Sorted Lists - https://leetcode.com/problems/merge-k-sorted-lists/
-- Top K Frequent Elements - https://leetcode.com/problems/top-k-frequent-elements/
-- Find Median from Data Stream - https://leetcode.com/problems/find-median-from-data-stream/
-### [📋 **Back to Table of Contents**](#toc)
----
 # <div id='intervals'/> ⏱ **Intervals**
 
 - Insert Interval - https://leetcode.com/problems/insert-interval/
@@ -804,7 +782,6 @@ def spiralTraverse(array):
 - [x] Input: `intervals = [[1,3],[2,6],[8,10],[15,18]]`
 - [x] Output: `[[1,6],[8,10],[15,18]]`
 - [x] Explanation: `Since intervals [1,3] and [2,6] overlaps, merge them into [1,6].`
-
 
 ### **Sort, Check and Mutate**
 ```python
@@ -868,7 +845,6 @@ input string by k positions in the alphabet, where k is the key.
 - [x] Input: `string = xyz, key = 2`
 - [x] Output: `zab`
 
-
 ### **ORD/CHR String Manipulation with Modulo Wrapping**
 ```python
 # O(n) Time | O(n) Space
@@ -900,7 +876,6 @@ def getNewLetter(letter, key):
 - [x] Input: `strs = ["eat","tea","tan","ate","nat","bat"]`
 - [x] Output: `[["bat"],["nat","tan"],["ate","eat","tea"]]`
 
-
 ### **Hash Map**
 ```python
 # O(w * nlog(n)) time | O(w * n) space
@@ -929,7 +904,6 @@ def groupAnagrams(words):
 
 - [x] Input: `string = "([])(){}(())()()"`
 - [x] Output: `true`
-
 
 ### **Dictionaries and Stacks**
 ```python
@@ -997,7 +971,6 @@ def balancedBrackets(string):
 - [x] Input: `string = "1921680"`
 - [x] Output: `['1.9.216.80', '1.92.16.80', '1.92.168.0', '19.2.16.80', '19.2.168.0', '19.21.6.80', '19.21.68.0', '19.216.8.0', '192.1.6.80', '192.1.68.0', '192.16.8.0']`
 
-
 ### **Three Pointers**
 ```python
 # O(1) Time | O(1) Space
@@ -1044,7 +1017,7 @@ def isValidPart(string):
 ---
 # <div id='linkedlists'/> 📝 **Linked Lists**
 
-- Reverse a Linked List - https://leetcode.com/problems/reverse-linked-list/
+- ✅ Reverse a Linked List - https://leetcode.com/problems/reverse-linked-list/
 - Detect Cycle in a Linked List - https://leetcode.com/problems/linked-list-cycle/
 - ✅ Merge Two Sorted Lists - https://leetcode.com/problems/merge-two-sorted-lists/
 - Merge K Sorted Lists - https://leetcode.com/problems/merge-k-sorted-lists/
@@ -1052,14 +1025,78 @@ def isValidPart(string):
 - Reorder List - https://leetcode.com/problems/reorder-list/
 ### [📋 **Back to Table of Contents**](#toc)
 ---
+## [🟩 Remove Duplicates From Linked List](https://www.algoexpert.io/questions/Remove%20Duplicates%20From%20Linked%20List)
+>* You're given the head of a Singly Linked List whose nodes are in sorted order with respect to their values. 
+>* Write a function that returns a modified version of the Linked List that doesn't contain any nodes with duplicate values. 
+>* The Linked List should be modified in place (i.e., you shouldn't create a brand new list), and the modified Linked List should still have its nodes sorted with respect to their values.
+>* Each `LinkedList` node has an integer `value` as well as a `next` node pointing to the next node in the list or to `None` if it's the tail of the list.
 
-## [🟩 Merge Two Sorted Lists](https://leetcode.com/problems/merge-two-sorted-lists/)
+- [x] Input: `linkedList = 1 -> 1 -> 3 -> 4 -> 4 -> 4 -> 5 -> 6 -> 6`
+- [x] Output: `1 -> 3 -> 4 -> 5 -> 6`
+
+### **Iteratively In-Place**
+```python
+class LinkedList:
+    def __init__(self, value):
+        self.value = value
+        self.next = None
+
+# O(n) Time | O(1) Space - where n is the number of nodes in the linked list
+def removeDuplicatesFromLinkedList(head):
+    # 1: Set currentNode to be the head of the linkedList 
+    currentNode = head
+    
+    # 2: While we haven't traversed until the end of the linkedList,
+    while currentNode is not None: 
+        # 3: Set nextDistinctNode to be the next node after currentNode
+        nextDistinctNode = currentNode.next
+        # 4: While nextDistinctNode is not at the None end of the linkedList and checking if nextNode.value == currentNode.value
+        while nextDistinctNode is not None and nextDistinctNode.value == currentNode.value:
+            # 5: If their values are the same, update nextDistinctNode to move to the next node until we find a distinct value
+            nextDistinctNode = nextDistinctNode.next 
+        """
+        Key: p1 - currentNode, p2 - nextDistinctNode
+        Step 3:
+        p1   p2
+        1 -> 1 -> 3 -> 4 -> 4 -> 4 -> 5 -> 6 -> 6
+        Step 4:
+        p1        p2
+        1 -> 1 -> 3 -> 4 -> 4 -> 4 -> 5 -> 6 -> 6
+        Step 5:
+        p1        p2
+        1 ---X--> 3 -> 4 -> 4 -> 4 -> 5 -> 6 -> 6
+        Step 6:
+                  p1
+        1 ---X--> 3 -> 4 -> 4 -> 4 -> 5 -> 6 -> 6
+        """
+        # 6: Once nextDistinctNode is positioned at a distinct value, connect the currentNode.next to point to nextDistinctNode (bypassing all the equal value nodes)
+        currentNode.next = nextDistinctNode
+        # 7: Update currentNode to be the nextDistinctNode for the next iteration
+        currentNode = nextDistinctNode
+    # 8: Return the head of the mutated linkedList    
+    return head     
+```
+
+✅ **ITERATIVELY IN-PLACE:** 
+- Initialise currentNode = head, iterate through the linkedList while keeping track of nextDistinctNode = currentNode.next
+- While nextDistinctNode.value == currentNode.value, keep moving nextDistinctNode = nextDistinctNode.next until nextDistinctNode is positioned on a non-equal distinct value to currentNode.value. 
+- Then, connect currentNode.next to point to nextDistinctNode and update currentNode to be nextDistinctNode (this bypasses all the equal value nodes).
+
+---
+## [🟨 Merge Two Sorted Linked Lists](https://leetcode.com/problems/merge-two-sorted-lists/)
 >* You are given the heads of two sorted linked lists `list1` and `list2`.
 >* Merge the two lists in a one **sorted** list. The list should be made by splicing together the nodes of the first two lists.
 >* Return the **head of the merged linked list**.
 
-- [x] Input: `list1 = [1,2,4], list2 = [1,3,4]`
-- [x] Output: `[1,1,2,3,4,4]`
+- [x] Input:
+```python
+linkedListOne = 1 -> 2 -> 4
+linkedListTwo = 1 -> 3 -> 4
+```
+- [x] Output: 
+```python
+1 -> 1 -> 2 -> 3 -> 4 -> 4
+```
 
 
 <img src="https://assets.leetcode.com/uploads/2020/10/03/merge_ex1.jpg" width="500"/>
@@ -1068,40 +1105,50 @@ def isValidPart(string):
 ### **Iteratively In-Place**
 ```python
 class LinkedList: 
-    def __init__(self, value):
-        self.value = value
-        self.next = None
-
+    def __init__(self, value): 
+        self.value = value 
+        self.next = None 
+        
 # O(n + m) Time where n is the length of the 1st linked list and m is the length of the 2nd linked list
 # O(1) Space - we mutated the linked lists in place
-def mergeLinkedLists(headOne, headTwo):
-    p1 = headOne # current node of the 1st linked list
-    p1Prev = None # previous node of the 1st linked list (iteration #1: this is a None)
-    p2 = headTwo # current node of the 2nd linked list
+def mergeLinkedLists(headOne, headTwo): 
+    # 1: Initialise p1 and p2 to be the input heads of LinkedList1 and LinkedList2 respectively
+    p1, p2 = headOne, headTwo
+    p1Prev = None # Initialise p1Prev to be None. This is used to temporarily store nodes.  
     
-    while p1 is not None and p2 is not None: # while both pointers are not None, we still have nodes to traverse 
-        if p1.value < p2.value: # EASY CASE: we keep moving the prev and p1 pointers onto the next subsequent nodes
+    # 2: While we have not finished traversing both the linkedLists,
+    while p1 is not None and p2 is not None: 
+        # 3: If p2.value > p1.value, traverse both the p1Prev and p1 pointers onto the next subsequent nodes in LinkedList1
+        if p2.value > p1.value: 
             p1Prev = p1 
             p1 = p1.next
-        else: # HARD CASE (p2.value < p1.value): perform the 4 pointer mutation in order for this hard case
-            if p1Prev is not None: # if p1Prev is not at the None end of the linked list
-                p1Prev.next = p2 # continue setting the next of p1Prev to p2
-            p1Prev = p2 # we need to get p1Prev = p2 before we overwrite the p2 below
-            p2 = p2.next # we need to keep track of the next value of p2
-            p1Prev.next = p1 # overwriting the former p2 with p1
-    # we can get out of this while loop if either p1 is None or p2 is None, meaning we have traversed to the end of linked list
-    
-    # EDGE CASE
-    if p1 is None: # if we run out of nodes to traverse in the 1st linked list and we still have values to append from the 2nd linked list
-        p1Prev.next = p2 # in this case, p1Prev is the final node of the 1st linked list and its next value should immediately connect to the 2nd linked list at p2
-    return headOne if headOne.value < headTwo.value else headTwo # return the correct head of the linkedlist with the smaller value
+        # 4: If p1.value >= p2.value, perform a series of pointer mutations to satisfy this case.
+        else: 
+            # 5: If p1Prev has been updated to be non-None, set p1Prev.next = p2
+            if p1Prev is not None: 
+                p1Prev.next = p2
+            # 6: Traverse both the p1Prev and p2 pointers onto the next subsequent nodes in LinkedList2
+            p1Prev = p2
+            p2 = p2.next
+            # 7: Connect p1Prev.next to p1
+            p1Prev.next = p1
+        
+        # 8: Edge case - if we have already reached at the None end of LinkedList 1 but still have nodes to traverse in LinkedList2,
+        if p1 is None:
+            # 9: Immediately connect the end of LinkedList1 to the remainder nodes of LinkedList2 (p1Prev would be at the tail of LL1 and p2 would be at the head of LL2)
+            p1Prev.next = p2
+        
+    # 10: Return the correct head of the mutated and merged linkedlist by selecting the smaller head
+    return headOne if headOne.value < headTwo.value else headTwo
 ```
 
 ✅ **ITERATIVELY IN-PLACE:** 
-- _Create 3 pointers (p1Prev, p1, p2)_
-- _If NodeL1 < NodeL2, keep moving prev and p1 to the next nodes._
-- _If NodeL2 < NodeL1, set p1Prev.next = p2 and p1Prev = p2 to keep track of value, move p2 = p2.next and then we can finally set p1Prev.next = p1_
-- _Insert each node from one list into the other_
+1. Create 3 pointers (p1Prev = `None`, p1 = `input headOne`, p2 = `input headTwo`)
+2. If p2.value > p1.value, keep moving p1Prev and p1 to the next subsequent nodes of LL1.
+3. If p1.value >= p2.value, keep moving p1Prev and p2 to the next subsequent nodes of LL2. Connect p1Prev.next to p1.
+4. Note: if p1Prev is not None, connect p1Prev.next to p2 first before executing Step 3!
+5. Note: if p1 is None, immediately connect p1Prev.next to p2 because p1 being None means we have reached the end of LL1 already but need to connect to the remainder of LL2. 
+6. Return the smaller head of the mutated and merged linkedList.
 
 ---
 
@@ -1124,7 +1171,6 @@ linkedListTwo = 9 -> 4 -> 5
 # linkedListTwo represents 549
 # Hence, 1742 + 549 = 2291
 ```
-
 
 ### **Iterative Arithmetics**
 ```python
@@ -1221,7 +1267,6 @@ k = 4
 # The input linked lists is mutated in-place where the 4th node from the end (node value 6) has been removed
 ```
 
-
 ### **Two Pointers**
 ```python
 class LinkedList:
@@ -1236,24 +1281,43 @@ def removeKthNodeFromEnd(head, k):
     first = head
     second = head
     
+    """ 
+    Step 2: Move second pointer k = 4 times
+    F                   S
+    0 -> 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9
+    Step 3: Then, move both first and second pointers at equal pace until second pointer is positioned at None end
+                                  F                   S
+    0 -> 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> None
+    Step 4: Perform first.next = first.next.next to delete the k-th node from the end
+                                  F                   S
+    0 -> 1 -> 2 -> 3 -> 4 -> 5 ---X--> 7 -> 8 -> 9 -> None
+    """
     # 2: Move the second pointer down the linked list k-times
     while counter <= k: 
         second = second.next
         counter += 1
         
-    # 3: If k value is high enough to move the second pointer to the end of the linked lists already,
+    # 5: Edge case - If k value is high enough to move the second pointer to the end of the linked lists already,
     if second is None:
-        # 4: Immediately, perform linked list mutation to delete the head of the linked list as our answer
+        """ 
+        Step 5: If k = 4 and S is already at None end,
+        F                   S
+        0 -> 1 -> 2 -> 3 -> None
+        Step 6: Then, immediately delete the head because the head is the k-th node from the end
+        F                   S
+        X -> 1 -> 2 -> 3 -> None
+        """
+        # 6: Immediately, perform linked list mutation to delete the head of the linked list as our answer
         head.value = head.next.value
         head.next = head.next.next
         return
     
-    # 5: Otherwise, keep moving both the first and second pointers at the same pace (.next) until the second pointer reaches the None value (or end of the list)
+    # 3: Move both the first and second pointers at the same pace (.next) until the second pointer reaches the None end of the linked list
     while second.next is not None: 
         second = second.next
         first = first.next # This is ensure the first pointer will naturally point at the k-th node from the end
         
-    # 6: Perform linked list mutation to delete the k-th node from the end by changing the next pointer to skip the k-th node
+    # 4: Perform linked list mutation to delete the k-th node from the end by changing the next pointer to skip the k-th node
     first.next = first.next.next 
 ```
 
@@ -1274,7 +1338,6 @@ head = 0 -> 1 -> 2 -> 3 -> 4 -> 5 # The head node with value 0
 ```python
 5 -> 4 -> 3 -> 2 -> 1 -> 0 # The new head node with value 5
 ```
-
 
 ### **Iterative Mutation**
 ```python
@@ -1340,7 +1403,6 @@ def reverseLinkedList(head):
 
 - [x] Input: `array = [2, 3, 1, -4, -4, 2]`
 - [x] Output: `true`
-
 
 ### **Depth First Search (Recursive)**
 ```python
@@ -1409,7 +1471,6 @@ true
 # 3: 1 -> 2 -> 0 -> 1
 # These are just 3 examples; there are more.
 ```
-
 
 ### **Depth First Search (Recursive)**
 ```python
@@ -1480,7 +1541,6 @@ descendantTwo = node I
 ```
 - [x] Output: `node B`
 
-
 ### **DFS Iterative**
 ```python
 class AncestralTree:
@@ -1537,7 +1597,6 @@ def backtrackAncestralTree(lowerDescendant, higherDescendant, diff):
 3. In this helper function, while differenceInDepths > 0, move the lowerDescendant up (by calling the ancestor property) until both nodes are at the same level of AncestralTree. 
 4. Finally, determine the youngest common ancestor of both nodes by moving both nodes up at the same time while lowerDescendant != higherDescendant. 
 5. Return any descendant node once both descendant nodes have reached their youngest common ancestor node.
-
 
 
 ### **DFS Iterative**
@@ -1607,14 +1666,13 @@ Explanation: matrix = [ # The rivers can be clearly seen here:
   ]
 ```
 
-
-### **Depth First Search (Iterative)**
+### **Depth First Search (Iterative Stack)**
 ```python
 # O(n) Time - we only need to traverse all of the elements in the matrix once
 # O(n) Space - we are using an auxiliary matrix of size n to keep track of visited nodes
 # n - the number of elements in the matrix
 def riverSizes(matrix):
-    sizes = [] 
+    sizes = [] # River Sizes answer array
     # 1: Initialise an auxiliary matrix to keep track of nodes already visited
     visited = [[False for value in row] for row in matrix] 
     # 2: Loop through every element in each row and column,
@@ -1629,57 +1687,72 @@ def riverSizes(matrix):
 
 def traverseNode(i, j, matrix, visited, sizes): 
     currentRiverSize = 0 
-    # ==============================
-    # Depth First Search (Iterative)
-    # ==============================
+    # ====================================
+    # Depth First Search (Iterative Stack)
+    # ====================================
     # 5: Initialise a stack of nodes to explore (for DFS implementation in LIFO order)
     nodesToExplore = [[i, j]]
 
     # STEP 1: EXPLORE NODES, USE STACK AND ITERATE DFS ON POPPED NODES THAT ARE RIVERS (1's)
-    while len(nodesToExplore): # while we still have nodes to explore,
-        currentNode = nodesToExplore.pop() # pop out the final value of the nodesToExplore array
+    # 6: While we still have nodes to explore, 
+    while len(nodesToExplore):
+        currentNode = nodesToExplore.pop()
+        # 7: Unpack the current node's positions i and j
         i, j = currentNode[0], currentNode[1]
-
+        
         # STEP 2: SKIP IF ALREADY VISITED OR LAND
-        if visited[i][j]: # if node has already been visited, we skip it
+        # 8: If currentNode has already been visited, skip current iteration
+        if visited[i][j]: 
             continue
-        visited[i][j] = True # otherwise if not visited, mark the current node being traversed as visited to keep track
-        if matrix[i][j] == 0: # if it is a piece of land, we skip it
+        # 9: Else if not visited, mark the currentNode as visited in the auxiliary matrix to keep track
+        visited[i][j] = True 
+        # 10: If currentNode is a piece of land, skip current iteration
+        if matrix[i][j] == 0:
             continue
 
         # STEP 3: OTHERWISE, WE FOUND A RIVER!
+        # 11: Increment the currentRiverSize every time currentNode is determined to be a river
         currentRiverSize += 1
 
         # STEP 4: NOW, CHECK ADJACENT NEIGHBOURS AND ITERATE DFS ON NEWLY APPENDED NEIGHBOUR NODES THAT ARE RIVERS
-        unvisitedNeighbours = getUnvisitedNeighbours(i, j, matrix, visited) # get unvisited neighbours around our current node and add it to nodesToExplore stack
+        # 12: Use a helper function to obtain an array of unvisited neighbours around the currentNode and push it to nodesToExplore stack
+        unvisitedNeighbours = getUnvisitedNeighbours(i, j, matrix, visited) 
+        
+        # 23: For each unvisited neighbour node in unvisitedNeighbours array,
         for neighbour in unvisitedNeighbours:
-            nodesToExplore.append(neighbour) # append new unvisited neighbours to explore in the stack
+            nodesToExplore.append(neighbour) # 24: Append new unvisited neighbour nodes to explore in the stack
 
     # STEP 5: AFTER A FULL DFS ON A RIVER, APPEND ANSWER TO OUR RIVER SIZES ARRAY
-    if currentRiverSize > 0: # if we have an actual river, we append to our sizes answer array
+    # 25: If currentRiverSize was incremented and we have an actual river, append to the sizes answer array
+    if currentRiverSize > 0: 
         sizes.append(currentRiverSize)
     
 def getUnvisitedNeighbours(i, j, matrix, visited):
     unvisitedNeighbours = []
-    # Check if the 4 surrounding adjacent neighbours are valid neighbours (unvisited and within the matrix boundary)
+    # 13: Check if 4 adjacent neighbours surrounding our currentNode are valid neighbours first (condition: unvisited and within the matrix boundary)
     # ==========================================
     # ROWS CHECK FOR NEIGHBOURS ABOVE AND BELOW
     # ==========================================
-    if i > 0 and not visited[i - 1][j]: # if we are not in the top row and not visited the neighbour above,
-        unvisitedNeighbours.append([i - 1, j]) # append the node (with indices) of the neighbour above us
-    if i < len(matrix) - 1 and not visited[i + 1][j]: # if we are not in the bottomw row and not visited neighbour below,
-        unvisitedNeighbours.append([i + 1, j]) # append the node (with indices) of the neighbour below us
+    # 14: Check if currentNode is not located at the top-most row and then check if neighbour node above is unvisited 
+    if i > 0 and not visited[i - 1][j]: 
+        unvisitedNeighbours.append([i - 1, j]) # 15: Append the unvisited neighbour node above (with their indices)
+    # 16: Check if currentNode is not located at the bottom-most row and then check if neighbour node below is unvisited
+    if i < len(matrix) - 1 and not visited[i + 1][j]: 
+        unvisitedNeighbours.append([i + 1, j]) # 17: Append the unvisited neighbour node below (with their indices)
+    
     # ============================================
     # COLUMNS CHECK FOR NEIGHBOURS LEFT AND RIGHT
     # ============================================
-    if j > 0 and not visited[i][j - 1]: # if we are not in the left-most column and not visited the neighbour to the left,
-        unvisitedNeighbours.append([i, j - 1]) # append the node (with indices) of the left neighbour
-    if j < len(matrix[0]) - 1 and not visited[i][j + 1]: # if we are not in the right-most column and not visited the neighbour to the right, 
-        unvisitedNeighbours.append([i, j + 1]) # append the node (with indices) of the right neighbour
-    return unvisitedNeighbours # finally, return the array containing nodes of all unvisited adjacent neighbours
+    # 18: Check if currentNode is not located at the left-most column and then check if neighbour node to the left is unvisited,
+    if j > 0 and not visited[i][j - 1]: 
+        unvisitedNeighbours.append([i, j - 1]) # 19: Append the unvisited neighbour node to the left (with their indices)
+    # 20: Check if currentNode is not located at the right-most column and then check if neighbour node to the left is unvisited,
+    if j < len(matrix[0]) - 1 and not visited[i][j + 1]: 
+        unvisitedNeighbours.append([i, j + 1]) # 21: Append the unvisited neighbour node to the right (with their indices)
+    return unvisitedNeighbours # 22: Finally, return the array containing all the unvisited adjacent neighbour nodes
 ```
 
-✅ **DEPTH FIRST SEARCH (ITERATIVE)**: _for each cell, if cell is 1 and unvisited, run dfs, increment count and mark each contiguous 1's as visited in auxiliary matrix_
+✅ **DEPTH FIRST SEARCH (ITERATIVE STACK)**: _for each cell, if cell is 1 and unvisited, run dfs, increment count and mark each contiguous 1's as visited in auxiliary matrix_
 
 ---
 ## [🟨 Remove Islands](https://www.algoexpert.io/questions/Remove%20Islands)
@@ -1716,7 +1789,6 @@ matrix =
     [1, 0, 0, 0, 0, 1],
 ]
 ```
-
 
 ### **Depth First Search (Iterative Stack)**
 ```python
@@ -1810,7 +1882,7 @@ def getNeighbors(matrix, row, col):
 
 ```
 
-✅ **DEPTH FIRST SEARCH (ITERATIVE)**: _Loop through only cells at the border, if cell is 1, run iterative dfs using a stack, mutate 1s into 2s, check for neighbours for any 1s to push to stack for next dfs iteration. Then, loop through all cells again and mutate 1s to 0s and 2s to 1s and return the mutated matrix in place._
+✅ **DEPTH FIRST SEARCH (ITERATIVE STACK)**: _Loop through only cells at the border, if cell is 1, run iterative dfs using a stack, mutate 1s into 2s, check for neighbours for any 1s to push to stack for next dfs iteration. Then, loop through all cells again and mutate 1s to 0s and 2s to 1s and return the mutated matrix in place._
 
 ---
 ## [🟨 Number of Islands](https://leetcode.com/problems/number-of-islands/)
@@ -1836,14 +1908,9 @@ Input: grid = [
 Output: 3
 ```
 
-
 ### **Depth First Search (Recursive)**
 ```python
-def numIslands(self, grid):
-    """
-    :type grid: List[List[str]]
-    :rtype: int
-    """
+def numIslands(grid: List[List[str]]) -> int:
     if not grid: return 0
     r, c = len(grid), len(grid[0])
     visited = [[False for _ in range(c)] for _ in range(r)]
@@ -1891,7 +1958,6 @@ Output: 6
 Explanation: The answer is not 11, because the island must be connected 4-directionally.
 ```
 
-
 ### [**Depth First Search (Iterative Stack)**](https://leetcode.com/problems/max-area-of-island/solution/)
 ```python
 def maxAreaOfIsland(self, grid):
@@ -1914,8 +1980,57 @@ def maxAreaOfIsland(self, grid):
                 ans = max(ans, shape)
     return ans
 ```
+```python
+def riverSizes(matrix):
+    visited = [[False for value in row] for row in matrix]
+    sizes = []
+    
+    for i in range(len(matrix)):
+        for j in range(len(matrix[i])):
+            if visited[i][j]:
+                continue
+            traverseNode(i, j, matrix, visited, sizes)
+    return max(sizes) if len(sizes) > 0 else 0
+    
+def traverseNode(i, j, matrix, visited, sizes): 
+    currentRiverSize = 0 
+    nodesToExplore = [[i, j]]
+    
+    while len(nodesToExplore) > 0: 
+        currentNode = nodesToExplore.pop()
+        i, j = currentNode[0], currentNode[1]
+        
+        if visited[i][j]:
+            continue
+        visited[i][j] = True
+        if matrix[i][j] == 0:
+            continue
 
-✅ **DEPTH FIRST SEARCH (ITERATIVE)**: _for each cell, if cell is 1 and unvisited, run dfs, increment count and mark each contiguous 1's as visited in auxiliary matrix_
+        currentRiverSize += 1
+        
+        unvisitedNeighbours = getUnvisitedNeighbours(i, j, matrix, visited)
+        for neighbour in unvisitedNeighbours:
+            nodesToExplore.append(neighbour)
+            
+    if currentRiverSize > 0: 
+        sizes.append(currentRiverSize)
+        
+def getUnvisitedNeighbours(i, j, matrix, visited): 
+    unvisitedNeighbours = []
+    
+    if i > 0 and not visited[i - 1][j]:
+        unvisitedNeighbours.append([i - 1, j])
+    if i < len(matrix) - 1 and not visited[i + 1][j]:
+        unvisitedNeighbours.append([i + 1, j])
+    if j > 0 and not visited[i][j - 1]:
+        unvisitedNeighbours.append([i, j - 1])
+    if j < len(matrix[0]) - 1 and not visited[i][j + 1]:
+        unvisitedNeighbours.append([i, j + 1])
+    
+    return unvisitedNeighbours    
+```
+
+✅ **DEPTH FIRST SEARCH (ITERATIVE STACK)**: _for each cell, if cell is 1 and unvisited, run dfs, increment count and mark each contiguous 1's as visited in auxiliary matrix_
 
 ---
 # <div id='trees'/> 🎄 **Trees**
@@ -2015,7 +2130,6 @@ Output: [15, 16, 18, 10, 11]
 11 == 1 + 3 + 7
 ```
 
-
 ### **Depth First Search (Recursive)**
 ```python
 
@@ -2079,8 +2193,7 @@ def calculateBranchSums(node, runningSum, sums):
   - etc...
   - Summing all of these depths yields 16.
 
-
-### **Depth First Search (Iterative using Stack)**
+### **Depth First Search (Iterative Stack)**
 ```python
 
 class BinaryTree:
@@ -2144,7 +2257,6 @@ def nodeDepths(root):
            9   8    
 ```
 
-
 ### **BFS Queue**
 ```python
 class BinaryTree:
@@ -2199,7 +2311,6 @@ def swapLeftAndRight(tree): # helper function to swap node.left and node.right o
 ```
 - [x] Output: 6
 - [x] Explanation: 9 -> 8 -> 7 -> 3 -> 4 -> 5 -> 6. There are 6 edges between the first node and the last node of this tree's longest path.  
-
 
 ### **DFS Recursion with Backtracking Max Computations**
 ```python
@@ -2264,7 +2375,6 @@ tree =
 ```
 - [x] Output: `true`
 
-
 ```python
 class BinaryTree:
     def __init__(self, value): 
@@ -2317,7 +2427,6 @@ def checkBalanced(tree):
 - [x] Output: 18
 - [x] Explanation: The optimal path is 5 -> 2 -> 1 -> 3 -> 7 with a path sum of 5 + 2 + 1 + 3 + 7 = 18
 
-
 ### [**DFS Recursion with Backtracking Max Computations**](https://leetcode.com/problems/binary-tree-maximum-path-sum/discuss/603423/Python-Recursion-stack-thinking-process-diagram)
 ```python
 class BinaryTree:
@@ -2365,6 +2474,8 @@ def findMaxSum(node):
     
 ---
 # <div id='bst'/> 🌲 **Binary Search Trees**
+### [📋 **Back to Table of Contents**](#toc)
+---
 ## [🟩 Find Closest Value in BST](https://www.algoexpert.io/questions/Find%20Closest%20Value%20In%20BST)
 >* Write a function that takes in a Binary Search Tree (BST) and a target integer value and returns the closest value to that target value contained in the BST.
 >* You can assume that there will only be one glosest value.
@@ -2387,7 +2498,6 @@ tree =
 target = 12      
 ```
 - [x] Output: 13
-
 
 ### **Binary Search Tree**
 ```python
@@ -2454,7 +2564,6 @@ remove(10):
  1             14
 contains(15): true
 ```
-
 
 ### **Binary Search Tree**
 ```python
@@ -2534,6 +2643,14 @@ class BST:
 ```
 
 ---
+# <div id='heaps'/> 🏔 **Heaps**
+
+- Merge K Sorted Lists - https://leetcode.com/problems/merge-k-sorted-lists/
+- Top K Frequent Elements - https://leetcode.com/problems/top-k-frequent-elements/
+- Find Median from Data Stream - https://leetcode.com/problems/find-median-from-data-stream/
+### [📋 **Back to Table of Contents**](#toc)
+
+---
 # <div id='dp'/> 📱 **Dynamic Programming**
 
 - Climbing Stairs - https://leetcode.com/problems/climbing-stairs/
@@ -2559,7 +2676,6 @@ class BST:
 - [x] Input: `str1 = "ZXVVYZW", str2 = "XKYKZPW"`
 - [x] Output: `["X", "Y", "Z", "W"]`
 
-
 ### [**Recursion**](https://leetcode.com/problems/longest-common-subsequence/discuss/436719/Python-very-detailed-solution-with-explanation-and-walkthrough-step-by-step.)
 ```python
 """
@@ -2581,7 +2697,6 @@ def helper(self, s1, s2, i, j):
 ```
 
 ✅ **RECURSION:** _if first chars are equal find lcs of remaining of each, else max of: lcs of first and remain of 2nd and lcs of 2nd remain of first, cache result; nested forloop to compute the cache without recursion_ 
-
 
 ### [**Bottom Up Dynamic Programming**](https://leetcode.com/problems/longest-common-subsequence/discuss/436719/Python-very-detailed-solution-with-explanation-and-walkthrough-step-by-step.)
 ```python
