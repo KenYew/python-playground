@@ -1,15 +1,3 @@
-<style>
-details > summary {
-  padding: 4px;
-  width: 100px;
-  background-color: #3c3d3c;
-  border: none;
-  box-shadow: 1px 1px 2px #101010;
-  cursor: pointer;
-}
-</style>
-
-
 <img src="https://www.python.org/static/community_logos/python-logo-generic.svg" width="500px"/><br/>
 
 # **💻 Data Structures and Algorithms in Python**
