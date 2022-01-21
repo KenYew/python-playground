@@ -1,8 +1,21 @@
+<style>
+details > summary {
+  padding: 4px;
+  width: 100px;
+  background-color: #3c3d3c;
+  border: none;
+  box-shadow: 1px 1px 2px #101010;
+  cursor: pointer;
+}
+</style>
+
+
 <img src="https://www.python.org/static/community_logos/python-logo-generic.svg" width="500px"/><br/>
 
-# **💻 Python Coding Patterns**
-### 📖 **Author:** **`Ken Yew Piong`**
-### 📆 **Last Modified:**  <img src="https://img.shields.io/badge/dynamic/json?style=flat-square&labelColor=0039A9&color=027DFF&label=UTC&query=currentDateTime&url=http%3A%2F%2Fworldclockapi.com%2Fapi%2Fjson%2Futc%2Fnow&logo=AzureDevOps&logoColor=3399FF"/>
+# **💻 Data Structures and Algorithms in Python**
+Blind 75 questions, in-depth solutions and coding patterns for FAANG coding interviews.
+#### 📖 Author: `Ken Yew Piong`
+#### 📆 Last Modified:  <img src="https://img.shields.io/badge/dynamic/json?style=flat-square&labelColor=0039A9&color=027DFF&label=UTC&query=currentDateTime&url=http%3A%2F%2Fworldclockapi.com%2Fapi%2Fjson%2Futc%2Fnow&logo=AzureDevOps&logoColor=3399FF"/>
 <a href="https://github.com/KenYew">
   <img src="https://img.shields.io/badge/GitHub-black?style=social&logo=GitHub"/>
 </a>
@@ -12,6 +25,7 @@
 
 ---
 # <div id='toc'/> 📋 **Table of Contents** 
+1. ### [⚡️ **Quick Notes**](#quicknotes)
 1. ### [🎹 **Arrays**](#arrays)
 1. ### [🔢 **Matrix**](#matrix)
 1. ### [⏱ **Intervals**](#intervals)
@@ -29,47 +43,154 @@
 1. ### [⚡️ **Binaries**](#binaries)
 
 ---
-# 📱 [Coding Patterns](https://seanprashad.com/leetcode-patterns/)
-## 🎹 **If input array is sorted:**
+## 📱 [Coding Patterns](https://seanprashad.com/leetcode-patterns/)
+#### 🎹 **If input array is sorted:**
 - `Binary search`
 - `Two pointers`
 
-## 🔢 **If asked for all permutations/subsets:**
+#### 🔢 **If asked for all permutations/subsets:**
 - `Backtracking`
 
-## 🎄 **If given a tree:**
+#### 🎄 **If given a tree:**
 - `DFS`
 - `BFS`
 
-## 📈 **If given a graph:**
+#### 📈 **If given a graph:**
 - `DFS`
 - `BFS`
 
-## 📝 **If given a linked list:**
+#### 📝 **If given a linked list:**
 - `Two pointers`
 
-## ♽ **If recursion is banned:**
+#### ♽ **If recursion is banned:**
 - `Stack`
 
-## 🔎 **If must solve in-place:**
+#### 🔎 **If must solve in-place:**
 - `Swap corresponding values`
 - `Store one or more different values in the same pointer`
 
-## 🎹 **If asked for maximum/minumum subarray/subset/options:**
+#### 🎹 **If asked for maximum/minumum subarray/subset/options:**
 - `Dynamic programming`
 
-## 📚 **If asked for top/least K items:**
+#### 📚 **If asked for top/least K items:**
 - `Heap`
 
-## 🔤 **If asked for common strings:**
+#### 🔤 **If asked for common strings:**
 - `Map`
 - `Trie`
 
-## 📱 **Else**
+#### 📱 **Else**
 - `Map/Set for O(1) time & O(n) space`
 - `Sort input for O(nlogn) time and O(1) space`
 
-### 🔑 [Keywords to Algorithm](https://algo.monster/problems/keyword_to_algo)
+### 🔑 [Keywords to Algorithms](https://algo.monster/problems/keyword_to_algo)
+
+---
+
+# <div id='quicknotes'/> ⚡️ **Quick Notes**
+### [📋 **Back to Table of Contents**](#toc)
+---
+#### 📝 Linked List Traversal
+##### To perform head to tail computations
+```python
+# 1: While currentNode pointer has not fully traversed to the None end of the linked list
+while currentNode is not None:
+
+# 2: Perform forwardtracking computations
+doSomething()
+
+# 3: Traverse to the next node of the linked list
+currentNode = currentNode.next
+
+# OR: Perform manipulation of node connections
+currentNode.next = nextDistinctNode # Skipping a node
+currentNode = nextDistinctNode
+
+next = currentNode.next
+currentNode.next = previousNode # Reversing a node
+previousNode = currentNode
+currentNode = next
+```
+
+#### ♽ Recursive DFS
+##### To perform root to leaf computations
+```python
+# 1: Base edge case to break the depth first search when we have arrived None child nodes of the leaf node
+if node is None:
+    return
+
+# 2: Perform forwardtracking computations
+doSomething()
+
+# 3: When reaching a leaf node
+if node.left is None and node.right is None:
+    returnLeafNodeAnswer
+
+# 4: Recursive function call to traverse down the tree and passing computed values down
+recursiveFunction(node.left, informationToPassDown, answer)
+recursiveFunction(node.right, informationToPassDown, answer)
+```
+##### To perform leaf to root computations
+```python
+# 1: Base edge case to break the depth first search when we have arrived None child nodes of the leaf node
+if node is None:
+    return
+
+# 2: Recursive function call to traverse down the tree
+informationToPassDown, answer = recursiveFunction(node.left)
+informationToPassDown, answer = recursiveFunction(node.right)
+
+# 3: Perform backtracking computations
+doSomething()
+
+# 4: Return information to pass down during recursion
+return (informationToPassDown, answer)
+```
+#### 📚 Stack DFS
+##### To perform root to leaf computations
+```python
+# 1: Initialise a stack with root node
+stack = [root]
+
+# 2: Iterate all elements of the stack in LIFO order
+while len(stack) > 0: 
+    node = stack.pop() # Pop the top-most element 
+
+# 3: Base edge case to break the depth first search when we have arrived None child nodes of the leaf node
+if node is None:
+    return
+
+# 4: Perform forwardtracking computations
+doSomething()
+
+# 5: Push child nodes to stack to traverse down the tree
+stack.append(node.left)
+stack.append(node.right)
+```
+
+#### 🌲 Queue BFS
+
+##### To perform root to leaf computations
+```python
+# 1: Initialise a queue with root node
+queue = [root]
+
+# 2: Iterate all elements of the queue in FIFO order
+while len(queue) > 0: 
+    node = queue.pop(0) # Pop the bottom-most element 
+
+# 3: Base edge case to break the depth first search when we have arrived None child nodes of the leaf node
+if node is None:
+    return
+
+# 4: Perform forwardtracking computations
+doSomething()
+
+# 5: Push child nodes to queue to traverse down the tree
+queue.append(node.left)
+queue.append(node.right)
+```
+
 ---
 # <div id='arrays'/> 🎹 **Arrays**
 
@@ -815,23 +936,19 @@ def mergeOverlappingIntervals(intervals):
 ```
 
 ✅ **SORT, CHECK AND MUTATE:** _Sort intervals by start values, compare end value and start value of adjacent intervals to check for overlap, mutate end value of answer interval to encapsulate merges, iterate checks for all intervals_
-### **Problem similar to:**
-- 252 Meeting Rooms
-- 253 Meetings Rooms II
-- 435 Non-overlapping Intervals
 
 ---
 # <div id='strings'/> 🔤 **Strings**
 
-- Longest Substring Without Repeating Characters - https://leetcode.com/problems/longest-substring-without-repeating-characters/
+- ✅ Longest Substring Without Repeating Characters - https://leetcode.com/problems/longest-substring-without-repeating-characters/
 - Longest Repeating Character Replacement - https://leetcode.com/problems/longest-repeating-character-replacement/
 - Minimum Window Substring - https://leetcode.com/problems/minimum-window-substring/
 - Valid Anagram - https://leetcode.com/problems/valid-anagram/
 - ✅ Group Anagrams - https://leetcode.com/problems/group-anagrams/
-- Valid Parentheses - https://leetcode.com/problems/valid-parentheses/
-- Valid Palindrome - https://leetcode.com/problems/valid-palindrome/
-- Longest Palindromic Substring - https://leetcode.com/problems/longest-palindromic-substring/
-- Palindromic Substrings - https://leetcode.com/problems/palindromic-substrings/
+- ✅ Valid Parentheses - https://leetcode.com/problems/valid-parentheses/
+- ✅ Valid Palindrome - https://leetcode.com/problems/valid-palindrome/
+- ✅ Longest Palindromic Substring - https://leetcode.com/problems/longest-palindromic-substring/
+- ✅ Palindromic Substrings - https://leetcode.com/problems/palindromic-substrings/
 - Encode and Decode Strings (Leetcode Premium) - https://leetcode.com/problems/encode-and-decode-strings/
 ### [📋 **Back to Table of Contents**](#toc)
 
@@ -869,6 +986,48 @@ def getNewLetter(letter, key):
 - _Loop each letter, convert letter into ASCII + KEY using ORD, then re-convert using CHR while handling for Z->A wrapping using MODULO 122_
 
 ---
+## [🟩 First Non-Repeating Character](https://www.algoexpert.io/questions/First%20Non-Repeating%20Character)
+>* Write a function that takes in a string of lowercase English-alphabet letters and returns the index of the string's first non-repeating character.
+>* The first non-repeating character is the first character in a string that occurs only once.
+>* If the input string doesn't have any non-repeating characters, your function should return `-1`
+
+- [x] Input: `string = "abcdcaf"`
+- [x] Output: `1`
+- [x] Explanation: `The first non-repeating character is "b" and is found at index 1`
+
+### **Dictionaries**
+```python
+# O(n) Time | O(1) Space - where n is the length of the input string
+# O(1) Space because input string only has lowercase English-alphabet letters hence the hash table will never have more than 26 character frequencies.
+def firstNonRepeatingCharacter(string):
+    # 1: Initialise a dictionary to keep track of the frequencies of each character of the input string
+    charFrequencies = {}
+    # 2: Loop through each character of the input string
+    for char in string:
+        # 3: Create a key-value pair - where the key is the currentChar and value is the frequency of that char.
+        charFrequencies[char] = charFrequencies.get(char, 0) + 1
+        # 4: During traversal, if currentChar is found again in the charFrequencies dictionary, the frequency value will be incremented by 1. This keeps track of the character's frequency when iterating through the input string.
+        """
+        # dict.get() method: 
+        # param (1): key to be searched in the dictionary
+        # param (2): default value to be returned if key is not found
+        """
+        
+    # 3: Once we have built our charFrequencies hash table, iterate through the input string again
+    for idx in range(len(string)): 
+        # 4: Extract the currentChar from currentIdx
+        char = string[idx] 
+        # 5: If currentChar has a frequency of 1 based on the hash table,
+        if charFrequencies[char] == 1:
+            # 6: Return the idx immediately as this will be the first non repeating (unique) character
+            return idx 
+    # 7: Otherwise, there are no unique characters, so return -1
+    return -1
+```
+
+✅ **DICTIONARIES:** _Loop through each char and store the frequencies of each char using `charFrequencies[char] = charFrequencies.get(char, 0) + 1`. Then, loop through each char again and `if charFrequencies[char] == 1`, return `idx` else return `-1`_
+
+---
 ## [🟨 Group Anagrams](https://leetcode.com/problems/group-anagrams/)
 >* Given an array of strings `strs`, group the **anagrams** together. You can return the answer in **any order**.
 >* An **Anagram** is a word or phrase formed by rearranging the letters of a different word or phrase, typically using all the original letters exactly once.
@@ -892,7 +1051,7 @@ def groupAnagrams(words):
     return list(anagrams.values())
 ```
 
-✅ **HASH MAP:** _Loop and sort each word, append `sortedWord/word` key/value pairs in `anagrams_dict`, if sortedWord is in `anagrams_dict`, set `anagrams_dict[sortedWord].append(word)`, return `anagram_dict.values()`_
+✅ **HASH MAP:** _Loop and sort each word, append `sortedWord/List[word]` key/value pairs in `anagrams_dict`, if sortedWord is in `anagrams_dict`, set `anagrams_dict[sortedWord].append(word)`, else set anagrams[sortedWord] = [word]. Return `anagram_dict.values()`_
 
 ---
 ## [🟨 Balanced Brackets](https://www.algoexpert.io/questions/Balanced%20Brackets)
@@ -1015,6 +1174,127 @@ def isValidPart(string):
 ✅ **THREE POINTERS**: _Set 3 pointers i, j, k for each IP dots, create 3 FOR loops for each pointer to slice string into 4 possible IP octets and check if the octets are valid (0-255) using a helper function. If all 4 octets are valid, then join the valid octets with '.' and append to answers array._
 
 ---
+## [🟨 Longest Palindromic Substring](https://www.algoexpert.io/questions/Longest%20Palindromic%20Substring)
+>* Write a function that, given a string, returns its longest palindromic substring.
+>* A palindrome is defined as a string that's written the same forward and backward. Note that single-character strings are palindromes.
+>* You can assume that there will only be one longest palindromic substring.
+
+- [x] Input: `string = "abaxyzzyxyf"`
+- [x] Output: `xyzzyx`
+
+### **Brute Force**
+```python
+# O(n^3) Time | O(n) Space
+def longestPalindromicSubstring(string): # O(n^2) Time
+    longestString = ""
+    for i in range(len(string)): 
+        for j in range(i, len(string)): 
+            substring = string[i : j + 1]
+            if len(substring) > len(longestString) and isPalindrome(substring):
+                longestString = substring
+    return longestString
+
+def isPalindrome(string): # O(n) Time
+    left, right = 0, len(string) - 1
+    while left < right: 
+        if string[left] != string[right]:
+            return False
+        left += 1
+        right -= 1
+    return True
+
+def isPalindrome(string): # Pythonic
+    if string == string[::-1]:
+        return True
+    return False
+```
+
+✅ **BRUTE FORCE:** _Use two FOR loops to get startIdx and endIdx of palindromic substring, check if `len(substring) > len(longestString) and isPalindrome(substring)` and keep updating longestString._
+
+
+### **Two Pointers**
+```python
+# O(n^2) Time | O(n) Space
+def longestPalindromicSubstring(string): # O(n) Time
+    # 1: Initialising an array of startIdx and endIdx of the current longest palindromic substring
+    # [0, 1] yields string[0:1]. This slices the string at index zero which only contains the first letter which is the smallest possible palindromic substring.
+    currentLongest = [0, 1] # NOTE: In Python, the endIdx letter of sliced string is not INCLUSIVE.
+    
+    # 2: Traversing the idx pointer from 1 to len(string). We start at 1 because the first letter is always palindromic
+    for idx in range(1, len(string)): 
+        # 3: Get odd-length palindrome where the center is the letter between previousLetter and nextLetter
+        # e.g.: cab(a)bac
+        odd = getLongestPalindromeFrom(string, idx - 1, idx + 1)
+        
+        # 4: Get even-length palindrome where the center is in between previousLetter and currentLetter
+        # e.g.: cab|bac
+        even = getLongestPalindromeFrom(string, idx - 1, idx)
+        
+        # 5: Get the longest palindromic substring of current iteration based on the length between x[1] and x[0]
+        # e.g.: odd = [0, 3] even = [0, 6], oddLength = 3 - 0 = 3, evenLength = 6 - 0 = 6, hence: longest = 6
+        longest = max(odd, even, key = lambda x: x[1] - x[0])
+        
+        # 6: Get the longest palindromic substring of all iterations based on the length between x[1] and x[0]
+        currentLongest = max(longest, currentLongest, key = lambda x: x[1] - x[0])
+    
+    # 7: Return the sliced input string using the startIdx and endIdx of currentLongest
+    return string[currentLongest[0] : currentLongest[1] + 1] # NOTE: In Python, the endIdx letter of sliced string is not INCLUSIVE so we add 1 to include the final letter at endIdx.
+
+def getLongestPalindromeFrom(string, left, right): # O(n) Time 
+    # 1: Starting from the middle of the palindrome, we spread out the left and right pointers until the ends during traversal
+    while left >= 0 and right < len(string): 
+        # 2: If both pointers are on different letters, this is not a contiguous palindrome so break at this point
+        if string[left] != string[right]: 
+            break
+        # 3: Else both pointers are on the same letters, keep spreading the pointers outwards until the start and end of palindromic substring
+        left -= 1
+        right += 1
+    # 4: Return the startIdx and endIdx of the palindromic substring
+    return [left + 1, right - 1] 
+    # NOTE: When left and right pointers have moved all the way outwards to the start and end of the palindromic substring and they finally break the while loop condition of left >= 0 and right < len(string), the left and right pointers would have been positioned one step too far to the left and right at left - 1 and right + 1 in order to break the while loop condition. So we return [left + 1, right - 1] to account for this offset.
+```
+
+✅ **TWO POINTERS:** _For each index of string, obtain the startIdx and endIdx of both odd-length and even-length palindromic substrings using `getLongestPalindromeFrom` helper function, keep updating longestPalindromicSubstring using max functions._
+
+---
+## [🟥 Longest Substring Without Duplication](https://www.algoexpert.io/questions/Longest%20Substring%20Without%20Duplication)
+>* Write a function that takes in a string and return its longest substring without duplicate characters.
+>* You can assume that there will only be one longest substring without duplication.
+
+- [x] Input: `string = "clementisacap"`
+- [x] Output: `mentisac`
+
+### **Dictionaries and Max Computations**
+```python
+# O(n) Time | O(min(n, a)) Space
+# where n is the length of the input string and a is the length of unique letters (set) in the input string
+def longestSubstringWithoutDuplication(string): 
+    # 1: Initialise lastSeen dictionary that stores char:idxLastSeenOfChar
+    lastSeen = {}
+    # 2: Initialise List[startIdx, endIdx] of the longest substring without duplication (LSWD)
+    # [0, 1] yields string[0:1]. This slices the string at index zero which only contains the first letter which is the smallest possible substring without duplication.
+    longest = [0, 1] # NOTE: In Python, the endIdx letter of sliced string is not INCLUSIVE.
+    startIdx = 0
+    
+    # 3: Looping through each character of the input string
+    for idx, char in enumerate(string):
+        # 4: If currentChar is seen before in our lastSeen dictionary,
+        if char in lastSeen: 
+            # 5: Compute the startIdx of the LSWD using the below max function
+            startIdx = max(startIdx, lastSeen[char] + 1) # lastSeen[char] + 1 so that we don't include the duplicated character in our LSWD
+        # 6: If length between endIdx and startIdx of LSWD is smaller than (currentIdx + 1 - startIdx),
+        if longest[1] - longest[0] < (idx + 1 - startIdx):
+            # 7: Update LSWD with new startIdx and endIdx
+            longest = [startIdx, idx + 1]
+        # 8: Else, store currentChar:currentIdx into the dictionary
+        lastSeen[char] = idx
+    # 9: Return the sliced input string using the startIdx and endIdx of LSWD
+    return string[longest[0] : longest[1]] 
+```
+
+✅ **DICTIONARIES AND MAX COMPUTATIONS:** _Loop through each char of input string, if char is seen in dictionary, perform max computation `startIdx = max(startIdx, lastSeen[char] + 1)`, if `longest[1] - longest[0] < (idx + 1 - startIdx)`, keep updating the startIdx and endIdx of LSWD, else store each char and its last seen index in the dictionary, finally return sliced input string using the startIdx and endIdx of LSWD._
+
+---
 # <div id='linkedlists'/> 📝 **Linked Lists**
 
 - ✅ Reverse a Linked List - https://leetcode.com/problems/reverse-linked-list/
@@ -1079,7 +1359,7 @@ def removeDuplicatesFromLinkedList(head):
 
 ✅ **ITERATIVELY IN-PLACE:** 
 - Initialise currentNode = head, iterate through the linkedList while keeping track of nextDistinctNode = currentNode.next
-- While nextDistinctNode.value == currentNode.value, keep moving nextDistinctNode = nextDistinctNode.next until nextDistinctNode is positioned on a non-equal distinct value to currentNode.value. 
+- While nextDistinctNode.value == currentNode.value, keep moving nextDistinctNode = nextDistinctNode.next until nextDistinctNode is positioned on a distinct value not equal to currentNode.value. 
 - Then, connect currentNode.next to point to nextDistinctNode and update currentNode to be nextDistinctNode (this bypasses all the equal value nodes).
 
 ---
@@ -1599,7 +1879,7 @@ def backtrackAncestralTree(lowerDescendant, higherDescendant, diff):
 5. Return any descendant node once both descendant nodes have reached their youngest common ancestor node.
 
 
-### **DFS Iterative**
+### **DFS Recursive**
 ```python
 class BinaryTree:
     def __init__(self, value):
@@ -2050,56 +2330,6 @@ def getUnvisitedNeighbours(i, j, matrix, visited):
 - Add and Search Word - https://leetcode.com/problems/add-and-search-word-data-structure-design/
 - Word Search II - https://leetcode.com/problems/word-search-ii/
 ### [📋 **Back to Table of Contents**](#toc)
-
----
-#### ♽ Recursive DFS
-```python
-# 1: Base edge case to break the depth first search when we have arrived None child nodes of the leaf node
-if node is None:
-    return
-
-# 2: When reaching a leaf node
-if node.left is None and node.right is None:
-
-# 3: Recursive function call to traverse down the tree and passing computed values down
-recursiveFunction(node.left, doSomething, ans)
-recursiveFunction(node.right, doSomething, ans)
-```
-#### 📚 Stack DFS
-```python
-# 1: Initialise a stack with root node
-stack = [root]
-
-# 2: Iterate all elements of the stack in LIFO order
-while len(stack) > 0: 
-    node = stack.pop() # Pop the top-most element 
-
-# 3: Base edge case to break the depth first search when we have arrived None child nodes of the leaf node
-if node is None:
-    return
- 
-# 4: Push child nodes to stack to traverse down the tree
-stack.append(node.left)
-stack.append(node.right)
-```
-
-#### 🌲 Queue BFS
-```python
-# 1: Initialise a queue with root node
-queue = [root]
-
-# 2: Iterate all elements of the queue in FIFO order
-while len(queue) > 0: 
-    node = queue.pop(0) # Pop the bottom-most element 
-
-# 3: Base edge case to break the depth first search when we have arrived None child nodes of the leaf node
-if node is None:
-    return
- 
-# 4: Push child nodes to queue to traverse down the tree
-queue.append(node.left)
-queue.append(node.right)
-```
 
 ---
 ## [🟩 Branch Sums](https://www.algoexpert.io/questions/Branch%20Sums)
