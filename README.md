@@ -1,3 +1,15 @@
+<style>
+details > summary {
+  padding: 4px;
+  width: 100px;
+  background-color: #3c3d3c;
+  border: none;
+  box-shadow: 1px 1px 2px #101010;
+  cursor: pointer;
+}
+</style>
+
+
 <img src="https://www.python.org/static/community_logos/python-logo-generic.svg" width="500px"/><br/>
 
 # **💻 Data Structures and Algorithms in Python**
@@ -228,7 +240,7 @@ def twoNumberSum(array, target):
 	return []
 ```
 
-✅ **HASH TABLE:** _Use hash map to instantly check for difference value, map will add index of last occurrence of a num, don’t use same element twice_
+✅ **HASH TABLE:** _Use hash table to instantly check for difference value, map will add index of last occurrence of a num, don’t use same element twice_
 
 
 ### **Two Pointers**
@@ -620,9 +632,9 @@ def smallestDifference(arrayOne, arrayTwo):
 >* You're given an array of integers and an integer. Write a function that moves all instances of that integer in the array to the end of the array and returns the array.
 >* The function should perform this in place (i.e., it should mutate the input array) and doesn't need to maintain the order of the other integers.
 - [x] Input: `array = [2, 1, 2, 2, 2, 3, 4, 2], toMove = 2`
-- [x] Output: `[1, 3, 4, 2, 2, 2, 2, 2]`
-
+- [x] Output: `[4, 1, 3, 2, 2, 2, 2, 2]` or `[1, 3, 4, 2, 2, 2, 2, 2]`
 ### **Two Pointers**
+
 ```python
 # O(n) Time | O(1) Space - where n is the length of the input array
 def moveElementToEnd(array, toMove):
@@ -645,6 +657,37 @@ def moveElementToEnd(array, toMove):
 ```
 
 ✅ **TWO POINTERS:** _Initialise two pointers (left & right) on each end. While left < right, nested while rightVal == toMoveNum, decrement right to ensure rightVal points to a swappable num != toMoveNum. Keep incrementing left. If leftVal == toMoveNum, perform swap._
+
+### **Two Pointers - Order Preserved**
+
+```python
+# O(n) Time | O(1) Space - where n is the length of the input array
+def moveElementToEnd(array, toMove):
+    readIdx, writeIdx = 0, 0
+    while readIdx < len(array): 
+        if array[readIdx] != toMove: 
+            array[readIdx], array[writeIdx] = array[writeIdx], array[readIdx]
+            writeIdx += 1
+        readIdx += 1
+    return array
+
+def moveElementToEnd(array, toMove):
+    writeIdx = 0
+    for readIdx in range(len(array)): 
+        if array[readIdx] != toMove: 
+            array[readIdx], array[writeIdx] = array[writeIdx], array[readIdx]
+            writeIdx += 1
+    return array
+
+Working through an example, say we have an array [1, 0, 2, 0, 3] and toMove = 0.
+When read = 0, write = 0 and write += 1.
+When read = 1, then array[read] == 0 and write = 1.
+When read = 2, then we swap array[2] (read) and array[1] (write). The array is now [1, 2, 0, 0, 3] and write = 2.
+When read = 3, array[read] == 0 and we skip.
+When read = 4, then we swap array[4] (read) and array[2] (write). The final array is [1, 2, 3, 0, 0].
+```
+
+✅ **TWO POINTERS:** _Initialise two pointers (readIdx & writeIdx) at 0. Iterate through the array with readIdx, if `array[readIdx] != toMove`, swap `array[readIdx], array[writeIdx] = array[writeIdx], array[readIdx]` and increment `writeIdx += 1`, keep traversing array with `readIdx`, return mutated array_
 
 ---
 ## [🟨 Longest Peak](https://www.algoexpert.io/questions/Longest%20Peak)
@@ -916,7 +959,7 @@ def mergeOverlappingIntervals(intervals):
             # 7: Mutate the currentIntervalEnd to be the highest number between the intervalEnd values of the currentInterval and nextInterval
             currentInterval[1] = max(currentIntervalEnd, nextIntervalEnd)
         else: 
-            # 8: Else if there are no overlapping, then immediately append the interval to the answer
+            # 8: Else if there are no overlapping, update currentInterval with new interval and immediately append to the answer
             currentInterval = nextInterval
             mergedIntervals.append(currentInterval)
             
@@ -1023,7 +1066,7 @@ def firstNonRepeatingCharacter(string):
 - [x] Input: `strs = ["eat","tea","tan","ate","nat","bat"]`
 - [x] Output: `[["bat"],["nat","tan"],["ate","eat","tea"]]`
 
-### **Hash Map**
+### **Hash Table**
 ```python
 # O(w * nlog(n)) time | O(w * n) space
 # w - the number of words
@@ -1039,7 +1082,7 @@ def groupAnagrams(words):
     return list(anagrams.values())
 ```
 
-✅ **HASH MAP:** _Loop and sort each word, append `sortedWord/List[word]` key/value pairs in `anagrams_dict`, if sortedWord is in `anagrams_dict`, set `anagrams_dict[sortedWord].append(word)`, else set anagrams[sortedWord] = [word]. Return `anagram_dict.values()`_
+✅ **HASH TABLE:** _Loop and sort each word, append `sortedWord/List[word]` key/value pairs in `anagrams_dict`, if sortedWord is in `anagrams_dict`, set `anagrams_dict[sortedWord].append(word)`, else set anagrams[sortedWord] = [word]. Return `anagram_dict.values()`_
 
 ---
 ## [🟨 Balanced Brackets](https://www.algoexpert.io/questions/Balanced%20Brackets)
@@ -1200,7 +1243,7 @@ def isPalindrome(string): # Pythonic
 ✅ **BRUTE FORCE:** _Use two FOR loops to get startIdx and endIdx of palindromic substring, check if `len(substring) > len(longestString) and isPalindrome(substring)` and keep updating longestString._
 
 
-### **Two Pointers**
+### **String Index Manipulation**
 ```python
 # O(n^2) Time | O(n) Space
 def longestPalindromicSubstring(string): # O(n) Time
@@ -1242,7 +1285,7 @@ def getLongestPalindromeFrom(string, left, right): # O(n) Time
     # NOTE: When left and right pointers have moved all the way outwards to the start and end of the palindromic substring and they finally break the while loop condition of left >= 0 and right < len(string), the left and right pointers would have been positioned one step too far to the left and right at left - 1 and right + 1 in order to break the while loop condition. So we return [left + 1, right - 1] to account for this offset.
 ```
 
-✅ **TWO POINTERS:** _For each index of string, obtain the startIdx and endIdx of both odd-length and even-length palindromic substrings using `getLongestPalindromeFrom` helper function, keep updating longestPalindromicSubstring using max functions._
+✅ **STRING INDEX MANIPULATION:** _For each index of string, obtain the startIdx and endIdx of both odd-length and even-length palindromic substrings using `getLongestPalindromeFrom` helper function, keep updating longestPalindromicSubstring using max functions._
 
 ---
 ## [🟥 Longest Substring Without Duplication](https://www.algoexpert.io/questions/Longest%20Substring%20Without%20Duplication)
@@ -1266,13 +1309,13 @@ def longestSubstringWithoutDuplication(string):
     
     # 3: Looping through each character of the input string
     for idx, char in enumerate(string):
-        # 4: If currentChar is seen before in our lastSeen dictionary,
+        # 4: If currentChar is seen before in our lastSeen dictionary, there is a duplication so,
         if char in lastSeen: 
-            # 5: Compute the startIdx of the LSWD using the below max function
+            # 5: Update the startIdx of the next potential LSWD using the below max function
             startIdx = max(startIdx, lastSeen[char] + 1) # lastSeen[char] + 1 so that we don't include the duplicated character in our LSWD
-        # 6: If length between endIdx and startIdx of LSWD is smaller than (currentIdx + 1 - startIdx),
+        # 6: Keep track of the longest LSWD by comparing the length of current iteration's SWD and that of previously stored LSWD
         if longest[1] - longest[0] < (idx + 1 - startIdx):
-            # 7: Update LSWD with new startIdx and endIdx
+            # 7: Update the new and longer LSWD with new startIdx and endIdx
             longest = [startIdx, idx + 1]
         # 8: Else, store currentChar:currentIdx into the dictionary
         lastSeen[char] = idx
@@ -1280,7 +1323,7 @@ def longestSubstringWithoutDuplication(string):
     return string[longest[0] : longest[1]] 
 ```
 
-✅ **DICTIONARIES AND MAX COMPUTATIONS:** _Loop through each char of input string, if char is seen in dictionary, perform max computation `startIdx = max(startIdx, lastSeen[char] + 1)`, if `longest[1] - longest[0] < (idx + 1 - startIdx)`, keep updating the startIdx and endIdx of LSWD, else store each char and its last seen index in the dictionary, finally return sliced input string using the startIdx and endIdx of LSWD._
+✅ **DICTIONARIES AND MAX COMPUTATIONS:** _Loop through each char of input string, if char is seen in dictionary, update the startIdx of the new LSWD using max computations `startIdx = max(startIdx, lastSeen[char] + 1)`, if `longest[1] - longest[0] < (idx + 1 - startIdx)`, keep track of the startIdx and endIdx of LSWD so far, else store each char and its last seen index in the dictionary, finally return sliced input string using the startIdx and endIdx of LSWD._
 
 ---
 # <div id='linkedlists'/> 📝 **Linked Lists**
@@ -1645,6 +1688,150 @@ def reverseLinkedList(head):
 ```
 
 ✅ **ITERATIVE MUTATION:** _Iterate through the linked list while maintaining currentNode and previousNode, iteratively reverse, return new head of list_
+
+
+
+---
+
+## [⬛️ LRU Cache](https://www.algoexpert.io/questions/LRU%20Cache)
+> Implement an `LRUCache` class for a Least Recently Used (LRU) cache. The class should support:
+    >* Inserting key-value pairs with the `insertKeyValuePair` method.
+    >* Retrieving a key's value with the `getValueFromkey` method.
+    >* Retrieving the most recently used (the most recently inserted or retrieved) key with the `getMostRecentkey` method.
+    >* `Note:` Each of these methods should run in constant time.
+
+> Additionally, the `LRUCache` class should store a `maxSize` property set to the size of the cache, which is passed in as an argument during instantiation. This size represents the maximum number of key-value pairs that the cache can store at once. If a key-value pair is inserted in the cache when it has reached maximum capacity, the least recently used key-value pair should be evicted from the cache and no longer retrievable; the newly added key-value pair should effectively replace it.
+
+> `Note:` Inserting a key-value pair with an already existing key should simply replace the key's value in the cache with the new value and shouldn't evict a key-value pair if the cache is full. Lastly, attempting to retrieve a value from a key that isn't in the cache should return `None`
+
+- [x] Sample Usage:
+```python
+# All operations below are performed sequentially:
+LRUCache(3): - # Instantiate an LRUCache object of size 3
+insertKeyValuePair("b", 2): -
+insertKeyValuePair("a", 1): -
+insertKeyValuePair("c", 3): -
+
+getMostRecentKey(): "c" # "c" was the most recently inserted key
+getValueFromKey("a"): 1
+getMostRecentKey(): "a" # "a" was the most recently retrieved key
+
+insertKeyValuePair("d", 4): - # The cache had 3 entries; the least recently used one is evicted
+getValueFromKey("b"): None # "b" was evicted in the previous operation
+
+insertKeyValuePair("a", 5): - # "a" already exists in the cache so its value just gets replaced
+getValueFromKey("a"): 5
+```
+### **Doubly Linked List Class**
+
+```python
+class DoublyLinkedList: 
+    def __init__(self):
+        self.head = None
+        self.tail = None
+        
+    def setHeadTo(self, node):
+        if self.head == node: 
+            return
+        elif self.head is None: 
+            self.head = node 
+            self.tail = node
+        elif self.head == self.tail: 
+            self.tail.prev = node
+            self.head = node
+            self.head.next = self.tail
+        else: 
+            if self.tail == node:
+                self.removeTail()
+            node.removeBindings()
+            self.head.prev = node
+            node.next = self.head
+            self.head = node
+    
+    def removeTail(self): 
+        if self.tail is None:
+            return
+        if self.tail == self.head: 
+            self.head = None
+            self.tail = None
+            return
+        self.tail = self.tail.prev
+        self.tail.next = None
+```
+
+✅ **ITERATIVE MUTATION:** _Iterate through the linked list while maintaining currentNode and previousNode, iteratively reverse, return new head of list_
+
+### **Doubly Linked List Node Class**
+
+```python
+class DoublyLinkedListNode:
+    def __init__(self, key, value):
+        self.key = key
+        self.value = value
+        self.next = None
+        self.prev = None
+        
+    def removeBindings(self): 
+        if self.prev is not None: 
+            self.prev.next = self.next
+        if self.next is not None: 
+            self.next.prev = self.prev
+        self.prev = None
+        self.next = None
+```
+
+✅ **ITERATIVE MUTATION:** _Iterate through the linked list while maintaining currentNode and previousNode, iteratively reverse, return new head of list_
+
+### **LRU Cache - Hash Table with Doubly Linked List**
+
+```python
+class LRUCache: 
+    def __init__(self, maxSize): 
+        self.cache = {}
+        self.maxSize = maxSize or 1
+        self.currentSize = 0
+        self.listOfMostRecent = DoublyLinkedList()
+    
+    # O(1) Time | O(1) Space    
+    def insertKeyValuePair(self, key, value):
+        if key not in self.cache:
+            if self.currentSize == self.maxSize: 
+                self.evictLeastRecent()
+            else: 
+                self.currentSize += 1
+            self.cache[key] = DoublyLinkedListNode(key, value)
+        else: 
+            self.replaceKey(key, value)
+        self.updateMostRecent(self.cache[key])
+        
+    # O(1) Time | O(1) Space
+    def getValueFromKey(self, key):
+        if key not in self.cache:
+            return None
+        self.updateMostRecent(self.cache[key])
+        return self.cache[key].value
+    
+    # O(1) Time | O(1) Space
+    def getMostRecentKey(self):
+        if self.listOfMostRecent.head is None: 
+            return None
+        return self.listOfMostRecent.head.key
+    
+    def evictLeastRecent(self): 
+        keyToRemove = self.listOfMostRecent.tail.key
+        self.listOfMostRecent.removeTail()
+        del self.cache[keyToRemove]
+        
+    def updateMostRecent(self, node): 
+        self.listOfMostRecent.setHeadTo(node)
+    
+    def replaceKey(self, key, value): 
+        if key not in self.cache: 
+            raise Exception("The provided key is not in the cache.")
+        self.cache[key].value = value
+```
+
+✅ **HASH TABLE WITH DOUBLY LINKED LIST:** _Iterate through the linked list while maintaining currentNode and previousNode, iteratively reverse, return new head of list_
 
 ---
 # <div id='graphs'/> 📈 **Graphs**
