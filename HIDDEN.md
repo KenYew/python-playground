@@ -3262,7 +3262,7 @@ class BST:
 - ✅ Bubble Sort - https://www.algoexpert.io/questions/Bubble%20Sort
 - Insertion Sort - https://www.algoexpert.io/questions/Insertion%20Sort
 - Selection Sort - https://www.algoexpert.io/questions/Selection%20Sort
-- Threee Number Sort - https://www.algoexpert.io/questions/Three%20Number%20Sort
+- Three Number Sort - https://www.algoexpert.io/questions/Three%20Number%20Sort
 - Quick Sort - https://www.algoexpert.io/questions/Quick%20Sort
 - Heap Sort - https://www.algoexpert.io/questions/Heap%20Sort
 - Radix Sort - https://www.algoexpert.io/questions/Radix%20Sort
@@ -3310,6 +3310,223 @@ def swap(left, right, array):
 1. Loop through the array and perform a swap if `array[idx] > array[idx + 1]`. 
 2. Maintain  `isSorted boolean` that finally gets set to `True` if swap condition above is not met
 3. Maintain `counter int` that increments by 1 after every for loop to ensure we ignore sorted elements in the next for loop.
+
+---
+## [🟩 Insertion Sort](https://www.algoexpert.io/questions/Insertion%20Sort)
+> Write a function that takes in an array of integers and returns a sorted version of that array. Use the Insertion Sort algorithm to sort the array.
+
+<img src="resources/insertion-sort.png" width="700px"/><br/>
+
+- [x] Input: `array = [8, 5, 2, 9, 5, 6, 3]`
+- [x] Output: `[2, 3, 5, 5, 6, 8, 9]`
+<details><summary><b>Solution</b></summary>
+<p>
+
+### **Single Pointer Iteration**
+```python
+# BEST: O(n) Time | O(1) Space
+# AVG: O(n^2) Time | O(1) Space
+# WORST: O(n^2) Time | O(1) Space
+def insertionSort(array):
+    for i in range(1, len(array)):
+        j = i
+        while j > 0 and array[j] < array[j - 1]:
+            swap(j, j - 1, array)
+            j -= 1
+    return array
+
+def swap(left, right, array):
+	array[left], array[right] = array[right], array[left]
+```
+</p>
+</details>
+
+✅ **Single Pointer Iteration:** 
+1. 
+
+---
+## [🟩 Selection Sort](https://www.algoexpert.io/questions/Selection%20Sort)
+> Write a function that takes in an array of integers and returns a sorted version of that array. Use the Selection Sort algorithm to sort the array.
+
+<img src="resources/selection-sort.png" width="700px"/><br/>
+
+- [x] Input: `array = [8, 5, 2, 9, 5, 6, 3]`
+- [x] Output: `[2, 3, 5, 5, 6, 8, 9]`
+<details><summary><b>Solution</b></summary>
+<p>
+
+### **Single Pointer Iteration**
+```python
+# BEST: O(n^2) Time | O(1) Space
+# AVG: O(n^2) Time | O(1) Space
+# WORST: O(n^2) Time | O(1) Space
+def selectionSort(array):
+	currentIdx = 0 
+	while currentIdx < len(array) - 1: 
+		smallestIdx = currentIdx
+		for i in range(currentIdx + 1, len(array)):
+			if array[smallestIdx] > array[i]:
+				smallestIdx = i
+		swap(currentIdx, smallestIdx, array)
+		currentIdx += 1
+	return array 
+
+def swap(left, right, array):
+	array[left], array[right] = array[right], array[left]
+```
+</p>
+</details>
+
+✅ **Single Pointer Iteration:** 
+1. 
+
+---
+## [🟥 Quick Sort](https://www.algoexpert.io/questions/Quick%20Sort)
+> Write a function that takes in an array of integers and returns a sorted version of that array. Use the Quick Sort algorithm to sort the array.
+
+<img src="resources/quick-sort.png" width="700px"/><br/>
+
+- [x] Input: `array = [8, 5, 2, 9, 5, 6, 3]`
+- [x] Output: `[2, 3, 5, 5, 6, 8, 9]`
+<details><summary><b>Solution</b></summary>
+<p>
+
+### **Single Pointer Iteration**
+```python
+# Best: O(nlog(n)) Time | O(nlog(n)) Space
+# Avg: O(nlog(n)) Time | O(nlog(n)) Space
+# Worst: O(n^2) Time | O(log(n)) Space 
+def quickSort(array):
+    quickSortHelper(array, 0, len(array) - 1)
+    return array
+    
+def quickSortHelper(array, start, end):
+    if end <= start: 
+        return
+
+    pivot, left, right = start, start + 1, end
+    
+    while left <= right:
+        if array[left] > array[pivot] and array[right] < array[pivot]:
+            swap(left, right, array)
+        if array[left] <= array[pivot]:
+            left += 1
+        if array[right] >= array[pivot]:
+            right -= 1
+    swap(pivot, right, array)
+    
+    leftSubarrayIsSmaller = right - 1 - start < end - (right + 1)
+    if leftSubarrayIsSmaller:
+        quickSortHelper(array, start, right - 1)
+        quickSortHelper(array, right + 1, end)
+    else:
+        quickSortHelper(array, right + 1, end)
+        quickSortHelper(array, start, right - 1)
+        
+def swap(i, j, array):
+    array[i], array[j] = array[j], array[i]
+    
+def quickSortHelper(array, start, end):
+    if end <= start:
+        return
+    
+    left = start + 1
+    right = end
+    pivot = (start + end) // 2
+    
+    array[start], array[pivot] = array[pivot], array[start]
+
+    while left <= right:
+        while left <= right and array[left] <= array[start]:
+            left += 1
+        while left <= right and array[right] >= array[start]:
+            right -= 1
+        if left < right:
+            array[left], array[right] = array[right], array[left]     
+               
+    array[start], array[right] = array[right], array[start]
+    quickSortHelper(array, start, right - 1)
+    quickSortHelper(array, right + 1, end)
+```
+</p>
+</details>
+
+✅ **Single Pointer Iteration:** 
+
+---
+## [🟥 Heap Sort](https://www.algoexpert.io/questions/Heap%20Sort)
+> Write a function that takes in an array of integers and returns a sorted version of that array. Use the Heap Sort algorithm to sort the array.
+
+<img src="resources/heap-sort.png" width="700px"/><br/>
+
+- [x] Input: `array = [8, 5, 2, 9, 5, 6, 3]`
+- [x] Output: `[2, 3, 5, 5, 6, 8, 9]`
+<details><summary><b>Solution</b></summary>
+<p>
+
+### **Single Pointer Iteration**
+```python
+# BEST: O(n^2) Time | O(1) Space
+# AVG: O(n^2) Time | O(1) Space
+# WORST: O(n^2) Time | O(1) Space
+
+def swap(left, right, array):
+	array[left], array[right] = array[right], array[left]
+```
+</p>
+</details>
+
+✅ **Single Pointer Iteration:** 
+
+---
+## [🟥 Radix Sort](https://www.algoexpert.io/questions/Radix%20Sort)
+> Write a function that takes in an array of integers and returns a sorted version of that array. Use the Radix Sort algorithm to sort the array.
+
+<img src="resources/radix-sort.png" width="700px"/><br/>
+
+- [x] Input: `array = [8, 5, 2, 9, 5, 6, 3]`
+- [x] Output: `[2, 3, 5, 5, 6, 8, 9]`
+<details><summary><b>Solution</b></summary>
+<p>
+
+### **Single Pointer Iteration**
+```python
+# BEST: O(n^2) Time | O(1) Space
+# AVG: O(n^2) Time | O(1) Space
+# WORST: O(n^2) Time | O(1) Space
+
+def swap(left, right, array):
+	array[left], array[right] = array[right], array[left]
+```
+</p>
+</details>
+
+✅ **Single Pointer Iteration:** 
+
+---
+## [⬛️ Merge Sort](https://www.algoexpert.io/questions/Merge%20Sort)
+> Write a function that takes in an array of integers and returns a sorted version of that array. Use the Merge Sort algorithm to sort the array.
+
+<img src="resources/merge-sort.png" width="700px"/><br/>
+
+- [x] Input: `array = [8, 5, 2, 9, 5, 6, 3]`
+- [x] Output: `[2, 3, 5, 5, 6, 8, 9]`
+<details><summary><b>Solution</b></summary>
+<p>
+
+### **Single Pointer Iteration**
+```python
+# BEST: O(n^2) Time | O(1) Space
+# AVG: O(n^2) Time | O(1) Space
+# WORST: O(n^2) Time | O(1) Space
+
+def swap(left, right, array):
+	array[left], array[right] = array[right], array[left]
+```
+</p>
+</details>
+
+✅ **Single Pointer Iteration:** 
 
 ---
 
