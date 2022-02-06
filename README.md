@@ -88,7 +88,7 @@ Blind 75 questions, in-depth solutions and coding patterns for FAANG coding inte
 ---
 
 # <div id='quicknotes'/> ⚡️ **Quick Notes**
-### [📋 **Back to Table of Contents**](#toc)
+#### [📋 **Back to Table of Contents**](#toc)
 ---
 #### 📝 Linked List Traversal
 ##### To perform head to tail computations
@@ -204,7 +204,7 @@ queue.append(node.right)
 - Search in Rotated Sorted Array - https://leetcode.com/problems/search-in-rotated-sorted-array/
 - ✅ 3Sum - https://leetcode.com/problems/3sum/
 - Container With Most Water - https://leetcode.com/problems/container-with-most-water/
-### [📋 **Back to Table of Contents**](#toc)
+#### [📋 **Back to Table of Contents**](#toc)
 
 ---
 ## [🟩 Two Sum](https://leetcode.com/problems/two-sum/)
@@ -865,7 +865,7 @@ def threeNumberSum(array, targetSum):
 - ✅ Spiral Matrix - https://leetcode.com/problems/spiral-matrix/
 - Rotate Image - https://leetcode.com/problems/rotate-image/
 - Word Search - https://leetcode.com/problems/word-search/
-### [📋 **Back to Table of Contents**](#toc)
+#### [📋 **Back to Table of Contents**](#toc)
 ---
 ## [🟨 Spiral Matrix](https://leetcode.com/problems/spiral-matrix/)
 >* Given an m x n matrix, return all elements of the matrix in spiral order.
@@ -926,7 +926,7 @@ def spiralTraverse(array):
 - Non-overlapping Intervals - https://leetcode.com/problems/non-overlapping-intervals/
 - Meeting Rooms (Leetcode Premium) - https://leetcode.com/problems/meeting-rooms/
 - Meeting Rooms II (Leetcode Premium) - https://leetcode.com/problems/meeting-rooms-ii/
-### [📋 **Back to Table of Contents**](#toc)
+#### [📋 **Back to Table of Contents**](#toc)
 ---
 ## [🟨 Merge Intervals](https://leetcode.com/problems/merge-intervals/)
 > Given an array of intervals where `intervals[i] = [starti, endi]`, merge all overlapping intervals, and return an array of the non-overlapping intervals that cover all the intervals in the input.
@@ -981,7 +981,7 @@ def mergeOverlappingIntervals(intervals):
 - ✅ Longest Palindromic Substring - https://leetcode.com/problems/longest-palindromic-substring/
 - ✅ Palindromic Substrings - https://leetcode.com/problems/palindromic-substrings/
 - Encode and Decode Strings (Leetcode Premium) - https://leetcode.com/problems/encode-and-decode-strings/
-### [📋 **Back to Table of Contents**](#toc)
+#### [📋 **Back to Table of Contents**](#toc)
 
 ---
 ## [🟩 Caesar Cipher Encryptor](https://www.algoexpert.io/questions/Caesar%20Cipher%20Encryptor)
@@ -1334,7 +1334,7 @@ def longestSubstringWithoutDuplication(string):
 - Merge K Sorted Lists - https://leetcode.com/problems/merge-k-sorted-lists/
 - ✅ Remove Nth Node From End Of List - https://leetcode.com/problems/remove-nth-node-from-end-of-list/
 - Reorder List - https://leetcode.com/problems/reorder-list/
-### [📋 **Back to Table of Contents**](#toc)
+#### [📋 **Back to Table of Contents**](#toc)
 ---
 ## [🟩 Remove Duplicates From Linked List](https://www.algoexpert.io/questions/Remove%20Duplicates%20From%20Linked%20List)
 >* You're given the head of a Singly Linked List whose nodes are in sorted order with respect to their values. 
@@ -1844,7 +1844,7 @@ class LRUCache:
 - Alien Dictionary (Leetcode Premium) - https://leetcode.com/problems/alien-dictionary/
 - Graph Valid Tree (Leetcode Premium) - https://leetcode.com/problems/graph-valid-tree/
 - Number of Connected Components in an Undirected Graph (Leetcode Premium) - https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/
-### [📋 **Back to Table of Contents**](#toc)
+#### [📋 **Back to Table of Contents**](#toc)
 
 ---
 
@@ -2504,7 +2504,7 @@ def getUnvisitedNeighbours(i, j, matrix, visited):
 - Implement Trie (Prefix Tree) - https://leetcode.com/problems/implement-trie-prefix-tree/
 - Add and Search Word - https://leetcode.com/problems/add-and-search-word-data-structure-design/
 - Word Search II - https://leetcode.com/problems/word-search-ii/
-### [📋 **Back to Table of Contents**](#toc)
+#### [📋 **Back to Table of Contents**](#toc)
 
 ---
 ## [🟩 Branch Sums](https://www.algoexpert.io/questions/Branch%20Sums)
@@ -2879,7 +2879,7 @@ def findMaxSum(node):
     
 ---
 # <div id='bst'/> 🌲 **Binary Search Trees**
-### [📋 **Back to Table of Contents**](#toc)
+#### [📋 **Back to Table of Contents**](#toc)
 ---
 ## [🟩 Find Closest Value in BST](https://www.algoexpert.io/questions/Find%20Closest%20Value%20In%20BST)
 >* Write a function that takes in a Binary Search Tree (BST) and a target integer value and returns the closest value to that target value contained in the BST.
@@ -3053,7 +3053,7 @@ class BST:
 - Merge K Sorted Lists - https://leetcode.com/problems/merge-k-sorted-lists/
 - Top K Frequent Elements - https://leetcode.com/problems/top-k-frequent-elements/
 - Find Median from Data Stream - https://leetcode.com/problems/find-median-from-data-stream/
-### [📋 **Back to Table of Contents**](#toc)
+#### [📋 **Back to Table of Contents**](#toc)
 
 ---
 # <div id='dp'/> 📱 **Dynamic Programming**
@@ -3069,7 +3069,7 @@ class BST:
 - Decode Ways - https://leetcode.com/problems/decode-ways/
 - Unique Paths - https://leetcode.com/problems/unique-paths/
 - Jump Game - https://leetcode.com/problems/jump-game/
-### [📋 **Back to Table of Contents**](#toc)
+#### [📋 **Back to Table of Contents**](#toc)
 
 ---
 ## [🟥 Longest Common Subsequence](https://www.algoexpert.io/questions/Longest%20Common%20Subsequence)
@@ -3131,5 +3131,5 @@ def longestCommonSubsequence(s1: str, s2: str) -> int:
 - Counting Bits - https://leetcode.com/problems/counting-bits/
 - Missing Number - https://leetcode.com/problems/missing-number/
 - Reverse Bits - https://leetcode.com/problems/reverse-bits/
-### [📋 **Back to Table of Contents**](#toc)
+#### [📋 **Back to Table of Contents**](#toc)
 ---

@@ -13,7 +13,7 @@ details > summary {
 <img src="https://www.python.org/static/community_logos/python-logo-generic.svg" width="500px"/><br/>
 
 # **💻 Data Structures and Algorithms in Python**
-Blind 75 questions, in-depth solutions and coding patterns for FAANG coding interviews.
+Blind 75 questions, coding patterns and in-depth solutions for FAANG coding interviews.
 #### 📖 Author: `Ken Yew Piong`
 #### 📆 Last Modified:  <img src="https://img.shields.io/badge/dynamic/json?style=flat-square&labelColor=0039A9&color=027DFF&label=UTC&query=currentDateTime&url=http%3A%2F%2Fworldclockapi.com%2Fapi%2Fjson%2Futc%2Fnow&logo=AzureDevOps&logoColor=3399FF"/>
 <a href="https://github.com/KenYew">
@@ -36,6 +36,7 @@ Blind 75 questions, in-depth solutions and coding patterns for FAANG coding inte
 1. ### [🌲 **Binary Search Trees**](#bst)
 1. ### [📚 **Sorting Algorithms**](#sort)
 1. ### [🔎 **Search Algorithms**](#search)
+1. ### [🧠 **Famous Algorithms**](#algorithms)
 1. ### [🥞 **Stacks**](#stacks)
 1. ### [🏔 **Heaps**](#heaps)
 1. ### [📱 **Dynamic Programming**](#dp)
@@ -88,7 +89,7 @@ Blind 75 questions, in-depth solutions and coding patterns for FAANG coding inte
 ---
 
 # <div id='quicknotes'/> ⚡️ **Quick Notes**
-### [📋 **Back to Table of Contents**](#toc)
+#### [📋 **Back to Table of Contents**](#toc)
 ---
 #### 📝 Linked List Traversal
 ##### To perform head to tail computations
@@ -194,6 +195,7 @@ queue.append(node.right)
 ---
 # <div id='arrays'/> 🎹 **Arrays**
 
+#### Blind 75
 - ✅ Two Sum - https://leetcode.com/problems/two-sum/
 - ✅ Best Time to Buy and Sell Stock - https://leetcode.com/problems/best-time-to-buy-and-sell-stock/
 - ✅ Contains Duplicate - https://leetcode.com/problems/contains-duplicate/
@@ -204,7 +206,22 @@ queue.append(node.right)
 - Search in Rotated Sorted Array - https://leetcode.com/problems/search-in-rotated-sorted-array/
 - ✅ 3Sum - https://leetcode.com/problems/3sum/
 - Container With Most Water - https://leetcode.com/problems/container-with-most-water/
-### [📋 **Back to Table of Contents**](#toc)
+
+#### LeetCode Patterns
+- `217` Contains Duplicate - https://leetcode.com/problems/contains-duplicate/
+- `268` Missing Number - https://leetcode.com/problems/missing-number/
+- `448` Find All Numbers Disappeared in an Array - https://leetcode.com/problems/find-all-numbers-disappeared-in-an-array/
+- `136` Single Number - https://leetcode.com/problems/single-number/
+- `2022` Convert 1D Array Into 2D Array - https://leetcode.com/problems/convert-1d-array-into-2d-array/
+- ✅ `238` Product of Array Except Self - https://leetcode.com/problems/product-of-array-except-self/
+- `287` Find the Duplicate Number - https://leetcode.com/problems/find-the-duplicate-number/
+- `442` Find All Duplicates in an Array - https://leetcode.com/problems/find-all-duplicates-in-an-array/
+- `73` Set Matrix Zeroes - https://leetcode.com/problems/set-matrix-zeroes/
+- `54` Spiral Matrix - https://leetcode.com/problems/spiral-matrix/
+- `48` Rotate Image - https://leetcode.com/problems/rotate-image/
+- `128` Longest Consecutive Sequence - https://leetcode.com/problems/longest-consecutive-sequence/
+- `41` First Missing Positive - https://leetcode.com/problems/first-missing-positive/
+#### [📋 **Back to Table of Contents**](#toc)
 
 ---
 ## [🟩 Two Sum](https://leetcode.com/problems/two-sum/)
@@ -921,7 +938,7 @@ def threeNumberSum(array, targetSum):
 - ✅ Spiral Matrix - https://leetcode.com/problems/spiral-matrix/
 - Rotate Image - https://leetcode.com/problems/rotate-image/
 - Word Search - https://leetcode.com/problems/word-search/
-### [📋 **Back to Table of Contents**](#toc)
+#### [📋 **Back to Table of Contents**](#toc)
 ---
 ## [🟨 Spiral Matrix](https://leetcode.com/problems/spiral-matrix/)
 >* Given an m x n matrix, return all elements of the matrix in spiral order.
@@ -986,7 +1003,7 @@ def spiralTraverse(array):
 - Non-overlapping Intervals - https://leetcode.com/problems/non-overlapping-intervals/
 - Meeting Rooms (Leetcode Premium) - https://leetcode.com/problems/meeting-rooms/
 - Meeting Rooms II (Leetcode Premium) - https://leetcode.com/problems/meeting-rooms-ii/
-### [📋 **Back to Table of Contents**](#toc)
+#### [📋 **Back to Table of Contents**](#toc)
 ---
 ## [🟨 Merge Intervals](https://leetcode.com/problems/merge-intervals/)
 > Given an array of intervals where `intervals[i] = [starti, endi]`, merge all overlapping intervals, and return an array of the non-overlapping intervals that cover all the intervals in the input.
@@ -1045,7 +1062,7 @@ def mergeOverlappingIntervals(intervals):
 - ✅ Longest Palindromic Substring - https://leetcode.com/problems/longest-palindromic-substring/
 - ✅ Palindromic Substrings - https://leetcode.com/problems/palindromic-substrings/
 - Encode and Decode Strings (Leetcode Premium) - https://leetcode.com/problems/encode-and-decode-strings/
-### [📋 **Back to Table of Contents**](#toc)
+#### [📋 **Back to Table of Contents**](#toc)
 
 ---
 ## [🟩 Caesar Cipher Encryptor](https://www.algoexpert.io/questions/Caesar%20Cipher%20Encryptor)
@@ -1430,7 +1447,7 @@ def longestSubstringWithoutDuplication(string):
 - Merge K Sorted Lists - https://leetcode.com/problems/merge-k-sorted-lists/
 - ✅ Remove Nth Node From End Of List - https://leetcode.com/problems/remove-nth-node-from-end-of-list/
 - Reorder List - https://leetcode.com/problems/reorder-list/
-### [📋 **Back to Table of Contents**](#toc)
+#### [📋 **Back to Table of Contents**](#toc)
 ---
 ## [🟩 Remove Duplicates From Linked List](https://www.algoexpert.io/questions/Remove%20Duplicates%20From%20Linked%20List)
 >* You're given the head of a Singly Linked List whose nodes are in sorted order with respect to their values. 
@@ -1972,7 +1989,7 @@ class LRUCache:
 - Alien Dictionary (Leetcode Premium) - https://leetcode.com/problems/alien-dictionary/
 - Graph Valid Tree (Leetcode Premium) - https://leetcode.com/problems/graph-valid-tree/
 - Number of Connected Components in an Undirected Graph (Leetcode Premium) - https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/
-### [📋 **Back to Table of Contents**](#toc)
+#### [📋 **Back to Table of Contents**](#toc)
 
 ---
 
@@ -2664,7 +2681,7 @@ def getUnvisitedNeighbours(i, j, matrix, visited):
 - Implement Trie (Prefix Tree) - https://leetcode.com/problems/implement-trie-prefix-tree/
 - Add and Search Word - https://leetcode.com/problems/add-and-search-word-data-structure-design/
 - Word Search II - https://leetcode.com/problems/word-search-ii/
-### [📋 **Back to Table of Contents**](#toc)
+#### [📋 **Back to Table of Contents**](#toc)
 
 ---
 ## [🟩 Branch Sums](https://www.algoexpert.io/questions/Branch%20Sums)
@@ -3063,7 +3080,7 @@ def findMaxSum(node):
     
 ---
 # <div id='bst'/> 🌲 **Binary Search Trees**
-### [📋 **Back to Table of Contents**](#toc)
+#### [📋 **Back to Table of Contents**](#toc)
 ---
 ## [🟩 Find Closest Value in BST](https://www.algoexpert.io/questions/Find%20Closest%20Value%20In%20BST)
 >* Write a function that takes in a Binary Search Tree (BST) and a target integer value and returns the closest value to that target value contained in the BST.
@@ -3240,12 +3257,84 @@ class BST:
 </details>
 
 ---
+# <div id='sort'/> 📚 **Sorting Algorithms**
+
+- ✅ Bubble Sort - https://www.algoexpert.io/questions/Bubble%20Sort
+- Insertion Sort - https://www.algoexpert.io/questions/Insertion%20Sort
+- Selection Sort - https://www.algoexpert.io/questions/Selection%20Sort
+- Threee Number Sort - https://www.algoexpert.io/questions/Three%20Number%20Sort
+- Quick Sort - https://www.algoexpert.io/questions/Quick%20Sort
+- Heap Sort - https://www.algoexpert.io/questions/Heap%20Sort
+- Radix Sort - https://www.algoexpert.io/questions/Radix%20Sort
+- Merge Sort - https://www.algoexpert.io/questions/Merge%20Sort
+
+<img src="resources/sorting-algorithms.gif" width="1000px"/><br/>
+
+#### [📋 **Back to Table of Contents**](#toc)
+
+---
+## [🟩 Bubble Sort](https://www.algoexpert.io/questions/Bubble%20Sort)
+> Write a function that takes in an array of integers and returns a sorted version of that array. Use the Bubble Sort algorithm to sort the array.
+
+<img src="resources/bubble-sort.gif" width="400px"/><br/>
+
+- [x] Input: `array = [8, 5, 2, 9, 5, 6, 3]`
+- [x] Output: `[2, 3, 5, 5, 6, 8, 9]`
+<details><summary><b>Solution</b></summary>
+<p>
+
+### **Single Pointer Iteration**
+```python
+# BEST: O(n) Time | O(1) Space
+# AVG: O(n^2) Time | O(1) Space
+# WORST: O(n^2) Time | O(1) Space
+def bubbleSort(array):
+    isSorted = False
+    counter = 0
+    while not isSorted: 
+        isSorted = True
+        for idx in range(len(array) - 1 - counter):
+            if array[idx] > array[idx + 1]:
+                swap(idx, idx + 1, array)
+                isSorted = False
+        counter += 1
+    return array
+
+def swap(left, right, array):
+	array[left], array[right] = array[right], array[left]
+```
+</p>
+</details>
+
+✅ **Single Pointer Iteration:** 
+1. Loop through the array and perform a swap if `array[idx] > array[idx + 1]`. 
+2. Maintain  `isSorted boolean` that finally gets set to `True` if swap condition above is not met
+3. Maintain `counter int` that increments by 1 after every for loop to ensure we ignore sorted elements in the next for loop.
+
+---
+
+# <div id='search'/> 🔎 **Search Algorithms**
+
+- ✅ Binary Search - https://www.algoexpert.io/questions/Binary%20Search
+- Find Three Largest Numbers - https://www.algoexpert.io/questions/Find%20Three%20Largest%20Numbers
+- Search In Sorted Matrix - https://www.algoexpert.io/questions/Search%20In%20Sorted%20Matrix
+#### [📋 **Back to Table of Contents**](#toc)
+
+---
+
+# <div id='algorithms'/> 🧠 **Famous Algorithms**
+
+- Kadane's Algorithm - https://www.algoexpert.io/questions/Kadane's%20Algorithm
+- Dijkstra's Algortihm - https://www.algoexpert.io/questions/Dijkstra's%20Algorithm
+- Topological Sort - https://www.algoexpert.io/questions/Topological%20Sort
+#### [📋 **Back to Table of Contents**](#toc)
+---
 # <div id='heaps'/> 🏔 **Heaps**
 
 - Merge K Sorted Lists - https://leetcode.com/problems/merge-k-sorted-lists/
 - Top K Frequent Elements - https://leetcode.com/problems/top-k-frequent-elements/
 - Find Median from Data Stream - https://leetcode.com/problems/find-median-from-data-stream/
-### [📋 **Back to Table of Contents**](#toc)
+#### [📋 **Back to Table of Contents**](#toc)
 
 ---
 # <div id='dp'/> 📱 **Dynamic Programming**
@@ -3261,7 +3350,7 @@ class BST:
 - Decode Ways - https://leetcode.com/problems/decode-ways/
 - Unique Paths - https://leetcode.com/problems/unique-paths/
 - Jump Game - https://leetcode.com/problems/jump-game/
-### [📋 **Back to Table of Contents**](#toc)
+#### [📋 **Back to Table of Contents**](#toc)
 
 ---
 ## [🟥 Longest Common Subsequence](https://www.algoexpert.io/questions/Longest%20Common%20Subsequence)
@@ -3331,5 +3420,5 @@ def longestCommonSubsequence(s1: str, s2: str) -> int:
 - Counting Bits - https://leetcode.com/problems/counting-bits/
 - Missing Number - https://leetcode.com/problems/missing-number/
 - Reverse Bits - https://leetcode.com/problems/reverse-bits/
-### [📋 **Back to Table of Contents**](#toc)
+#### [📋 **Back to Table of Contents**](#toc)
 ---
