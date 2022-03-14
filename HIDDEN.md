@@ -342,34 +342,45 @@ The points of interest are the peaks and valleys in the given graph. We need to 
 
 ### **Kadane's Algorithm**
 ```python
-# O(n) Time | O(1) Space
+# Solution using Kadane's Algorithm
+# O(n) Time | O(1) Space - where n is the length of the input array
 def maxProfit(prices):
-    minPrice = float("inf")
-    maxProfit = 0
-    
-    for price in prices: 
-        if price < minPrice:
-            minPrice = price
-        elif price - minPrice > maxProfit:
-            maxProfit = price - minPrice
-    return maxProfit
-
-# Kadane's Algorithm
-# O(n) Time | O(1) Space
-def maxProfit(prices):
+    # EDGE: If input array is empty, return 0
     if len(prices) < 1:
         return 0
+    # 1: Initialise minBuyPriceEndingHere pointer at the beginning of array and maxProfit value to keep track of max profits so far
+    minBuyPriceEndingHere = prices[0] # Minimum value of elements traversed so far
+    maxProfitSoFar = 0 # Maximum value of profit calculated so far (profit = currentPrice - minBuyPriceEndingHere)
+    # 2: Traverse the array and compute for each value
+    for currentPrice in prices:
+        # 3: Using Kadane's algorithm, calculate minBuyPriceEndingHere and maxProfitSoFar with min and max functions for each element traversed so far
+        minBuyPriceEndingHere = min(minBuyPriceEndingHere, currentPrice)
+        profit = currentPrice - minBuyPriceEndingHere # Calculate current profit using currentPrice
+        maxProfitSoFar = max(maxProfitSoFar, profit)
+    return maxProfitSoFar
     
-    minPrice = prices[0]
-    maxProfit = 0
-    for price in prices:
-        minPrice = min(minPrice, price)
-        profit = price - minPrice
-        maxProfit = max(maxProfit, profit)
-    return maxProfit
+# Kadane's Algorithm Concept
+# O(n) Time | O(1) Space - where n is the length of the input array
+def kadane(array): 
+    # 1: Initialise two pointers for array traversal (maxSumEndingHere and maxSoFar)
+    maxSumEndingHere = array[0] # Summation of all adjacent elements up to this point
+    maxSoFar = array[0] # Maximum value of summations calculated so far 
+    # 2: Traverse the array and compute for each element
+    for idx in range(1, len(array)): 
+        currentNum = array[idx]
+        # 3: Using Kadane's algorithm, calculate maxSumEndingHere and maxSoFar with max functions for each element traversed so far
+        maxSumEndingHere = max(currentNum, maxSumEndingHere + currentNum)
+        maxSoFar = max(maxSoFar, maxSumEndingHere)
+    return maxSoFar
 ```
 </p>
 </details>
+
+✅ **Kadane's Algorithm**:
+1. Traverse the array once and compute for each element using Kadane's algorithm
+2. minBuyPriceEndingHere = min(minBuyPriceEndingHere, currentPrice)
+3. profit = currentPrice - minBuyPriceEndingHere
+4. maxProfitSoFar = max(maxProfitSoFar, profit)
 
 ---
 ## [🟩 Contains Duplicate](https://leetcode.com/problems/contains-duplicate/)
@@ -3602,6 +3613,49 @@ def binarySearch(array, target):
 - Dijkstra's Algortihm - https://www.algoexpert.io/questions/Dijkstra's%20Algorithm
 - Topological Sort - https://www.algoexpert.io/questions/Topological%20Sort
 #### [📋 **Back to Table of Contents**](#toc)
+
+---
+## [🟨 Kadane's Algorithm](https://www.algoexpert.io/questions/Kadane's%20Algorithm)
+> Write a function that takes in a non-empty array of integers and returns the maximum sum that can be obtained by summing up all of the integers in a non-empty subarray of the input array. A subarray must only contain adjacent numbers (numbers next to each other in the input array).
+
+- [x] Input: `[3, 5, -9, 1, 3, -2, 3, 4, 7, 2, -9, 6, 3, 1, -5, 4]`
+- [x] Output: `19`
+<details><summary><b>Solution</b></summary>
+<p>
+
+### **Kadane's Algorithm - Two Pointers**
+```python
+# O(n) Time | O(1) Space - where n is the length of the input array
+def kadane(array): 
+    # 1: Initialise two pointers for array traversal (maxSumEndingHere and maxSoFar)
+    maxSumEndingHere = array[0] # Summation of all adjacent elements up to this point
+    maxSoFar = array[0] # Maximum value of summations calculated so far 
+    # 2: Traverse the array and compute for each element
+    for idx in range(1, len(array)): 
+        currentNum = array[idx]
+        # 3: Using Kadane's algorithm, calculate maxSumEndingHere and maxSoFar with max functions for each element traversed so far
+        maxSumEndingHere = max(currentNum, maxSumEndingHere + currentNum)
+        maxSoFar = max(maxSoFar, maxSumEndingHere)
+    return maxSoFar
+
+""" 
+Example:
+Input: 
+[3, 5, -9, 1, 3, -2, 3, 4, 7, 2, -9, 6, 3, 1, -5, 4]
+maxSumEndingHere = max(currentNum, maxSumEndingHere)
+[3, 8, -1, 1, 4, 2, 5, 9, 16, 18, 9, 15, 18, 19, 14, 18]
+maxSoFar = max(maxSoFar, maxSumEndingHere)
+[3, 8, 8, 8, 8, 8, 8, 9, 16, 18, 18, 18, 18, 19, 19, 19]
+Output: 19
+"""
+```
+</p>
+</details>
+
+✅ **Kadane's Algorithm - Two Pointers:**
+1. Traverse the array once and compute each element using Kadane's algorithm
+2. maxSumEndingHere = max(currentNum, maxSumEndingHere)
+3. maxSoFar = max(maxSoFar, maxSumEndingHere)
 ---
 # <div id='heaps'/> 🏔 **Heaps**
 
