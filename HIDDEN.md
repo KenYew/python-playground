@@ -201,7 +201,7 @@ queue.append(node.right)
 - ✅ Contains Duplicate - https://leetcode.com/problems/contains-duplicate/
 - ✅ Product of Array Except Self - https://leetcode.com/problems/product-of-array-except-self/
 - ✅ Maximum Subarray - https://leetcode.com/problems/maximum-subarray/
-- Maximum Product Subarray - https://leetcode.com/problems/maximum-product-subarray/
+- ✅ Maximum Product Subarray - https://leetcode.com/problems/maximum-product-subarray/
 - Find Minimum in Rotated Sorted Array - https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/
 - Search in Rotated Sorted Array - https://leetcode.com/problems/search-in-rotated-sorted-array/
 - ✅ 3Sum - https://leetcode.com/problems/3sum/
@@ -302,27 +302,66 @@ def TwoSums(array, target):
 
 ### **Kadane's Algorithm** 
 ```python
-# O(n) Time | O(1) Space
-def maximumSubarraySum(self, arr):
-    # 1: Initialise maxSum and currentSum
-    maxSum = float("-inf")
-    currentSum = 0
-
-    # 2: Traverse through each value in the input array
-    for val in arr:
-        # 3: Add the new value of the current element to our currentSum
-        currentSum = currentSum + val
-        # 4: If currentSum is bigger than maxSum, update maxSum with the new bigger number from currentSum
-        if currentSum > maxSum:
-            maxSum = currentSum
-        # 5: If currentSum is less than zero, update currentSum to zero
-        if currentSum < 0:
-            currentSum = 0
-    return maxSum
+# O(n) Time | O(1) Space - where n is the length of the input array
+def maxSubArray(nums):
+    # 1: Initialise maxSumEndingHere pointer at the beginning of array and maxSoFar to keep track of max sum so far
+    maxSumEndingHere, maxSoFar = 0, float("-inf")
+    # 2: Traverse the array and compute for each element
+    for currentNum in nums:
+        # 3: Using Kadane's algorithm, calculate maxSumEndingHere and maxSoFar with max functions for each element traversed so far
+        maxSumEndingHere = max(currentNum, maxSumEndingHere + currentNum)
+        maxSoFar = max(maxSoFar, maxSumEndingHere)
+    return maxSoFar
 ```
 </p>
 </details>
 
+✅ **Kadane's Algorithm:** 
+1. Traverse the array once and compute each element using Kadane's algorithm
+2. maxSumEndingHere = max(currentNum, maxSumEndingHere)
+3. maxSoFar = max(maxSoFar, maxSumEndingHere)
+
+---
+## [🟨 Maximum Product Subarray](https://leetcode.com/problems/maximum-product-subarray/)
+>* Given an integer array nums, find a contiguous non-empty subarray within the array that has the largest product, and return the product.
+>* The test cases are generated so that the answer will fit in a 32-bit integer.
+>* A subarray is a contiguous subsequence of the array.
+
+Example 1:
+- [x] Input: `nums = [2, 3, -2, 4]`
+- [x] Output: `6`
+- [x] Explanation: `[2, 3] has the largest product = 6.`
+
+Example 2: 
+- [x] Input: `nums = [-2, 0, -1]`
+- [x] Output: `0`
+- [x] Explanation: `The result cannot be 2, because [-2, -1] is not a subarray.`
+
+<details><summary><b>Solution</b></summary>
+<p>
+
+### [**Kadane's Algorithm**](https://leetcode.com/problems/maximum-product-subarray/discuss/48276/Python-solution-with-detailed-explanation) 
+```python
+# O(n) Time | O(1) Space - where n is the length of the input array
+def maxProduct(nums):
+    maxProduct, minProduct, result = nums[0], nums[0], nums[0]
+    for i in range(1, len(nums)):
+        postiveProduct = max(nums[i], maxProduct*nums[i], minProduct*nums[i])
+        negativeProduct = min(nums[i], maxProduct*nums[i], minProduct*nums[i])            
+        maxProduct, minProduct = postiveProduct, negativeProduct
+        result = max(maxProduct, result)
+    return result
+```
+</p>
+</details>
+
+✅ **Kadane's Algorithm:** 
+1. Traverse the array once and compute each element using Kadane's algorithm
+2. postiveProduct = `max(nums[i], maxProduct*nums[i], minProduct*nums[i])`
+3. negativeProduct = `min(nums[i], maxProduct*nums[i], minProduct*nums[i])`
+4. maxProduct, minProduct = postiveProduct, negativeProduct
+5. result = `max(maxProduct, result)`
+   
 ---
 ## [🟩 Best Time to Buy and Sell Stock](https://leetcode.com/problems/best-time-to-buy-and-sell-stock/)
 >* You are given an array prices where `prices[i]` is the price of a given stock on the ith day.
@@ -358,11 +397,11 @@ def maxProfit(prices):
         profit = currentPrice - minBuyPriceEndingHere # Calculate current profit using currentPrice
         maxProfitSoFar = max(maxProfitSoFar, profit)
     return maxProfitSoFar
-    
+
 # Kadane's Algorithm Concept
 # O(n) Time | O(1) Space - where n is the length of the input array
 def kadane(array): 
-    # 1: Initialise two pointers for array traversal (maxSumEndingHere and maxSoFar)
+    # 1: Initialise maxSumEndingHere pointer at the beginning of array and maxSoFar to keep track of max sum so far
     maxSumEndingHere = array[0] # Summation of all adjacent elements up to this point
     maxSoFar = array[0] # Maximum value of summations calculated so far 
     # 2: Traverse the array and compute for each element
@@ -3623,11 +3662,11 @@ def binarySearch(array, target):
 <details><summary><b>Solution</b></summary>
 <p>
 
-### **Kadane's Algorithm - Two Pointers**
+### **Kadane's Algorithm**
 ```python
 # O(n) Time | O(1) Space - where n is the length of the input array
 def kadane(array): 
-    # 1: Initialise two pointers for array traversal (maxSumEndingHere and maxSoFar)
+    # 1: Initialise maxSumEndingHere pointer at the beginning of array and maxSoFar to keep track of max sum so far
     maxSumEndingHere = array[0] # Summation of all adjacent elements up to this point
     maxSoFar = array[0] # Maximum value of summations calculated so far 
     # 2: Traverse the array and compute for each element
@@ -3652,7 +3691,7 @@ Output: 19
 </p>
 </details>
 
-✅ **Kadane's Algorithm - Two Pointers:**
+✅ **Kadane's Algorithm:**
 1. Traverse the array once and compute each element using Kadane's algorithm
 2. maxSumEndingHere = max(currentNum, maxSumEndingHere)
 3. maxSoFar = max(maxSoFar, maxSumEndingHere)

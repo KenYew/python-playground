@@ -57,8 +57,6 @@ details > summary {
 - [x] Input: `nums = [2, 7, 11, 15], target = 9`
 - [x] Output: `[0, 1]`
 - [x] Explanation: `Because nums[0] + nums[1] == 9, we return [0, 1].`
-<details><summary><b>Solution</b></summary>
-<p>
 
 ### **Brute Force**
 ```python
@@ -86,13 +84,9 @@ def twoNumberSum(array, target):
 			nums[num] = True
 	return []
 ```
-</p>
-</details>
 
 ✅ **HASH TABLE:** _Use hash table to instantly check for difference value, map will add index of last occurrence of a num, don’t use same element twice_
 
-<details><summary><b>Solution</b></summary>
-<p>
 
 ### **Two Pointers**
 ```python
@@ -111,8 +105,6 @@ def TwoSums(array, target):
             return [array[left], array[right]]
     return -1 
 ```
-</p>
-</details>
 
 ✅ **TWO POINTERS:** _Sort the array, use two pointers on each end of the array and move pointers based on comparison between sum and targetNum_
 
@@ -125,8 +117,6 @@ def TwoSums(array, target):
 - [x] Input: `nums = [-2,1,-3,4,-1,2,1,-5,4]`
 - [x] Output: `6`
 - [x] Explanation: `[4,-1,2,1] has the largest sum = 6.`
-<details><summary><b>Solution</b></summary>
-<p>
 
 ### **Kadane's Algorithm** 
 ```python
@@ -148,8 +138,6 @@ def maximumSubarraySum(self, arr):
             currentSum = 0
     return maxSum
 ```
-</p>
-</details>
 
 ---
 ## [🟩 Best Time to Buy and Sell Stock](https://leetcode.com/problems/best-time-to-buy-and-sell-stock/)
@@ -165,8 +153,6 @@ def maximumSubarraySum(self, arr):
 
 <img src="https://leetcode.com/media/original_images/121_profit_graph.png" width="500"  /><br/>
 The points of interest are the peaks and valleys in the given graph. We need to find the largest peak following the smallest valley. We can maintain two variables - minprice and maxprofit corresponding to the smallest valley and maximum profit (maximum difference between selling price and minprice) obtained so far respectively.
-<details><summary><b>Solution</b></summary>
-<p>
 
 ### **Kadane's Algorithm**
 ```python
@@ -196,16 +182,12 @@ def maxProfit(prices):
         maxProfit = max(maxProfit, profit)
     return maxProfit
 ```
-</p>
-</details>
 
 ---
 ## [🟩 Contains Duplicate](https://leetcode.com/problems/contains-duplicate/)
 > Given an integer array `nums`, return `true` if any value appears **at least twice** in the array, and return `false` if every element is distinct.
 - [x] Input: `nums = [1,2,3,1]`
 - [x] Output: `true`
-<details><summary><b>Solution</b></summary>
-<p>
 
 ### **Brute Force**
 ```python
@@ -248,8 +230,6 @@ def containsDuplicate(nums):
 def containsDuplicate(self, nums):
     return len(nums) > len(set(nums))
 ```
-</p>
-</details>
 
 ✅ **HASH SET:** _Use hash set to add and keep track of unique values in array, if value is seen in hash set, we found our duplicate_
 
@@ -259,8 +239,6 @@ def containsDuplicate(self, nums):
 >* Return a new array of the same length with the squares of the original integers also sorted in ascending order.
 - [x] Input: `array = [1, 2, 3, 5, 6, 8, 9]`
 - [x] Output: `[1, 4, 9, 25, 36, 64, 81]`
-<details><summary><b>Solution</b></summary>
-<p>
 
 ### **Two Pointers**
 ```python
@@ -287,8 +265,6 @@ def sortedSquaredArray(array):
     # 10: Finally, return the sorted squared array
     return ans
 ```
-</p>
-</details>
 
 ✅ **TWO POINTERS:** _Initialise output array with 0's, and left and right pointers on each end of array. Traverse idx from end to beginning of the array, if abs(leftVal) > abs(rightVal), write the ans[idx] = leftVal ** 2 and increment left, else abs(rightVal) >= abs(leftVal), write the ans[idx] = rightVal **2 and decrement right._
 
@@ -301,8 +277,6 @@ the numbers `[2, 4]`.
 >* Note that a single number in an array and the array itself are both valid subsequences of the array.
 - [x] Input: `array = [5, 1, 22, 25, 6, -1, 8, 10], sequence = [1, 6, -1, 10]`
 - [x] Output: `true`
-<details><summary><b>Solution</b></summary>
-<p>
 
 ### **Two Pointers**
 ```python
@@ -325,8 +299,6 @@ def isValidSubsequence(array, sequence):
     # 5: Once we have incremented seqIdx enough times, return the Boolean answer of whether the sequence is valid (only if seqIdx == len(sequence))
     return seqIdx == len(sequence)
 ```
-</p>
-</details>
 
 ✅ **TWO POINTERS:** _Initialise pointer for both input arrays (arr, seq). While both pointers have not fully traversed their arrays, if values from both array match, increment seqIdx, otherwise keep incrementing arrIdx. Return Boolean logic seqIdx == len(sequence)_
 
@@ -344,8 +316,6 @@ def isValidSubsequence(array, sequence):
 10 is equal to 5 x 1 x 2
 20 is equal to 5 x 1 x 4
 ```
-<details><summary><b>Solution</b></summary>
-<p>
 
 ### **Brute Force**
 ```python
@@ -438,8 +408,6 @@ def arrayOfProducts(array):
         
     return products
 ```
-</p>
-</details>
 
 ✅ **TWO POINTERS:** 
 - Initialise the result array with 1s and equal to the size of the input array. 
@@ -454,8 +422,6 @@ def arrayOfProducts(array):
 >* You can assume that there will only be one pair of numbers with the smallest difference.
 - [x] Input: `arrayOne = [-1, 5, 10, 20, 28, 3], arrayTwo = [26, 134, 135, 15, 17]`
 - [x] Output: `[28, 26]`
-<details><summary><b>Solution</b></summary>
-<p>
 
 ### **Two Pointers**
 ```python
@@ -498,8 +464,6 @@ def smallestDifference(arrayOne, arrayTwo):
             smallestPair = [firstNum, secondNum] # store also the smallest pair of nums in this iteration
     return smallestPair
 ```
-</p>
-</details>
 
 ✅ **TWO POINTERS:** 
 1. Sort both input array1 and array2. 
@@ -515,8 +479,6 @@ def smallestDifference(arrayOne, arrayTwo):
 - [x] Input: `array = [2, 1, 2, 2, 2, 3, 4, 2], toMove = 2`
 - [x] Output: `[4, 1, 3, 2, 2, 2, 2, 2]` or `[1, 3, 4, 2, 2, 2, 2, 2]`
 ### **Two Pointers**
-<details><summary><b>Solution</b></summary>
-<p>
 
 ```python
 # O(n) Time | O(1) Space - where n is the length of the input array
@@ -538,14 +500,10 @@ def moveElementToEnd(array, toMove):
         left += 1
     return array
 ```
-</p>
-</details>
 
 ✅ **TWO POINTERS:** _Initialise two pointers (left & right) on each end. While left < right, nested while rightVal == toMoveNum, decrement right to ensure rightVal points to a swappable num != toMoveNum. Keep incrementing left. If leftVal == toMoveNum, perform swap._
 
 ### **Two Pointers - Order Preserved**
-<details><summary><b>Solution</b></summary>
-<p>
 
 ```python
 # O(n) Time | O(1) Space - where n is the length of the input array
@@ -573,8 +531,6 @@ When read = 2, then we swap array[2] (read) and array[1] (write). The array is n
 When read = 3, array[read] == 0 and we skip.
 When read = 4, then we swap array[4] (read) and array[2] (write). The final array is [1, 2, 3, 0, 0].
 ```
-</p>
-</details>
 
 ✅ **TWO POINTERS:** _Initialise two pointers (readIdx & writeIdx) at 0. Iterate through the array with readIdx, if `array[readIdx] != toMove`, swap `array[readIdx], array[writeIdx] = array[writeIdx], array[readIdx]` and increment `writeIdx += 1`, keep traversing array with `readIdx`, return mutated array_
 
@@ -587,8 +543,6 @@ peak in the array.
 - [x] Input: `array = [1, 2, 3, 3, 4, 0, 10, 6, 5, -1, -3, 2, 3]`
 - [x] Output: `6`
 - [x] Explanation: `0, 10, 6, 5, -1 -3` form the longest peak
-<details><summary><b>Solution</b></summary>
-<p>
 
 ### **Two Pointers**
 ```python
@@ -632,8 +586,6 @@ def longestPeak(array):
         
     return longestPeakLength
 ```
-</p>
-</details>
 
 ✅ **TWO POINTERS:** 
 1. Intialise peakIdx to traverse the array and find a potential peak.
@@ -652,8 +604,6 @@ def longestPeak(array):
 
 - [x] Input: `nums = []` or `nums = [0]`
 - [x] Output: `[]`
-<details><summary><b>Solution</b></summary>
-<p>
 
 ### [**Two Pointers**](https://leetcode.com/problems/two-sum/discuss/737092/Sum-MegaPost-Python3-Solution-with-a-detailed-explanation)
 ```python
@@ -701,15 +651,11 @@ def threeSum(nums: List[int]) -> List[List[int]]:
                 right -= 1
     return ans
 ```
-</p>
-</details>
 
 ✅ **TWO POINTERS:** 
 - `ThreeSum: A + B + C = 0` 
 - _Sort input array, perform a FOR loop for A, then set Two Pointers (L & R) for B and C. Increment L if sum is too small and decrement R if sum is too big._
 - _To prevent duplicates, if A == prevA, skip FOR loop iteration. If B == prevB, increment L in the TwoPointer WHILE loop_
-<details><summary><b>Solution</b></summary>
-<p>
 
 ### **TargetSum Variant**
 ```python
@@ -752,8 +698,6 @@ def threeNumberSum(array, targetSum):
                 right -= 1
     return ans
 ```
-</p>
-</details>
 
 ✅ **TWO POINTERS:** 
 - `ThreeSum: A + B + C = 0` 

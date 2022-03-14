@@ -1,15 +1,3 @@
-<style>
-details > summary {
-  padding: 4px;
-  width: 100px;
-  background-color: #3c3d3c;
-  border: none;
-  box-shadow: 1px 1px 2px #101010;
-  cursor: pointer;
-}
-</style>
-
-
 <img src="https://www.python.org/static/community_logos/python-logo-generic.svg" width="500px"/><br/>
 
 # **💻 Data Structures and Algorithms in Python**
@@ -201,7 +189,7 @@ queue.append(node.right)
 - ✅ Contains Duplicate - https://leetcode.com/problems/contains-duplicate/
 - ✅ Product of Array Except Self - https://leetcode.com/problems/product-of-array-except-self/
 - ✅ Maximum Subarray - https://leetcode.com/problems/maximum-subarray/
-- Maximum Product Subarray - https://leetcode.com/problems/maximum-product-subarray/
+- ✅ Maximum Product Subarray - https://leetcode.com/problems/maximum-product-subarray/
 - Find Minimum in Rotated Sorted Array - https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/
 - Search in Rotated Sorted Array - https://leetcode.com/problems/search-in-rotated-sorted-array/
 - ✅ 3Sum - https://leetcode.com/problems/3sum/
@@ -292,25 +280,60 @@ def TwoSums(array, target):
 
 ### **Kadane's Algorithm** 
 ```python
-# O(n) Time | O(1) Space
-def maximumSubarraySum(self, arr):
-    # 1: Initialise maxSum and currentSum
-    maxSum = float("-inf")
-    currentSum = 0
-
-    # 2: Traverse through each value in the input array
-    for val in arr:
-        # 3: Add the new value of the current element to our currentSum
-        currentSum = currentSum + val
-        # 4: If currentSum is bigger than maxSum, update maxSum with the new bigger number from currentSum
-        if currentSum > maxSum:
-            maxSum = currentSum
-        # 5: If currentSum is less than zero, update currentSum to zero
-        if currentSum < 0:
-            currentSum = 0
-    return maxSum
+# O(n) Time | O(1) Space - where n is the length of the input array
+def maxSubArray(nums):
+    # 1: Initialise maxSumEndingHere pointer at the beginning of array and maxSoFar to keep track of max sum so far
+    maxSumEndingHere, maxSoFar = 0, float("-inf")
+    # 2: Traverse the array and compute for each element
+    for currentNum in nums:
+        # 3: Using Kadane's algorithm, calculate maxSumEndingHere and maxSoFar with max functions for each element traversed so far
+        maxSumEndingHere = max(currentNum, maxSumEndingHere + currentNum)
+        maxSoFar = max(maxSoFar, maxSumEndingHere)
+    return maxSoFar
 ```
 
+✅ **Kadane's Algorithm:** 
+1. Traverse the array once and compute each element using Kadane's algorithm
+2. maxSumEndingHere = max(currentNum, maxSumEndingHere)
+3. maxSoFar = max(maxSoFar, maxSumEndingHere)
+
+---
+## [🟨 Maximum Product Subarray](https://leetcode.com/problems/maximum-product-subarray/)
+>* Given an integer array nums, find a contiguous non-empty subarray within the array that has the largest product, and return the product.
+>* The test cases are generated so that the answer will fit in a 32-bit integer.
+>* A subarray is a contiguous subsequence of the array.
+
+Example 1:
+- [x] Input: `nums = [2, 3, -2, 4]`
+- [x] Output: `6`
+- [x] Explanation: `[2, 3] has the largest product = 6.`
+
+Example 2: 
+- [x] Input: `nums = [-2, 0, -1]`
+- [x] Output: `0`
+- [x] Explanation: `The result cannot be 2, because [-2, -1] is not a subarray.`
+
+
+### [**Kadane's Algorithm**](https://leetcode.com/problems/maximum-product-subarray/discuss/48276/Python-solution-with-detailed-explanation) 
+```python
+# O(n) Time | O(1) Space - where n is the length of the input array
+def maxProduct(nums):
+    maxProduct, minProduct, result = nums[0], nums[0], nums[0]
+    for i in range(1, len(nums)):
+        postiveProduct = max(nums[i], maxProduct*nums[i], minProduct*nums[i])
+        negativeProduct = min(nums[i], maxProduct*nums[i], minProduct*nums[i])            
+        maxProduct, minProduct = postiveProduct, negativeProduct
+        result = max(maxProduct, result)
+    return result
+```
+
+✅ **Kadane's Algorithm:** 
+1. Traverse the array once and compute each element using Kadane's algorithm
+2. postiveProduct = `max(nums[i], maxProduct*nums[i], minProduct*nums[i])`
+3. negativeProduct = `min(nums[i], maxProduct*nums[i], minProduct*nums[i])`
+4. maxProduct, minProduct = postiveProduct, negativeProduct
+5. result = `max(maxProduct, result)`
+   
 ---
 ## [🟩 Best Time to Buy and Sell Stock](https://leetcode.com/problems/best-time-to-buy-and-sell-stock/)
 >* You are given an array prices where `prices[i]` is the price of a given stock on the ith day.
@@ -328,32 +351,43 @@ The points of interest are the peaks and valleys in the given graph. We need to 
 
 ### **Kadane's Algorithm**
 ```python
-# O(n) Time | O(1) Space
+# Solution using Kadane's Algorithm
+# O(n) Time | O(1) Space - where n is the length of the input array
 def maxProfit(prices):
-    minPrice = float("inf")
-    maxProfit = 0
-    
-    for price in prices: 
-        if price < minPrice:
-            minPrice = price
-        elif price - minPrice > maxProfit:
-            maxProfit = price - minPrice
-    return maxProfit
-
-# Kadane's Algorithm
-# O(n) Time | O(1) Space
-def maxProfit(prices):
+    # EDGE: If input array is empty, return 0
     if len(prices) < 1:
         return 0
-    
-    minPrice = prices[0]
-    maxProfit = 0
-    for price in prices:
-        minPrice = min(minPrice, price)
-        profit = price - minPrice
-        maxProfit = max(maxProfit, profit)
-    return maxProfit
+    # 1: Initialise minBuyPriceEndingHere pointer at the beginning of array and maxProfit value to keep track of max profits so far
+    minBuyPriceEndingHere = prices[0] # Minimum value of elements traversed so far
+    maxProfitSoFar = 0 # Maximum value of profit calculated so far (profit = currentPrice - minBuyPriceEndingHere)
+    # 2: Traverse the array and compute for each value
+    for currentPrice in prices:
+        # 3: Using Kadane's algorithm, calculate minBuyPriceEndingHere and maxProfitSoFar with min and max functions for each element traversed so far
+        minBuyPriceEndingHere = min(minBuyPriceEndingHere, currentPrice)
+        profit = currentPrice - minBuyPriceEndingHere # Calculate current profit using currentPrice
+        maxProfitSoFar = max(maxProfitSoFar, profit)
+    return maxProfitSoFar
+
+# Kadane's Algorithm Concept
+# O(n) Time | O(1) Space - where n is the length of the input array
+def kadane(array): 
+    # 1: Initialise maxSumEndingHere pointer at the beginning of array and maxSoFar to keep track of max sum so far
+    maxSumEndingHere = array[0] # Summation of all adjacent elements up to this point
+    maxSoFar = array[0] # Maximum value of summations calculated so far 
+    # 2: Traverse the array and compute for each element
+    for idx in range(1, len(array)): 
+        currentNum = array[idx]
+        # 3: Using Kadane's algorithm, calculate maxSumEndingHere and maxSoFar with max functions for each element traversed so far
+        maxSumEndingHere = max(currentNum, maxSumEndingHere + currentNum)
+        maxSoFar = max(maxSoFar, maxSumEndingHere)
+    return maxSoFar
 ```
+
+✅ **Kadane's Algorithm**:
+1. Traverse the array once and compute for each element using Kadane's algorithm
+2. minBuyPriceEndingHere = min(minBuyPriceEndingHere, currentPrice)
+3. profit = currentPrice - minBuyPriceEndingHere
+4. maxProfitSoFar = max(maxProfitSoFar, profit)
 
 ---
 ## [🟩 Contains Duplicate](https://leetcode.com/problems/contains-duplicate/)
@@ -3095,14 +3129,21 @@ class BST:
 # AVG: O(n^2) Time | O(1) Space
 # WORST: O(n^2) Time | O(1) Space
 def bubbleSort(array):
+    # 1: Keep track on whether the array is sorted or not using the isSorted Boolean
     isSorted = False
     counter = 0
+    # 2: While we haven't sort the array yet,
     while not isSorted: 
+        # 3: Set the isSorted to True for now,
         isSorted = True
+        # 4: Loop through all elements with a range that decrements with every sorted element (using a counter)
         for idx in range(len(array) - 1 - counter):
+            # 5: If array[idx] > array[idx + 1], swap their values
             if array[idx] > array[idx + 1]:
                 swap(idx, idx + 1, array)
+                # 6: Reset the isSorted Boolean to False so that we keep entering the while loop
                 isSorted = False
+        # 7: Increment the counter with each successful sorted element (so that we don't include it in the next iteration of sorting)
         counter += 1
     return array
 
@@ -3117,7 +3158,8 @@ def swap(left, right, array):
 
 ---
 ## [🟩 Insertion Sort](https://www.algoexpert.io/questions/Insertion%20Sort)
-> Write a function that takes in an array of integers and returns a sorted version of that array. Use the Insertion Sort algorithm to sort the array.
+>* Write a function that takes in an array of integers and returns a sorted version of that array. Use the Insertion Sort algorithm to sort the array.
+>* Insertion sort algorithm is the fastest for a nearly sorted array. 
 
 <img src="resources/insertion-sort.png" width="700px"/><br/>
 
@@ -3130,10 +3172,14 @@ def swap(left, right, array):
 # AVG: O(n^2) Time | O(1) Space
 # WORST: O(n^2) Time | O(1) Space
 def insertionSort(array):
+    # 1: Loop through all elements
     for i in range(1, len(array)):
+        # 2: Set pointer j to equal to pointer i 
         j = i
+        # 3: While pointer j is still positive and current element is smaller than previous element, swap their values
         while j > 0 and array[j] < array[j - 1]:
             swap(j, j - 1, array)
+            # 4: Decrement the pointer j
             j -= 1
     return array
 
@@ -3142,7 +3188,9 @@ def swap(left, right, array):
 ```
 
 ✅ **Single Pointer Iteration:** 
-1. 
+1. Loop through the array and set pointer j to current iteration index, i
+2. While pointer j is still positive and array[j] < array[j - 1], perform a swap
+3. Decrement the pointer j
 
 ---
 ## [🟩 Selection Sort](https://www.algoexpert.io/questions/Selection%20Sort)
@@ -3174,7 +3222,6 @@ def swap(left, right, array):
 ```
 
 ✅ **Single Pointer Iteration:** 
-1. 
 
 ---
 ## [🟥 Quick Sort](https://www.algoexpert.io/questions/Quick%20Sort)
@@ -3318,6 +3365,46 @@ def swap(left, right, array):
 #### [📋 **Back to Table of Contents**](#toc)
 
 ---
+## [🟩 Binary Search](https://leetcode.com/problems/binary-search/)
+> Given an array of integers `nums` which is sorted in ascending order, and an integer `target`, write a function to search `target` in `nums`. If `target` exists, then return its index. Otherwise, return `-1`.
+
+<img src="resources/binary-and-linear-search-animations.gif" width="500px"/><br/>
+
+- [x] Input: `nums = [-1,0,3,5,9,12], target = 9`
+- [x] Output: `4`
+
+### **Two Pointers**
+```python
+# O(nlogn) time | O(1) space 
+# array is searched in place - not introducing any new data structure
+def binarySearch(array, target):
+    # 1: Initialise two pointers for each side of the array
+    left, right = 0, len(array) - 1
+	
+    # 2: While both pointers have not cross each other,
+    while (left <= right): # EDGE: <= is used for the edge case where array has only 1 element.  
+        # 3: Evaluate the midpoint pointer by calculating (left + right) // 2
+        mid = (left + right) // 2
+        # 4: Return the midpoint index if array[mid] == target
+        if array[mid] == target:
+            return mid
+        else:
+            # 5: Else, if array[mid] is already smaller than the target, then we should discard everything on the left and update the new lower boundary: left = mid + 1 
+            if (array[mid] < target):
+                left = mid + 1
+            # 6: Otherwise, we discard everything on the right and update the new upper boundary: right = mid - 1
+            else: 
+                right = mid - 1
+    # 7: Return -1 by default if we cannot find our target number in the array
+    return -1
+```
+
+✅ **Two Pointers:** 
+1. while (left <= right), evaluate mid = (left + right) // 2
+2. if array[mid] == target, return mid
+3. else, if array[mid] < target, update the lower boundary to be left = mid + 1
+4. else, if array[mid] > target, update the right boundary to be right = mid - 1
+---
 
 # <div id='algorithms'/> 🧠 **Famous Algorithms**
 
@@ -3325,6 +3412,45 @@ def swap(left, right, array):
 - Dijkstra's Algortihm - https://www.algoexpert.io/questions/Dijkstra's%20Algorithm
 - Topological Sort - https://www.algoexpert.io/questions/Topological%20Sort
 #### [📋 **Back to Table of Contents**](#toc)
+
+---
+## [🟨 Kadane's Algorithm](https://www.algoexpert.io/questions/Kadane's%20Algorithm)
+> Write a function that takes in a non-empty array of integers and returns the maximum sum that can be obtained by summing up all of the integers in a non-empty subarray of the input array. A subarray must only contain adjacent numbers (numbers next to each other in the input array).
+
+- [x] Input: `[3, 5, -9, 1, 3, -2, 3, 4, 7, 2, -9, 6, 3, 1, -5, 4]`
+- [x] Output: `19`
+
+### **Kadane's Algorithm**
+```python
+# O(n) Time | O(1) Space - where n is the length of the input array
+def kadane(array): 
+    # 1: Initialise maxSumEndingHere pointer at the beginning of array and maxSoFar to keep track of max sum so far
+    maxSumEndingHere = array[0] # Summation of all adjacent elements up to this point
+    maxSoFar = array[0] # Maximum value of summations calculated so far 
+    # 2: Traverse the array and compute for each element
+    for idx in range(1, len(array)): 
+        currentNum = array[idx]
+        # 3: Using Kadane's algorithm, calculate maxSumEndingHere and maxSoFar with max functions for each element traversed so far
+        maxSumEndingHere = max(currentNum, maxSumEndingHere + currentNum)
+        maxSoFar = max(maxSoFar, maxSumEndingHere)
+    return maxSoFar
+
+""" 
+Example:
+Input: 
+[3, 5, -9, 1, 3, -2, 3, 4, 7, 2, -9, 6, 3, 1, -5, 4]
+maxSumEndingHere = max(currentNum, maxSumEndingHere)
+[3, 8, -1, 1, 4, 2, 5, 9, 16, 18, 9, 15, 18, 19, 14, 18]
+maxSoFar = max(maxSoFar, maxSumEndingHere)
+[3, 8, 8, 8, 8, 8, 8, 9, 16, 18, 18, 18, 18, 19, 19, 19]
+Output: 19
+"""
+```
+
+✅ **Kadane's Algorithm:**
+1. Traverse the array once and compute each element using Kadane's algorithm
+2. maxSumEndingHere = max(currentNum, maxSumEndingHere)
+3. maxSoFar = max(maxSoFar, maxSumEndingHere)
 ---
 # <div id='heaps'/> 🏔 **Heaps**
 
