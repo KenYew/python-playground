@@ -288,139 +288,6 @@ def TwoSums(array, target):
 
 ✅ **TWO POINTERS:** _Sort the array, use two pointers on each end of the array and move pointers based on comparison between sum and targetNum_
 
-
----
-## [🟩 Maximum Subarray](https://leetcode.com/problems/maximum-subarray/)
->* Given an integer array nums, find the contiguous subarray (containing at least one number) which has the largest sum and return its sum.
->* A subarray is a contiguous part of an array.
-
-- [x] Input: `nums = [-2,1,-3,4,-1,2,1,-5,4]`
-- [x] Output: `6`
-- [x] Explanation: `[4,-1,2,1] has the largest sum = 6.`
-<details><summary><b>Solution</b></summary>
-<p>
-
-### **Kadane's Algorithm** 
-```python
-# O(n) Time | O(1) Space - where n is the length of the input array
-def maxSubArray(nums):
-    # 1: Initialise maxSumEndingHere pointer at the beginning of array and maxSoFar to keep track of max sum so far
-    maxSumEndingHere, maxSoFar = 0, float("-inf")
-    # 2: Traverse the array and compute for each element
-    for currentNum in nums:
-        # 3: Using Kadane's algorithm, calculate maxSumEndingHere and maxSoFar with max functions for each element traversed so far
-        maxSumEndingHere = max(currentNum, maxSumEndingHere + currentNum)
-        maxSoFar = max(maxSoFar, maxSumEndingHere)
-    return maxSoFar
-```
-</p>
-</details>
-
-✅ **Kadane's Algorithm:** 
-1. Traverse the array once and compute each element using Kadane's algorithm
-2. maxSumEndingHere = max(currentNum, maxSumEndingHere)
-3. maxSoFar = max(maxSoFar, maxSumEndingHere)
-
----
-## [🟨 Maximum Product Subarray](https://leetcode.com/problems/maximum-product-subarray/)
->* Given an integer array nums, find a contiguous non-empty subarray within the array that has the largest product, and return the product.
->* The test cases are generated so that the answer will fit in a 32-bit integer.
->* A subarray is a contiguous subsequence of the array.
-
-Example 1:
-- [x] Input: `nums = [2, 3, -2, 4]`
-- [x] Output: `6`
-- [x] Explanation: `[2, 3] has the largest product = 6.`
-
-Example 2: 
-- [x] Input: `nums = [-2, 0, -1]`
-- [x] Output: `0`
-- [x] Explanation: `The result cannot be 2, because [-2, -1] is not a subarray.`
-
-<details><summary><b>Solution</b></summary>
-<p>
-
-### [**Kadane's Algorithm**](https://leetcode.com/problems/maximum-product-subarray/discuss/48276/Python-solution-with-detailed-explanation) 
-```python
-# O(n) Time | O(1) Space - where n is the length of the input array
-def maxProduct(nums):
-    maxProduct, minProduct, result = nums[0], nums[0], nums[0]
-    for i in range(1, len(nums)):
-        postiveProduct = max(nums[i], maxProduct*nums[i], minProduct*nums[i])
-        negativeProduct = min(nums[i], maxProduct*nums[i], minProduct*nums[i])            
-        maxProduct, minProduct = postiveProduct, negativeProduct
-        result = max(maxProduct, result)
-    return result
-```
-</p>
-</details>
-
-✅ **Kadane's Algorithm:** 
-1. Traverse the array once and compute each element using Kadane's algorithm
-2. postiveProduct = `max(nums[i], maxProduct*nums[i], minProduct*nums[i])`
-3. negativeProduct = `min(nums[i], maxProduct*nums[i], minProduct*nums[i])`
-4. maxProduct, minProduct = postiveProduct, negativeProduct
-5. result = `max(maxProduct, result)`
-   
----
-## [🟩 Best Time to Buy and Sell Stock](https://leetcode.com/problems/best-time-to-buy-and-sell-stock/)
->* You are given an array prices where `prices[i]` is the price of a given stock on the ith day.
->* You want to maximize your profit by choosing a single day to buy one stock and choosing a different day in the future to sell that stock.
->* Return the maximum profit you can achieve from this transaction. If you cannot achieve any profit, return 0.
-
-- [x] Input: `prices = [7,1,5,3,6,4]`
-- [x] Output: `5`
-- [x] Explanation: 
-  - `Buy on day 2 (price = 1) and sell on day 5 (price = 6), profit = 6-1 = 5.`
-  - `Note that buying on day 2 and selling on day 1 is not allowed because you must buy before you sell.`
-
-<img src="https://leetcode.com/media/original_images/121_profit_graph.png" width="500"  /><br/>
-The points of interest are the peaks and valleys in the given graph. We need to find the largest peak following the smallest valley. We can maintain two variables - minprice and maxprofit corresponding to the smallest valley and maximum profit (maximum difference between selling price and minprice) obtained so far respectively.
-<details><summary><b>Solution</b></summary>
-<p>
-
-### **Kadane's Algorithm**
-```python
-# Solution using Kadane's Algorithm
-# O(n) Time | O(1) Space - where n is the length of the input array
-def maxProfit(prices):
-    # EDGE: If input array is empty, return 0
-    if len(prices) < 1:
-        return 0
-    # 1: Initialise minBuyPriceEndingHere pointer at the beginning of array and maxProfit value to keep track of max profits so far
-    minBuyPriceEndingHere = prices[0] # Minimum value of elements traversed so far
-    maxProfitSoFar = 0 # Maximum value of profit calculated so far (profit = currentPrice - minBuyPriceEndingHere)
-    # 2: Traverse the array and compute for each value
-    for currentPrice in prices:
-        # 3: Using Kadane's algorithm, calculate minBuyPriceEndingHere and maxProfitSoFar with min and max functions for each element traversed so far
-        minBuyPriceEndingHere = min(minBuyPriceEndingHere, currentPrice)
-        profit = currentPrice - minBuyPriceEndingHere # Calculate current profit using currentPrice
-        maxProfitSoFar = max(maxProfitSoFar, profit)
-    return maxProfitSoFar
-
-# Kadane's Algorithm Concept
-# O(n) Time | O(1) Space - where n is the length of the input array
-def kadane(array): 
-    # 1: Initialise maxSumEndingHere pointer at the beginning of array and maxSoFar to keep track of max sum so far
-    maxSumEndingHere = array[0] # Summation of all adjacent elements up to this point
-    maxSoFar = array[0] # Maximum value of summations calculated so far 
-    # 2: Traverse the array and compute for each element
-    for idx in range(1, len(array)): 
-        currentNum = array[idx]
-        # 3: Using Kadane's algorithm, calculate maxSumEndingHere and maxSoFar with max functions for each element traversed so far
-        maxSumEndingHere = max(currentNum, maxSumEndingHere + currentNum)
-        maxSoFar = max(maxSoFar, maxSumEndingHere)
-    return maxSoFar
-```
-</p>
-</details>
-
-✅ **Kadane's Algorithm**:
-1. Traverse the array once and compute for each element using Kadane's algorithm
-2. minBuyPriceEndingHere = min(minBuyPriceEndingHere, currentPrice)
-3. profit = currentPrice - minBuyPriceEndingHere
-4. maxProfitSoFar = max(maxProfitSoFar, profit)
-
 ---
 ## [🟩 Contains Duplicate](https://leetcode.com/problems/contains-duplicate/)
 > Given an integer array `nums`, return `true` if any value appears **at least twice** in the array, and return `false` if every element is distinct.
@@ -980,6 +847,358 @@ def threeNumberSum(array, targetSum):
 ✅ **TWO POINTERS:** 
 - `ThreeSum: A + B + C = 0` 
 - _Sort input array, perform a FOR loop for A, then set Two Pointers (L & R) for B and C. Increment L if sum is too small and decrement R if sum is too big. When targetSum is found, find the next targetSum by traversing both L & R inwards._
+
+---
+# 🧠 Kadane's Algorithm Pattern
+## [🟩 Maximum Subarray](https://leetcode.com/problems/maximum-subarray/)
+>* Given an integer array nums, find the contiguous subarray (containing at least one number) which has the largest sum and return its sum.
+>* A subarray is a contiguous part of an array.
+
+- [x] Input: `nums = [-2,1,-3,4,-1,2,1,-5,4]`
+- [x] Output: `6`
+- [x] Explanation: `[4,-1,2,1] has the largest sum = 6.`
+<details><summary><b>Solution</b></summary>
+<p>
+
+### **Kadane's Algorithm** 
+```python
+# O(n) Time | O(1) Space - where n is the length of the input array
+def maxSubArray(nums):
+    # 1: Initialise maxSumEndingHere pointer at the beginning of array and maxSoFar to keep track of max sum so far
+    maxSumEndingHere, maxSoFar = 0, float("-inf")
+    # 2: Traverse the array and compute for each element
+    for currentNum in nums:
+        # 3: Using Kadane's algorithm, calculate maxSumEndingHere and maxSoFar with max functions for each element traversed so far
+        maxSumEndingHere = max(currentNum, maxSumEndingHere + currentNum)
+        maxSoFar = max(maxSoFar, maxSumEndingHere)
+    return maxSoFar
+```
+</p>
+</details>
+
+✅ **Kadane's Algorithm:** 
+1. Traverse the array once and compute each element using Kadane's algorithm
+2. maxSumEndingHere = max(currentNum, maxSumEndingHere)
+3. maxSoFar = max(maxSoFar, maxSumEndingHere)
+
+---
+## [🟨 Maximum Product Subarray](https://leetcode.com/problems/maximum-product-subarray/)
+>* Given an integer array nums, find a contiguous non-empty subarray within the array that has the largest product, and return the product.
+>* The test cases are generated so that the answer will fit in a 32-bit integer.
+>* A subarray is a contiguous subsequence of the array.
+
+Example 1:
+- [x] Input: `nums = [2, 3, -2, 4]`
+- [x] Output: `6`
+- [x] Explanation: `[2, 3] has the largest product = 6.`
+
+Example 2: 
+- [x] Input: `nums = [-2, 0, -1]`
+- [x] Output: `0`
+- [x] Explanation: `The result cannot be 2, because [-2, -1] is not a subarray.`
+
+<details><summary><b>Solution</b></summary>
+<p>
+
+### [**Kadane's Algorithm**](https://leetcode.com/problems/maximum-product-subarray/discuss/48276/Python-solution-with-detailed-explanation) 
+```python
+# O(n) Time | O(1) Space - where n is the length of the input array
+def maxProduct(nums):
+    maxProduct, minProduct, result = nums[0], nums[0], nums[0]
+    for i in range(1, len(nums)):
+        postiveProduct = max(nums[i], maxProduct*nums[i], minProduct*nums[i])
+        negativeProduct = min(nums[i], maxProduct*nums[i], minProduct*nums[i])            
+        maxProduct, minProduct = postiveProduct, negativeProduct
+        result = max(maxProduct, result)
+    return result
+```
+</p>
+</details>
+
+✅ **Kadane's Algorithm:** 
+1. Traverse the array once and compute each element using Kadane's algorithm
+2. postiveProduct = `max(nums[i], maxProduct*nums[i], minProduct*nums[i])`
+3. negativeProduct = `min(nums[i], maxProduct*nums[i], minProduct*nums[i])`
+4. maxProduct, minProduct = postiveProduct, negativeProduct
+5. result = `max(maxProduct, result)`
+   
+---
+## [🟩 Best Time to Buy and Sell Stock](https://leetcode.com/problems/best-time-to-buy-and-sell-stock/)
+>* You are given an array prices where `prices[i]` is the price of a given stock on the ith day.
+>* You want to maximize your profit by choosing a single day to buy one stock and choosing a different day in the future to sell that stock.
+>* Return the maximum profit you can achieve from this transaction. If you cannot achieve any profit, return 0.
+
+- [x] Input: `prices = [7,1,5,3,6,4]`
+- [x] Output: `5`
+- [x] Explanation: 
+  - `Buy on day 2 (price = 1) and sell on day 5 (price = 6), profit = 6-1 = 5.`
+  - `Note that buying on day 2 and selling on day 1 is not allowed because you must buy before you sell.`
+
+<img src="https://leetcode.com/media/original_images/121_profit_graph.png" width="500"  /><br/>
+The points of interest are the peaks and valleys in the given graph. We need to find the largest peak following the smallest valley. We can maintain two variables - minprice and maxprofit corresponding to the smallest valley and maximum profit (maximum difference between selling price and minprice) obtained so far respectively.
+<details><summary><b>Solution</b></summary>
+<p>
+
+### **Kadane's Algorithm**
+```python
+# Solution using Kadane's Algorithm
+# O(n) Time | O(1) Space - where n is the length of the input array
+def maxProfit(prices):
+    # EDGE: If input array is empty, return 0
+    if len(prices) < 1:
+        return 0
+    # 1: Initialise minBuyPriceEndingHere pointer at the beginning of array and maxProfit value to keep track of max profits so far
+    minBuyPriceEndingHere = prices[0] # Minimum value of elements traversed so far
+    maxProfitSoFar = 0 # Maximum value of profit calculated so far (profit = currentPrice - minBuyPriceEndingHere)
+    # 2: Traverse the array and compute for each value
+    for currentPrice in prices:
+        # 3: Using Kadane's algorithm, calculate minBuyPriceEndingHere and maxProfitSoFar with min and max functions for each element traversed so far
+        minBuyPriceEndingHere = min(minBuyPriceEndingHere, currentPrice)
+        profit = currentPrice - minBuyPriceEndingHere # Calculate current profit using currentPrice
+        maxProfitSoFar = max(maxProfitSoFar, profit)
+    return maxProfitSoFar
+
+# Kadane's Algorithm Concept
+# O(n) Time | O(1) Space - where n is the length of the input array
+def kadane(array): 
+    # 1: Initialise maxSumEndingHere pointer at the beginning of array and maxSoFar to keep track of max sum so far
+    maxSumEndingHere = array[0] # Summation of all adjacent elements up to this point
+    maxSoFar = array[0] # Maximum value of summations calculated so far 
+    # 2: Traverse the array and compute for each element
+    for idx in range(1, len(array)): 
+        currentNum = array[idx]
+        # 3: Using Kadane's algorithm, calculate maxSumEndingHere and maxSoFar with max functions for each element traversed so far
+        maxSumEndingHere = max(currentNum, maxSumEndingHere + currentNum)
+        maxSoFar = max(maxSoFar, maxSumEndingHere)
+    return maxSoFar
+```
+</p>
+</details>
+
+✅ **Kadane's Algorithm**:
+1. Traverse the array once and compute for each element using Kadane's algorithm
+2. minBuyPriceEndingHere = min(minBuyPriceEndingHere, currentPrice)
+3. profit = currentPrice - minBuyPriceEndingHere
+4. maxProfitSoFar = max(maxProfitSoFar, profit)
+
+---
+# 🪟 Sliding Window Pattern
+## [🟩 Average of Subarrays of Size k](https://www.educative.io/courses/grokking-the-coding-interview/7D5NNZWQ8Wr)
+>* Given an `array`, find the average of all subarrays of `k` contiguous elements in it.
+- [x] Input: `array = [1, 3, 2, 6, -1, 4, 1, 8, 2], k = 5`
+- [x] Output: `[2.2, 2.8, 2.4, 3.6, 2.8]`
+<details><summary><b>Solution</b></summary>
+<p>
+
+### **Sliding Window**
+```python
+# Brute Force
+# Time O(n * k) | Space O(k) where n is the number of elements in the array and k is the size of subarray
+def findAverageOfSubarrays(k, array): 
+    result = []
+    # 1: Loop through each element of the array but keep track of completed elements with - k + 1
+    for idx in range(len(array) - k + 1):
+        # 2: Initialise _sum variable of float type
+        _sum = 0.0
+        # 3: Loop through each element of the array again from idx to idx + k
+        for jdx in range(idx, idx + k):
+            # 4: Sum all traversed elements of the array
+            _sum += array[jdx]
+        # 5: Append the mean of total sum as the answer 
+        result.append(_sum/k)
+    return result
+
+# Sliding Window
+# Time O(n) | Space O(k) where n is the number of elements in the array and k is the size of subarray
+def findAverageOfSubarrays(k, array): 
+    result = []
+    # 1: Initialise windowSum for the sum of k elements of subarray and windowStart pointer for the beginning of the sliding window
+    windowSum, windowStart = 0.0, 0
+    # 2: Increment the windowEnd pointer in a for loop
+    for windowEnd in range(len(array)): 
+        # 3: Sliding the window, we add the next element going in
+        windowSum += array[windowEnd]
+        # 4: Don't start the sliding window until we have incremented windowEnd to the required window size of k
+        if windowEnd >= k - 1:
+            # 5: Calculate the average of current windowSum and append the result
+            result.append(windowSum / k) 
+            # 6: Sliding the window, we subtract the element going out
+            windowSum -= array[windowStart]
+            # 7: Move the sliding window one element at a time
+            windowStart += 1
+    return result
+```
+</p>
+</details>
+
+✅ **Sliding Window:** Use windowStart and windowEnd pointers to move the sliding window and compute windowSum (and its average) in every iteration.
+
+---
+## [🟩 Maximum Sum Subarrays of Size k](https://www.educative.io/courses/grokking-the-coding-interview/JPKr0kqLGNP)
+> Given an array of positive numbers and a positive number ‘k,’ find the `maximum sum of any contiguous subarray of size ‘k’.`
+##### Example 1:
+- [x] Input: `array = [2, 1, 5, 1, 3, 2], k = 3`
+- [x] Output: `9`
+- [x] Explanation: Subarray with maximum sum is `[5, 1, 3]`.
+
+##### Example 2:
+- [x] Input: `[2, 3, 4, 1, 5], k = 2`
+- [x] Output: `7`
+- [x] Explanation: Subarray with maximum sum is `[3, 4]`.
+
+<img src="resources/max-sum-of-subarrays.png" width="400px"/>
+<details><summary><b>Solution</b></summary>
+<p>
+
+### **Sliding Window**
+```python
+# Brute Force
+# Time O(n * k) | Space O(1) where n is the number of elements in the array
+def maxSumSubarraysOfSizeK(k, array): 
+  maxSum, windowSum = 0, 0 
+  for idx in range(len(array) - k + 1): 
+    windowSum = 0
+    for jdx in range(idx, idx + k): 
+      windowSum += array[jdx]
+    maxSum = max(maxSum, windowSum)
+  return maxSum
+ 
+# Time O(n) | Space O(1) where n is the number of elements in the array
+def maxSumSubarraysOfSizeK(k, array):
+    windowSum, windowStart, maxSum = 0, 0, float("-inf")
+    for windowEnd in range(len(array)): 
+        windowSum += array[windowEnd]
+        if windowEnd >= k - 1:
+            maxSum = max(maxSum, windowSum)
+            windowSum -= array[windowStart]
+            windowStart += 1
+    return maxSum
+```
+</p>
+</details>
+
+✅ **Sliding Window:** Use windowStart and windowEnd pointers to move the sliding window and compute windowSum in every iteration.
+
+---
+## [🟩 Smallest Subarray With a Greater Sum](https://www.educative.io/courses/grokking-the-coding-interview/7XMlMEQPnnQ)
+> Given an array of positive numbers and a positive number ‘S,’ find the length of the `smallest` contiguous subarray whose sum is `greater than or equal to ‘S’`. Return 0 if no such subarray exists.
+##### Example 1: 
+- [x] Input: `array = [2, 1, 5, 2, 3, 2], S = 7`
+- [x] Output: `2`
+- [x] Explanation: The smallest subarray with a sum greater than or equal to '7' is `[5, 2]`.
+
+##### Example 2: 
+- [x] Input: `array = [2, 1, 5, 2, 8], S = 7`
+- [x] Output: `1`
+- [x] Explanation: The smallest subarray with a sum greater than or equal to '7' is `[8]`.
+
+##### Example 3: 
+- [x] Input: `array = [3, 4, 1, 1, 6], S = 8`
+- [x] Output: `3`
+- [x] Explanation: The smallest subarray with a sum greater than or equal to '8' is `[3, 4, 1]`.
+
+<img src="resources/smallest-subarray-sum-1.png" align="left" width="400px"/>
+<img src="resources/smallest-subarray-sum-2.png" align="middle" width="400px"/>
+
+<details><summary><b>Solution</b></summary>
+<p>
+
+### **Sliding Window**
+```python
+# Sliding Window
+# Time O(n) | Space O(1) where n is the number of elements in the array
+def smallestSubarraySum(s, array):
+    windowStart, windowSum, minLength = 0, 0, float("inf")
+    # 1: Increment the windowEnd pointer in a for loop to create sliding window
+    for windowEnd in range(len(array)): 
+        # 2: Sliding the window, we keep adding elements from the beginning of the array
+        windowSum += array[windowEnd]
+        # 3: When the windowSum becomes >= s,
+        while windowSum >= s: 
+            # 4: Record the minimum length as the smallest window so far
+            minLength = min(minLength, windowEnd - windowStart + 1)
+            # 5: Sliding the window, we subtract the element going out
+            windowSum -= array[windowStart]
+            # 6: Move the sliding window one element at a time
+            windowStart += 1
+    # 7: If minLength is unchanged because no subarray exists, return 0
+    if minLength == float("inf"):
+        return 0
+    return minLength
+
+# Time O(n): The outer for loop runs for all elements, and the inner while loop processes each element only once; therefore, the time complexity of the algorithm will be O(N+N) which is asymptotically equivalent to O(N)
+# Space O(1): The algorithm runs in constant space O(1) because no additional memory is used and the input array is computed in place. 
+```
+</p>
+</details>
+
+✅ **Sliding Window:** Use windowStart and windowEnd pointers to move the sliding window and compute windowSum in every iteration. Use min function to keep track on smallest length of subarray so far.
+
+---
+## [🟩 Longest Substring with Maximum K Distinct Characters](https://www.educative.io/courses/grokking-the-coding-interview/YQQwQMWLx80)
+> Given a string, find the length of the `longest substring` in it `with no more than K distinct characters.`
+##### Example 1: 
+- [x] Input: `String="araaci", K=2`
+- [x] Output: `4`
+- [x] Explanation: The longest substring with no more than '2' distinct characters is "araa".
+
+##### Example 2: 
+- [x] Input: `String="araaci", K=1`
+- [x] Output: `2`
+- [x] Explanation: The longest substring with no more than '1' distinct characters is "aa".
+
+##### Example 3: 
+- [x] Input: `String="cbbebi", K=3`
+- [x] Output: `5`
+- [x] Explanation: The longest substrings with no more than '3' distinct characters are "cbbeb" & "bbebi".
+
+<img src="resources/longest-substring-with-k-distinct-1.png" align="left" width="400px"/>
+<img src="resources/longest-substring-with-k-distinct-2.png" align="middle" width="450px"/>
+
+<details><summary><b>Solution</b></summary>
+<p>
+
+### **Sliding Window**
+```python
+# Sliding Window
+# Time O(N) | Space O(K) where N is the number of elements in the array and K is the number of distinct characters
+def longestSubstrinWithKDistinct(k, string):
+    windowStart, maxLength = 0, 0
+    charFrequency = {}
+
+    # 1: Increment the windowEnd pointer in a for loop to create sliding window
+    for windowEnd in range(len(string)): 
+        # 2: Set the right most character using the windowEnd of the string
+        rightChar = string[windowEnd]
+        # 3: If right most character is not seen in the dictionary, initialise its frequency as 0
+        if rightChar not in charFrequency: 
+            charFrequency[rightChar] = 0
+        # 4: Sliding the window, increment the frequency of the right-most character going into the window
+        charFrequency[rightChar] += 1
+        
+        # 5: If the number of key-value pairs (distinct characters) is greater than k, 
+        while len(charFrequency) > k: 
+            # 6: Shrink the sliding window from the beginning of string until we have no more than k distinct characters in the dictionary 
+            leftChar = string[windowStart]
+            # 7: Sliding the window, decrement the frequency of the left-most character going out of the window
+            charFrequency[leftChar] -= 1
+            # 8: If frequency becomes zero in the dictionary, remove the left-most character from the dictionary
+            if charFrequency[leftChar] == 0:
+                del charFrequency[leftChar]
+            # 9: Move the sliding window one element at a time
+            windowStart += 1
+            
+        # 10: Check if the current window length is the longest so far and if so, record its length
+        maxLength = max(maxLength, windowEnd - windowStart + 1)
+    return maxLength
+
+# Time O(N): The above algorithm’s time complexity will be O(N) where N is the number of characters in the input string. The outer for loop runs for all characters, and the inner while loop processes each character only once; therefore, the time complexity of the algorithm will be O(N+N) which is asymptotically equivalent to O(N)
+# Space O(K): The algorithm’s space complexity is O(K) as we will be storing a maximum of K+1 characters in the HashMap.
+```
+</p>
+</details>
+
+✅ **Sliding Window:** Use windowStart and windowEnd pointers to move the sliding window and compute sliding window in every iteration. Use dictionary to keep track of character frequencies and max funtion to keep track of longest substring so far.
 
 ---
 # <div id='matrix'/> 🔢 **Matrix**
