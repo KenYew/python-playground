@@ -79,6 +79,31 @@ Blind 75 questions, coding patterns and in-depth solutions for FAANG coding inte
 # <div id='quicknotes'/> ⚡️ **Quick Notes**
 #### [📋 **Back to Table of Contents**](#toc)
 ---
+## 📱 Coding Pattern Templates
+#### 🪟 Sliding Window
+##### To perform beginning to end computations of an array in O(n) time complexity
+```python
+windowSum, windowStart = 0, 0
+# 1: Increment the windowEnd pointer to start creating the sliding window
+for windowEnd in range(len(array)): 
+    
+    # 2: Sliding the window, add elements going in
+    windowSum += array[windowEnd]
+
+    # 3: Set conditions required to start sliding the window
+    if windowEnd >= k - 1:
+        
+        # 4: Perform computations on elements in window
+        result.append(doSomethingToWindow())
+
+        # 5: Sliding the window, subtract the element going out
+        windowSum -= array[windowStart]
+
+        # 6: Move the sliding window one element at a time for the next iteration
+        windowStart += 1
+return result
+```
+
 #### 📝 Linked List Traversal
 ##### To perform head to tail computations
 ```python
@@ -1051,7 +1076,7 @@ def smallestSubarraySum(s, array):
 ✅ **Sliding Window:** Use windowStart and windowEnd pointers to move the sliding window and compute windowSum in every iteration. Use min function to keep track on smallest length of subarray so far.
 
 ---
-## [🟩 Longest Substring with Maximum K Distinct Characters](https://www.educative.io/courses/grokking-the-coding-interview/YQQwQMWLx80)
+## [🟨 Longest Substring with Maximum K Distinct Characters](https://www.educative.io/courses/grokking-the-coding-interview/YQQwQMWLx80)
 > Given a string, find the length of the `longest substring` in it `with no more than K distinct characters.`
 ##### Example 1: 
 - [x] Input: `String="araaci", K=2`
@@ -1069,7 +1094,7 @@ def smallestSubarraySum(s, array):
 - [x] Explanation: The longest substrings with no more than '3' distinct characters are "cbbeb" & "bbebi".
 
 <img src="resources/longest-substring-with-k-distinct-1.png" align="left" width="400px"/>
-<img src="resources/longest-substring-with-k-distinct-2.png" align="middle" width="450px"/>
+<img src="resources/longest-substring-with-k-distinct-2.png" align="middle" width="430px"/>
 
 
 ### **Sliding Window**
@@ -1080,29 +1105,29 @@ def longestSubstrinWithKDistinct(k, string):
     windowStart, maxLength = 0, 0
     charFrequency = {}
 
-    # 1: Increment the windowEnd pointer in a for loop to create sliding window
+    # 1: Increment the windowEnd pointer to create sliding window
     for windowEnd in range(len(string)): 
-        # 2: Set the right most character using the windowEnd of the string
+        # 2: Set the right-most character using the windowEnd of the string
         rightChar = string[windowEnd]
-        # 3: If right most character is not seen in the dictionary, initialise its frequency as 0
+        # 3: If right-most character is not seen in the dictionary, initialise a record of this char
         if rightChar not in charFrequency: 
             charFrequency[rightChar] = 0
-        # 4: Sliding the window, increment the frequency of the right-most character going into the window
+        # 4: Sliding the window, increment the frequency of all the right-most characters going into the window
         charFrequency[rightChar] += 1
         
-        # 5: If the number of key-value pairs (distinct characters) is greater than k, 
+        # 5: If the number of distinct characters exceeds k (tracked by the number of key-value pairs in dict)
         while len(charFrequency) > k: 
             # 6: Shrink the sliding window from the beginning of string until we have no more than k distinct characters in the dictionary 
             leftChar = string[windowStart]
-            # 7: Sliding the window, decrement the frequency of the left-most character going out of the window
+            # 7: Shrinking the sliding window, decrement the frequency of the left-most character going out of the window
             charFrequency[leftChar] -= 1
-            # 8: If frequency becomes zero in the dictionary, remove the left-most character from the dictionary
+            # 8: At any point, if the frequency of any left-most character reduces to zero, we remove it from the dictionary
             if charFrequency[leftChar] == 0:
                 del charFrequency[leftChar]
-            # 9: Move the sliding window one element at a time
+            # 9: Shrinking the sliding window one element at a time
             windowStart += 1
             
-        # 10: Check if the current window length is the longest so far and if so, record its length
+        # 10: Keep track of the maximum length so far
         maxLength = max(maxLength, windowEnd - windowStart + 1)
     return maxLength
 
@@ -1110,7 +1135,143 @@ def longestSubstrinWithKDistinct(k, string):
 # Space O(K): The algorithm’s space complexity is O(K) as we will be storing a maximum of K+1 characters in the HashMap.
 ```
 
-✅ **Sliding Window:** Use windowStart and windowEnd pointers to move the sliding window and compute sliding window in every iteration. Use dictionary to keep track of character frequencies and max funtion to keep track of longest substring so far.
+✅ **Sliding Window:** Use windowStart and windowEnd pointers to move the sliding window and compute sliding window in every iteration. Use dictionary to keep track of character frequencies and max function to keep track of longest substring so far.
+
+---
+## [🟥 Longest Substring with Distinct Characters](https://www.educative.io/courses/grokking-the-coding-interview/YMzBx1gE5EO)
+> Given a string, find the `length of the longest substring`, which has `all distinct characters`.
+##### Example 1: 
+- [x] Input: `String="aabccbb"`
+- [x] Output: `3`
+- [x] Explanation: The longest substring with distinct characters is "abc".
+
+##### Example 2: 
+- [x] Input: `String="abbbb"`
+- [x] Output: `2`
+- [x] Explanation: The longest substring with distinct characters is "ab".
+
+##### Example 3: 
+- [x] Input: `String="abccde"`
+- [x] Output: `3`
+- [x] Explanation: The longest substrings with distinct characters are "abc" & "cde".
+
+
+### **Sliding Window**
+```python
+# Time O(N) | Space O(K) where N is the number of elements in the array and K is the number of distinct characters
+def nonRepeatSubstring(string): 
+    windowStart, maxLength = 0, float("-inf")
+    charIndexMap = {}
+    # 1: Increment the windowEnd pointer to create sliding window
+    for windowEnd in range(len(string)): 
+        # 2: Set the right-most character using the windowEnd of the string
+        rightChar = string[windowEnd]
+        # 3: If right-most character is already seen in dictionary, shrink the window from the beginning so that we have only one occurrence of rightChar
+        if rightChar in charIndexMap:
+            # 4: Re-evaluate windowStart pointer. In the current sliding window, we will not have any rightChar after its previous index and if windowStart is already ahead of the last index of rightChar, we keep windowStart
+            windowStart = max(windowStart, charIndexMap[rightChar] + 1)
+        # 5: Add rightChar:windowEnd (char:index) into the dictionary
+        charIndexMap[rightChar] = windowEnd
+        # 6: Keep track of the maximum length so far
+        maxLength = max(maxLength, windowEnd - windowStart + 1)
+    return maxLength
+
+# Time O(N): The above algorithm’s time complexity will be O(N) where ‘N’ is the number of characters in the input string.
+# Space O(K): The algorithm’s space complexity will be O(K) where K is the number of distinct characters in the input string. 
+# This also means K<=N because in the worst case, the whole string might not have any duplicate character, so the entire string will be added to the HashMap. 
+# Having said that, since we can expect a fixed set of characters in the input string (e.g., 26 for English letters), we can say that the algorithm runs in fixed space O(1)
+# In this case, we can use a fixed-size array instead of the HashMap.
+```
+
+✅ **Sliding Window:** Use windowStart and windowEnd pointers to move the sliding window and compute sliding window in every iteration. Use dictionary to keep track of character and its index. Use max function to keep track of longest substring so far.
+
+---
+## [🟥 Longest Substring with Same Letters after Replacement](https://www.educative.io/courses/grokking-the-coding-interview/R8DVgjq78yR)
+> Given a string with lowercase letters only, if you are allowed to `replace no more than k letters` with any letter, find the `length of the longest substring having the same letters` after replacement.
+##### Example 1: 
+- [x] Input: `String="aabccbb", k=2`
+- [x] Output: `5`
+- [x] Explanation: Replace the two 'c' with 'b' to have the longest repeating substring "bbbbb".
+
+##### Example 2: 
+- [x] Input: `String="abbcb", k=1`
+- [x] Output: `4`
+- [x] Explanation: Replace the 'c' with 'b' to have the longest repeating substring "bbbb".
+
+##### Example 3: 
+- [x] Input: `String="abccde", k=1`
+- [x] Output: `3`
+- [x] Explanation: Replace the 'b' or 'd' with 'c' to have the longest repeating substring "ccc".
+
+
+### **Sliding Window**
+```python
+# Time O(N) | Space O(1) where N is the number of letters in the input string.
+def lengthOfLongestSubstring(string, k):
+    windowStart, maxLength, maxRepeatingLetterCount = 0, 0, 0
+    frequencyMap = {}
+    
+    for windowEnd in range(len(string)): 
+        rightChar = string[windowEnd]
+        if rightChar not in frequencyMap:
+            frequencyMap[rightChar] = 0
+        frequencyMap[rightChar] += 1
+        maxRepeatingLetterCount = max(maxRepeatingLetterCount, frequencyMap[rightChar])
+        
+        if (windowEnd - windowStart + 1 - maxRepeatingLetterCount) > k:
+            leftChar = string[windowStart]
+            frequencyMap[leftChar] -= 1
+            windowStart += 1
+        maxLength = max(maxLength, windowEnd - windowStart + 1)
+    return maxLength
+
+# Time O(N) where ‘N’ is the number of letters in the input string.
+# Space O(1) as we expect only the lower case letters in the input string, we can conclude that the space complexity will be O(26) to store each letter’s frequency in the HashMap, which is asymptotically equal to O(1).
+```
+
+✅ **Sliding Window:** Use windowStart and windowEnd pointers to move the sliding window and compute sliding window in every iteration. Use dictionary to keep track of character and its index. Use max function to keep track of longest substring so far.
+
+---
+## [🟥 Longest Subarray with Ones after Replacement](https://www.educative.io/courses/grokking-the-coding-interview/B6VypRxPolJ)
+> Given an array containing 0s and 1s, if you are allowed to `replace no more than ‘k’ 0s with 1s`, find the length of the `longest contiguous subarray having all 1s.`
+##### Example 1: 
+- [x] Input: `Array=[0, 1, 1, 0, 0, 0, 1, 1, 0, 1, 1], k=2`
+- [x] Output: `6`
+- [x] Explanation: Replace the '0' at index 5 and 8 to have the longest contiguous subarray of 1s having length 6.
+
+##### Example 2: 
+- [x] Input: `Array=[0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 0, 1, 1], k=3`
+- [x] Output: `9`
+- [x] Explanation: Replace the '0' at index 6, 9, and 10 to have the longest contiguous subarray of 1s having length 9.
+
+
+
+### **Sliding Window**
+```python
+# Time O(N) | Space O(1) where N is the number of letters in the input string.
+def lengthOfLongestSubstring(array, k):
+  windowStart, maxLength, maxOneCount = 0, 0, 0
+
+  # Try to extend the range [windowStart, windowEnd]
+  for windowEnd in range(len(array)):
+    if array[windowEnd] == 1:
+      maxOneCount += 1
+
+    # Current window size is from windowStart to windowEnd, overall we have a maximum of 1s
+    # repeating 'maxOneCount' times, this means we can have a window with 'maxOneCount' 1s
+    # and the remaining are 0s which should replace with 1s.
+    # now, if the remaining 0s are more than 'k', it is the time to shrink the window as we
+    # are not allowed to replace more than 'k' 0s
+    if (windowEnd - windowStart + 1 - maxOneCount) > k:
+      if array[windowStart] == 1:
+        maxOneCount -= 1
+      windowStart += 1
+
+    maxLength = max(maxLength, windowEnd - windowStart + 1)
+  return maxLength
+```
+
+✅ **Sliding Window:** Use windowStart and windowEnd pointers to move the sliding window and compute sliding window in every iteration. Use dictionary to keep track of character and its index. Use max function to keep track of longest substring so far.
 
 ---
 # <div id='matrix'/> 🔢 **Matrix**
