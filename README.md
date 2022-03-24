@@ -91,7 +91,7 @@ for windowEnd in range(len(array)):
     windowSum += array[windowEnd]
 
     # 3: Set conditions required to start sliding the window
-    if windowEnd >= k - 1:
+    if condition():
         
         # 4: Perform computations on elements in window
         result.append(doSomethingToWindow())
@@ -103,7 +103,29 @@ for windowEnd in range(len(array)):
         windowStart += 1
 return result
 ```
+#### ✌️ Two Pointers
+##### To traverse and compute all elements of an array
+```python
+# 1: Initialise two pointers on each end of the array
+left, right = 0, len(array) - 1
 
+# 2: While pointers have not traversed and crossed each other,
+while left < right: 
+    
+    # 3: Perform some computation
+    computeSomething()
+
+    # 4: Set a condition that requires *left to increment and move to the right
+    if condition1(): 
+        left += 1
+
+    # 5: Set a condition that requires *right to decrement and move to the left
+    elif condition2():
+        right -= 1
+    
+    baseCase()
+return result
+```
 #### 📝 Linked List Traversal
 ##### To perform head to tail computations
 ```python
@@ -375,6 +397,7 @@ def sortedSquaredArray(array):
     # 10: Finally, return the sorted squared array
     return ans
 ```
+
 
 ✅ **TWO POINTERS:** _Initialise output array with 0's, and left and right pointers on each end of array. Traverse idx from end to beginning of the array, if abs(leftVal) > abs(rightVal), write the ans[idx] = leftVal ** 2 and increment left, else abs(rightVal) >= abs(leftVal), write the ans[idx] = rightVal **2 and decrement right._
 
@@ -1107,12 +1130,12 @@ def longestSubstrinWithKDistinct(k, string):
 
     # 1: Increment the windowEnd pointer to create sliding window
     for windowEnd in range(len(string)): 
-        # 2: Set the right-most character using the windowEnd of the string
+        # 2: Create the right-most character (using windowEnd pointer) going into the sliding window
         rightChar = string[windowEnd]
-        # 3: If right-most character is not seen in the dictionary, initialise a record of this char
+        # 3: If rightChar is not seen in the dictionary, initialise char:frequency key-value pair
         if rightChar not in charFrequency: 
             charFrequency[rightChar] = 0
-        # 4: Sliding the window, increment the frequency of all the right-most characters going into the window
+        # 4: Sliding the window, increment the frequency of any rightChars going into the window
         charFrequency[rightChar] += 1
         
         # 5: If the number of distinct characters exceeds k (tracked by the number of key-value pairs in dict)
@@ -1124,7 +1147,7 @@ def longestSubstrinWithKDistinct(k, string):
             # 8: At any point, if the frequency of any left-most character reduces to zero, we remove it from the dictionary
             if charFrequency[leftChar] == 0:
                 del charFrequency[leftChar]
-            # 9: Shrinking the sliding window one element at a time
+            # 9: Increment the windowStart pointer to shrink the sliding window one element at a time
             windowStart += 1
             
         # 10: Keep track of the maximum length so far
@@ -1166,9 +1189,10 @@ def nonRepeatSubstring(string):
     for windowEnd in range(len(string)): 
         # 2: Set the right-most character using the windowEnd of the string
         rightChar = string[windowEnd]
-        # 3: If right-most character is already seen in dictionary, shrink the window from the beginning so that we have only one occurrence of rightChar
+        # 3: If we get a duplicate character going into the window, shrink the window to ensure we always have distinct characters in the window
         if rightChar in charIndexMap:
-            # 4: Re-evaluate windowStart pointer. In the current sliding window, we will not have any rightChar after its previous index and if windowStart is already ahead of the last index of rightChar, we keep windowStart
+            # 4: Set the windowStart pointer to point at the index of the last duplicated character (skipping any previous duplicate characters) 
+            # or at the windowStart (if windowStart is already ahead of the index of the last duplicated character) whichever is the biggest  
             windowStart = max(windowStart, charIndexMap[rightChar] + 1)
         # 5: Add rightChar:windowEnd (char:index) into the dictionary
         charIndexMap[rightChar] = windowEnd
@@ -1183,7 +1207,7 @@ def nonRepeatSubstring(string):
 # In this case, we can use a fixed-size array instead of the HashMap.
 ```
 
-✅ **Sliding Window:** Use windowStart and windowEnd pointers to move the sliding window and compute sliding window in every iteration. Use dictionary to keep track of character and its index. Use max function to keep track of longest substring so far.
+✅ **Sliding Window:** Use windowStart and windowEnd pointers to move the sliding window and compute sliding window in every iteration. Use dictionary to keep track of the last index of each character we have processed. Whenever we get a duplicate character, shrink the sliding window to ensure we always have distinct characters in sliding window. Use max function to keep track of longest substring so far.
 
 ---
 ## [🟥 Longest Substring with Same Letters after Replacement](https://www.educative.io/courses/grokking-the-coding-interview/R8DVgjq78yR)
@@ -1211,17 +1235,28 @@ def lengthOfLongestSubstring(string, k):
     windowStart, maxLength, maxRepeatingLetterCount = 0, 0, 0
     frequencyMap = {}
     
+    # 1: Increment the windowEnd pointer to create sliding window
     for windowEnd in range(len(string)): 
+        # 2: Create the right-most character (using windowEnd pointer) going into the sliding window
         rightChar = string[windowEnd]
+        # 3: If rightChar is not seen in the dictionary, initialise char:frequency key-value pair
         if rightChar not in frequencyMap:
             frequencyMap[rightChar] = 0
+        # 4: Sliding the window, increment the frequency of any rightChars going into the window
         frequencyMap[rightChar] += 1
+        
+        # 5: Keep track of the count of the maximum repeating letter in any window
         maxRepeatingLetterCount = max(maxRepeatingLetterCount, frequencyMap[rightChar])
         
+        # 6: At any window, if windowLength - maxRepeatingLetterCount >  k, we need to shrink window (too much k!)
         if (windowEnd - windowStart + 1 - maxRepeatingLetterCount) > k:
+            # 7: Shrink the sliding window from the beginning of the string 
             leftChar = string[windowStart]
+            # 8: Decrement frequency of left-most char going out of the window
             frequencyMap[leftChar] -= 1
+            # 9: Increment the windowStart pointer to shrink the sliding window one element at a time
             windowStart += 1
+        # 10: Keep track of the maximum length so far
         maxLength = max(maxLength, windowEnd - windowStart + 1)
     return maxLength
 
@@ -1229,7 +1264,7 @@ def lengthOfLongestSubstring(string, k):
 # Space O(1) as we expect only the lower case letters in the input string, we can conclude that the space complexity will be O(26) to store each letter’s frequency in the HashMap, which is asymptotically equal to O(1).
 ```
 
-✅ **Sliding Window:** Use windowStart and windowEnd pointers to move the sliding window and compute sliding window in every iteration. Use dictionary to keep track of character and its index. Use max function to keep track of longest substring so far.
+✅ **Sliding Window:** Use windowStart and windowEnd pointers to move the sliding window and compute sliding window in every iteration. Use dictionary to keep track of characters going in and their frequencies. Start shrinking if windowLength - maxRepeatingLetterCount > k. Use max function to keep track of longest substring so far.
 
 ---
 ## [🟥 Longest Subarray with Ones after Replacement](https://www.educative.io/courses/grokking-the-coding-interview/B6VypRxPolJ)
@@ -1251,27 +1286,98 @@ def lengthOfLongestSubstring(string, k):
 # Time O(N) | Space O(1) where N is the number of letters in the input string.
 def lengthOfLongestSubstring(array, k):
   windowStart, maxLength, maxOneCount = 0, 0, 0
-
-  # Try to extend the range [windowStart, windowEnd]
+  # 1: Increment the windowEnd pointer to create sliding window
   for windowEnd in range(len(array)):
+    # 2: If number going in is a 1, increment the maxOneCount counter
     if array[windowEnd] == 1:
       maxOneCount += 1
-
-    # Current window size is from windowStart to windowEnd, overall we have a maximum of 1s
-    # repeating 'maxOneCount' times, this means we can have a window with 'maxOneCount' 1s
-    # and the remaining are 0s which should replace with 1s.
-    # now, if the remaining 0s are more than 'k', it is the time to shrink the window as we
-    # are not allowed to replace more than 'k' 0s
+    # 3: At any window, if windowLength - maxOneCount > k, we need to shrink window (too much k!)
     if (windowEnd - windowStart + 1 - maxOneCount) > k:
+      # 4: If left-most number in window is a 1, decrement the maxOneCount counter as we will slide this number out!
       if array[windowStart] == 1:
         maxOneCount -= 1
+      # 5: Increment the windowStart pointer to shrink the sliding window one element at a time
       windowStart += 1
-
+    # 6: Keep track of the maximum length so far
     maxLength = max(maxLength, windowEnd - windowStart + 1)
   return maxLength
 ```
 
-✅ **Sliding Window:** Use windowStart and windowEnd pointers to move the sliding window and compute sliding window in every iteration. Use dictionary to keep track of character and its index. Use max function to keep track of longest substring so far.
+✅ **Sliding Window:** Use windowStart and windowEnd pointers to move the sliding window and compute sliding window in every iteration. Increment maxOneCount counter for every 1s going in. Start shrinking if windowLength - maxOneCount > k. Use max function to keep track of longest substring so far.
+
+---
+# ✌️ Two Pointers Pattern
+## [🟩 Remove Duplicates](https://www.educative.io/courses/grokking-the-coding-interview/mEEA22L5mNA)
+>* Given an array of sorted numbers, remove all duplicates from it. You should not use any extra space; after removing the duplicates in-place return the length of the subarray that has no duplicate in it.
+##### Example 1: 
+- [x] Input: `array = [2, 3, 3, 3, 6, 9, 9]`
+- [x] Output: `4`
+- [x] Explanation: The first four elements after removing the duplicates will be [2, 3, 6, 9].
+
+##### Example 2: 
+- [x] Input: `array = [2, 2, 2, 11]`
+- [x] Output: `2`
+- [x] Explanation: The first two elements after removing the duplicates will be [2, 11].
+
+<img src="resources/remove-duplicates.png" align="left" width="500px"/>
+
+### **Two Pointers**
+```python
+# O(n) Time | O(1) Space where n is the number of elements in the array
+def removeDuplicates(array): 
+    idx, nextNonDuplicate = 0, 1
+
+    # 1: While we haven't fully traversed the array,
+    while (idx < len(array)):
+        # 2: If adjacent elements are not duplicates,
+        if array[nextNonDuplicate - 1] != array[idx]:
+            # 3: Replace nextNonDuplicate element with current iteration element
+            array[nextNonDuplicate] = array[idx]
+            # 4: Increment *nextNonDuplicate to find the next non duplicate element
+            nextNonDuplicate += 1
+        # 5: Increment *idx to keep traversing the array
+        idx += 1
+    return nextNonDuplicate
+```
+
+✅ **Two Pointers:** `*idx` iterates the array. `*nextNonDuplicate` replaces element with the next non-duplicate number. Hence, algorithm iterates through the array and whenever we see a non-duplicate number, we move it next to the last non-duplicate number we've seen.
+
+---
+
+## [🟩 Squaring a Sorted Array](https://www.educative.io/courses/grokking-the-coding-interview/R1ppNG3nV9R)
+>* Given a sorted array, create a new array containing squares of all the numbers of the input array in the sorted order.
+##### Example 1: 
+- [x] Input: `array = [-2, -1, 0, 2, 3]`
+- [x] Output: `[0, 1, 4, 4, 9]`
+
+##### Example 2: 
+- [x] Input: `array = [-3, -1, 0, 1, 2]`
+- [x] Output: `[0, 1, 1, 4, 9]`
+
+<img src="resources/sorted-squared-array.png" align="left" width="750px"/>
+
+### **Two Pointers**
+```python
+# O(n) Time | O(n) Space - where n is the length of the input array
+def sortedSquaredArray(array):
+    squares = [0 for _ in array]
+    highestSquareIdx = len(array) - 1
+    left, right = 0, len(array) - 1
+    
+    while left <= right: 
+        leftSquare = array[left] * array[left]
+        rightSquare = array[right] * array[right]
+        if leftSquare > rightSquare: 
+            squares[highestSquareIdx] = leftSquare
+            left += 1
+        else:
+            squares[highestSquareIdx] = rightSquare
+            right -= 1
+        highestSquareIdx -= 1
+    return squares
+```
+
+✅ **Two Pointers:** `*left` iterates the array from beginning to end. `*right` iterates the array from end to beginning. Compute `leftSquare` and `rightSquare`. Increment `*left` or `*right` depending `leftSquare` > `rightSquare` and save results in `squares` array.
 
 ---
 # <div id='matrix'/> 🔢 **Matrix**

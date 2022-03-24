@@ -21,5 +21,23 @@ def sortedSquaredArray(array):
     # 10: Finally, return the sorted squared array
     return ans
 
+# O(n) Time | O(n) Space - where n is the length of the input array
+def sortedSquaredArray(array):
+    squares = [0 for _ in array]
+    highestSquareIdx = len(array) - 1
+    left, right = 0, len(array) - 1
+    
+    while left <= right: 
+        leftSquare = array[left] * array[left]
+        rightSquare = array[right] * array[right]
+        if leftSquare > rightSquare: 
+            squares[highestSquareIdx] = leftSquare
+            left += 1
+        else:
+            squares[highestSquareIdx] = rightSquare
+            right -= 1
+        highestSquareIdx -= 1
+    return squares
+
 array = [1, 2, 3, 5, 6, 8, 9]
 print(sortedSquaredArray(array))
