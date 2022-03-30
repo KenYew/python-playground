@@ -827,7 +827,7 @@ def threeSum(nums: List[int]) -> List[List[int]]:
                 # EDGE CASE TO SKIP DUPLICATES
                 #  [-3 -2, -2, 0, 0, 2, 2]
                 # [ IDX L               R]
-                # EDGE 2: If two adjacent elements have the same value while the left and right pointers haven't finished traversing the entire array yet, keep moving the pointers to prevent checking for duiplicates
+                # EDGE 2: If two adjacent elements have the same value while the left and right pointers haven't finished traversing the entire array yet, keep moving the pointers to prevent checking for duplicates
                 while left < right and nums[left] == nums[left + 1]:
                     left += 1
                 while left < right and nums[right] == nums[right - 1]:
@@ -858,6 +858,10 @@ def threeNumberSum(array, targetSum):
 
     # 2: idx pointer loops through all values from index 0 to "n - 2" for the 1st value of the sum
     for idx in range(len(array) - 2): # since we're looking for a triplet, in the n-th iteration of the for loop, the idxPointer will always be 3rd from last of the array to allow for leftPointer and rightPointer to fit in the triplet
+       
+        # EDGE 1: If there are two adjacent elements of the same value for indices after idx = 0, skip iteration to prevent checking for duplicates
+        if idx > 0 and nums[idx] == nums[idx - 1]:
+            continue
 
         # 3: Initialise left and right pointers for the 2nd and 3rd value of the sum
         left = idx + 1
@@ -883,6 +887,15 @@ def threeNumberSum(array, targetSum):
             # 8: If we found the right combination to equal targetSum, append the 3 values of currentSum
             elif currentSum == targetSum:
                 ans.append([array[idx], array[left], array[right]])
+
+                # EDGE CASE TO SKIP DUPLICATES
+                #  [-3 -2, -2, 0, 0, 2, 2]
+                # [ IDX L               R]
+                # EDGE 2: If two adjacent elements have the same value while the left and right pointers haven't finished traversing the entire array yet, keep moving the pointers to prevent checking for duplicates
+                while left < right and nums[left] == nums[left + 1]:
+                    left += 1
+                while left < right and nums[right] == nums[right - 1]:
+                    right -= 1
 
                 # 9: and move both left and right pointers inwards to look for more potential sums
                 left += 1
@@ -1458,7 +1471,8 @@ def removeDuplicates(array):
 - [x] Input: `array = [-3, -1, 0, 1, 2]`
 - [x] Output: `[0, 1, 1, 4, 9]`
 
-<img src="resources/sorted-squared-array.png" align="left" width="750px"/>
+<img src="resources/sorted-squared-array.png" width="750px"/>
+
 <details><summary><b>Solution</b></summary>
 <p>
 
@@ -1487,6 +1501,200 @@ def sortedSquaredArray(array):
 
 ✅ **Two Pointers:** `*left` iterates the array from beginning to end. `*right` iterates the array from end to beginning. Compute `leftSquare` and `rightSquare`. Increment `*left` or `*right` depending `leftSquare` > `rightSquare` and save results in `squares` array.
 
+---
+
+## [🟩 Triplets with Smaller Sum](https://www.educative.io/courses/grokking-the-coding-interview/mElknO5OKBO)
+>* Given an array `arr` of unsorted numbers and a target sum, `count all triplets` in it such that `arr[i] + arr[j] + arr[k] < target` where `i`, `j`, and `k` are three different indices. Write a function to return the count of such triplets.
+##### Example 1: 
+- [x] Input: `array = [-1, 0, 2, 3], target = 3`
+- [x] Output: `2`
+- [x] Explanation: There are two triplets whose sum is less than the target: `[-1, 0, 3], [-1, 0, 2]`
+
+##### Example 2: 
+- [x] Input: `array = [-1, 4, 2, 1, 3], target = 5`
+- [x] Output: `4`
+- [x] Explanation: There are two triplets whose sum is less than the target: `[-1, 1, 4], [-1, 1, 3], [-1, 1, 2], [-1, 2, 3]`
+
+<details><summary><b>Solution</b></summary>
+<p>
+
+### **Return the count of triplets with smaller sum**
+```python
+# O(nlogn) Time 
+def threeSumSmaller(array, targetSum): 
+    array.sort()
+    totalCount = 0 
+    
+    # 1: Iterate *idx for X 
+    for idx in range(len(array) - 2):
+        # 2: We need to search a pair of numbers (Y & Z) such that it is less than targetSum - X 
+        # Since the equation goes X + Y + Z < targetSum so Y + Z < targetSum - X
+        totalCount += searchPair(array, targetSum - array[idx], idx)
+        
+    return totalCount
+
+# O(n) Time 
+# 3: Helper function to search for Y and Z such that they are < targetSum - X using two pointers approach
+def searchPair(array, targetSum, idx):
+    count = 0
+    left, right = idx + 1, len(array) - 1
+    while left < right: 
+        _sum = array[left] + array[right]
+        if _sum < targetSum: 
+            count += right - left
+            left += 1
+        else: 
+            right -= 1
+    return count
+
+# Total Time Complexity: O(nlogn + n) is asymptotically equivalent to O(n)
+# Total Space Complexity: O(n) for the output array
+```
+### **Return the array of triplets with smaller sum**
+```python
+# O(nlogn) Time 
+def threeSumSmaller(array, targetSum): 
+    array.sort()
+    triplets = []
+    
+    # 1: Iterate *idx for X 
+    for idx in range(len(array) - 2):
+        # 2: We need to search a pair of numbers (Y & Z) such that it is less than targetSum - X 
+        # Since the equation goes X + Y + Z < targetSum so Y + Z < targetSum - X
+        searchPair(array, targetSum - array[idx], idx, triplets)
+    return triplets
+
+# O(n^2) Time
+# 3: Helper function to search for Y and Z such that they are < targetSum - X using two pointers approach
+def searchPair(array, targetSum, idx, triplets):
+    left, right = idx + 1, len(array) - 1
+    while left < right: 
+        _sum = array[left] + array[right]
+        if _sum < targetSum: 
+            # With *left and *right correctly in place with _sum < targetSum, append all the triplets within in a for loop 
+            for jdx in range(right, left, -1):
+                triplets.append([array[idx], array[left], array[jdx]])
+            left += 1
+        else: 
+            right -= 1
+    return triplets
+
+# Total Time Complexity: O(nlogn + n^2) is asymptotically equivalent to O(n^3)
+# Total Space Complexity: O(n) for the output array
+```
+</p>
+</details>
+
+✅ **Two Pointers:** `*left` iterates the array from beginning to end. `*right` iterates the array from end to beginning. If `_sum` < `targetSum - X`, `left += 1` else `right -= 1`
+
+---
+
+## [🟨 Subarrays with Product Less than a Target](https://www.educative.io/courses/grokking-the-coding-interview/RMV1GV1yPYz)
+>* Given an array with positive numbers and a positive target number, find all of its contiguous subarrays whose `product is less than the target number.`
+##### Example 1: 
+- [x] Input: `array = [2, 5, 3, 10], target=30`
+- [x] Output: `[2], [5], [2, 5], [3], [5, 3], [10]`
+- [x] Explanation: There are six contiguous subarrays whose product is less than the target.
+##### Example 2: 
+- [x] Input: `array = [[8, 2, 6, 5], target=50`
+- [x] Output: `[8], [2], [8, 2], [6], [2, 6], [5], [6, 5]`
+- [x] Explanation: There are seven contiguous subarrays whose product is less than the target.
+
+<details><summary><b>Solution</b></summary>
+<p>
+
+### **Sliding Window**
+```python
+# O(n) Time - Sliding Window
+# O(n^2) Time - Nested For-Loop (Worst Case)
+# O(n^3) Total Time | O(n) Space 
+from collections import deque
+def findSubarrays(array, target):
+    result = []
+    product, left = 1, 0
+    # 1: Increment *right to start the sliding window
+    for right in range(len(array)): 
+        # 2: Sliding the window, multiply all elements going in
+        product *= array[right]
+        # 3: If product >= target and left < len(array), start shrinking the sliding window!
+        while product >= target and left < len(array): 
+            # 4: Sliding the window, divide all elements going out
+            product /= array[left]
+            # 5: Shrink the window one element at a time
+            left += 1
+            
+        # Note: Since the product of all numbers from left to right is less than the target therefore,
+        # all subarrays from left to right will have a product less than the target too; to avoid
+        # duplicates, we will start with a subarray containing only arr[right] and then extend it
+        
+        # 6: Instantiate the deque() object - a doubly ended queue with O(1) Time append or pop operations
+        tempList = deque()
+        # 7: With *left and *right pointers correctly in place, iterate *idx and append all the answers from *right to *left      
+        for idx in reversed(range(left, right + 1)): # or for idx in range(right, left - 1, -1):
+            # 8: Append all the answers into a temporary subarray (inserting from the left)
+            tempList.appendleft(array[idx])
+            # 9: Append the subarray into the final result array
+            result.append(list(tempList))
+    return result
+```
+</p>
+</details>
+
+✅ **Two Pointers:** Use `*right` and `*left` pointers to move the sliding window and compute product in a sliding window. If `product >= target` and `left < len(array)`, shrink the sliding window. Append all answer elements in a deque subarray. Append all answer subarrays into result array.
+
+---
+
+## [🟨 Dutch National Flag Problem](https://www.educative.io/courses/grokking-the-coding-interview/RMBxV6jz6Q0)
+>* Given an array containing `0s, 1s and 2s`, sort the array in-place. You should treat numbers of the array as objects, hence, we can’t count 0s, 1s, and 2s to recreate the array.
+>* The flag of the Netherlands consists of three colors: red, white and blue; and since our input array also consists of three different numbers that is why it is called Dutch National Flag problem.
+##### Example 1: 
+- [x] Input: [1, 0, 2, 1, 0]
+- [x] Output: [0, 0, 1, 1, 2]
+##### Example 2: 
+- [x] Input: [2, 2, 0, 1, 2, 0]
+- [x] Output: [0, 0, 1, 2, 2, 2,]
+
+<details><summary><b>Solution</b></summary>
+<p>
+
+### **Two Pointers**
+```python
+# O(n) Time | O(1) Space - we are iterating through the array only once
+def dutchFlagSort(array): 
+    # All elements < low are 0
+    # All elements > high are 2
+    # All elements from >= low < i are 1
+    # *low is the pivot for all 0s and *high is the pivot for all 2s
+    # [0, 0, 1, 1,  2, 2]
+    # [  LOW    IDX HI  ]
+    idx, low, high = 0, 0, len(array) - 1 
+    
+    # 1: While we haven't traversed all elements in the array,
+    while idx <= high:
+        # 2: If array[idx] == 0, swap array[idx] and array[left] values
+        if array[idx] == 0: 
+            array[idx], array[low] = array[low], array[idx]
+            # 3: Increment *idx and *low pointers
+            idx += 1
+            low += 1 # This ensures *low pivot is always moving and positioned at the final "0" element
+        # 4: If array[idx] == 1, 
+        elif array[idx] == 1: 
+            # 5: Increment *idx pointer
+            idx += 1 # This ensures *idx pivot is always moving and positioned at the final "1" element
+        # 6: If array[idx] == 2, swap array[idx] and array[right] values
+        else: 
+            array[idx], array[high] = array[high], array[idx]
+            # 7: Decrement *high pointer
+            high -= 1 # This ensures *high pivot is always moving and positioned at the first "2" element
+```
+</p>
+</details>
+
+✅ **Two Pointers:** 
+1. Use `*low` for 0s, `*idx` for  1s and `*high` for 2s. 
+1. If `array[idx] == 0`, swap `array[idx] and array[left]` values and increment `*idx and *low`
+1. If `array[idx] == 1`, increment `*idx`
+1. If `array[idx] == 2`, swap `array[idx] and array[high]` values and decrement `*high`
 ---
 # <div id='matrix'/> 🔢 **Matrix**
 
