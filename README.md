@@ -1332,7 +1332,7 @@ def lengthOfLongestSubstring(array, k):
 - [x] Output: `2`
 - [x] Explanation: The first two elements after removing the duplicates will be [2, 11].
 
-<img src="resources/remove-duplicates.png" align="left" width="500px"/>
+<img src="resources/remove-duplicates.png" width="500px"/>
 
 ### **Two Pointers**
 ```python
