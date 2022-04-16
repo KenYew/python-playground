@@ -3857,6 +3857,28 @@ def longestCommonSubsequence(s1: str, s2: str) -> int:
 #### [📋 **Back to Table of Contents**](#toc)
 ---
 # <div id='window'/> 🪟 **Sliding Window Pattern**
+#### To perform beginning to end computations of an array in O(n) time complexity
+```python
+windowSum, windowStart = 0, 0
+# 1: Increment the windowEnd pointer to start creating the sliding window
+for windowEnd in range(len(array)): 
+    
+    # 2: Sliding the window, add elements going in
+    windowSum += array[windowEnd]
+
+    # 3: Set conditions required to start sliding the window
+    if condition():
+        
+        # 4: Perform computations on elements in window
+        result.append(doSomethingToWindow())
+
+        # 5: Sliding the window, subtract the element going out
+        windowSum -= array[windowStart]
+
+        # 6: Move the sliding window one element at a time for the next iteration
+        windowStart += 1
+return result
+```
 #### [📋 **Back to Table of Contents**](#toc)
 ---
 ## [🟩 Average of Subarrays of Size k](https://www.educative.io/courses/grokking-the-coding-interview/7D5NNZWQ8Wr)
@@ -4235,6 +4257,28 @@ def lengthOfLongestSubstring(array, k):
 
 ---
 # <div id='twopointers'/> ✌️ **Two Pointers Pattern**
+#### To traverse and compute all elements of an array
+```python
+# 1: Initialise two pointers on each end of the array
+left, right = 0, len(array) - 1
+
+# 2: While pointers have not traversed and crossed each other,
+while left < right: 
+    
+    # 3: Perform some computation
+    computeSomething()
+
+    # 4: Set a condition that requires *left to increment and move to the right
+    if condition1(): 
+        left += 1
+
+    # 5: Set a condition that requires *right to decrement and move to the left
+    elif condition2():
+        right -= 1
+    
+    baseCase()
+return result
+```
 #### [📋 **Back to Table of Contents**](#toc)
 ---
 ## [🟩 Remove Duplicates](https://www.educative.io/courses/grokking-the-coding-interview/mEEA22L5mNA)
@@ -4515,6 +4559,20 @@ def dutchFlagSort(array):
 
 ---
 # <div id='dfs'/> 🌲 **Depth First Search Pattern**
+
+```python
+def recursiveFunction(currentNode, currentPath=[]): 
+  if currentNode is None:
+    return  # return 0, return False
+
+  currentPath.append(currentNode.value)
+
+  # return
+  recursiveFunction(currentNode.left, informationToPassDown, currentPath)
+  recursiveFunction(currentNode.right, informationToPassDown, currentPath)
+
+  del currentPath[-1]
+```
 #### [📋 **Back to Table of Contents**](#toc)
 ---
 ## 🟩 [Binary Tree Path Sum](https://www.educative.io/courses/grokking-the-coding-interview/RMlGwgpoKKY)
@@ -4663,5 +4721,351 @@ def findPathSumRecursive(currentNode, pathSum):
 </details>
 
 ---
+## [🟨 Path With Given Sequence ](https://www.educative.io/courses/grokking-the-coding-interview/m280XNlPOkn)
+Given a binary tree and a number sequence, find if the sequence is present as a root-to-leaf path in the given tree.
+
+<img src="resources/path-with-given-sequence-1.png" width="500px"/>
+<img src="resources/path-with-given-sequence-2.png" width="500px"/>
+
+<details><summary><b>Solution</b></summary>
+<p>
+
+### [**Depth First Search - Recursive**](./trees/path-with-given-sequence.py)
+```python
+class TreeNode: 
+  def __init__(self, value): 
+    self.value = value 
+    self.left = None
+    self.right = None 
+
+def findPath(root, sequence):
+  sequenceIdx = 0 
+  # EDGE: If treeNode is empty, return True if sequence is empty, else return False
+  if not root: 
+    return len(sequence) == 0
+  return findPathRecursive(root, sequence, sequenceIdx)
+
+# O(n) Time - where n is the total number of nodes in the tree
+# We traverse each node once. 
+# O(n) Space worst case - where n is the total number of nodes in the tree that will be stored in the recursion stack
+# Worst case is when the given tree is a linked list where every node has only one child
+def findPathRecursive(currentNode, sequence, sequenceIdx): 
+  # 1: Base case for when we reach the branch end with None child nodes
+  if currentNode is None: 
+    return False
+
+  # 2: If sequenceIdx has moved and exceeded past sequenceLength 
+  # or if there is a mismatch between currentNode.value and currentSequenceValue,
+  sequenceLength = len(sequence)
+  if sequenceIdx >= sequenceLength or currentNode.value != sequence[sequenceIdx]:
+    return False
+  
+  # 3: If currentNode is a leaf node and sequenceIdx == sequenceLength - 1, return True 
+  if currentNode.left is None and currentNode.right is None and sequenceIdx == sequenceLength - 1: 
+    return True
+
+  # 4: If currentNode is NOT a leaf node, perform DFS recursion on child nodes
+  # and increment sequenceIdx to iterate the sequence array
+  return findPathRecursive(currentNode.left, sequence, sequenceIdx + 1) or findPathRecursive(currentNode.right, sequence, sequenceIdx + 1)
+```
+</p>
+</details>
+
+---
+
+## 🟨 [Count Paths for a Sum](https://www.educative.io/courses/grokking-the-coding-interview/xV2J7jvN1or)
+Given a binary tree and a number ‘S’, find all paths in the tree such that the sum of all the node values of each path equals ‘S’. Please note that the paths can start or end at any node but all paths must follow direction from parent to child (top to bottom).
+
+<img src="resources/count-paths-for-a-sum-1.png" width="500px"/>
+<img src="resources/count-paths-for-a-sum-2.png" width="500px"/>
+
+<details><summary><b>Solution</b></summary>
+<p>
+
+### [**Depth First Search - Recursive**](./trees/count-paths-for-a-sum.py)
+```python
+class TreeNode:
+  def __init__(self, value, left=None, right=None): 
+    self.value = value
+    self.left = left
+    self.right = right
+
+def countPaths(root, targetSum): 
+  currentPath = []
+  return countPathsRecursive(root, targetSum, currentPath)
+
+# Time Complexity: O(n^2) worst or O(nlogn) best - where n is the total number of nodes in the tree
+# We traverse each node once, but for every node, we also iterate the currentPath.
+# For a skewed tree, currentPath iterates at worst case O(n)
+# For a balanced tree, currentPath iterates at best case O(log(n))
+
+# Space Complexity: O(n) worst - where n is the total number of nodes in the tree that will be stored in the recursion stack
+# Worst case is when the given tree is a linked list where every node has only one child
+def countPathsRecursive(currentNode, targetSum, currentPath): 
+  # 1: Base case for when we reach the branch end with None child nodes
+  if currentNode is None: 
+    return 0
+  
+  # 2: Append currentNode.value to currentPath[]
+  currentPath.append(currentNode.value)
+  pathCount, pathSum = 0, 0 # Initialise pathCount and pathSum
+
+  # 3: Find the sums of all subpaths in the currentPath[] so far
+  for idx in range(len(currentPath) - 1, -1, -1): # Iterate backwards!
+    pathSum += currentPath[idx]
+    # 4: If the sum of any subpath == targetSum, we found a path! so we increment pathCount
+    if pathSum == targetSum: 
+      pathCount += 1
+
+  # 5: Perform recursive DFS on child nodes while passing down all current information
+  # Aggregate pathCount from all recursive calls in both left and right subtrees
+  pathCount += countPathsRecursive(currentNode.left, targetSum, currentPath)
+  pathCount += countPathsRecursive(currentNode.right, targetSum, currentPath)
+
+  # 6: Remove currentNode from currentPath[] to backtrack
+  # We need to remove currentNode while we are going up the recursive call stack
+  del currentPath[-1]
+
+  return pathCount
+```
+</p>
+</details>
+
+---
+## 🟨 [Tree Diameter](https://www.educative.io/courses/grokking-the-coding-interview/xVV1jA29YK9)
+
+Given a binary tree, find the length of its diameter. The diameter of a tree is the number of nodes on the longest path between any two leaf nodes. The diameter of a tree may or may not pass through the root.
+
+Note: You can always assume that there are at least two leaf nodes in the given tree.
+
+<img src="resources/tree-diameter-1.png" width="500px"/>
+<img src="resources/tree-diameter-2.png" width="500px"/>
+
+<details><summary><b>Solution</b></summary>
+<p>
+
+### [**Depth First Search - Recursive**](./trees/tree-diameter.py)
+```python
+class TreeNode:
+  def __init__(self, val, left=None, right=None):
+    self.val = val
+    self.left = left
+    self.right = right
+
+class TreeDiameter:
+
+  def __init__(self):
+    self.treeDiameter = 0
+
+  def find_diameter(self, root):
+    self.calculate_height(root)
+    return self.treeDiameter
+
+   # O(n) Time - where n is the total number of nodes in the tree
+   # We traverse each node once. 
+   # O(n) Space worst case - where n is the total number of nodes in the tree that will be stored in the recursion stack
+   # Worst case is when the given tree is a linked list where every node has only one child
+  def calculate_height(self, currentNode):
+    if currentNode is None:
+      return 0
+
+    leftTreeHeight = self.calculate_height(currentNode.left)
+    rightTreeHeight = self.calculate_height(currentNode.right)
+
+    # if the current node doesn't have a left or right subtree, we can't have
+    # a path passing through it, since we need a leaf node on each side
+    if leftTreeHeight is not None and rightTreeHeight is not None:
+
+      # diameter at the current node will be equal to the height of left subtree +
+      # the height of right sub-trees + '1' for the current node
+      diameter = leftTreeHeight + rightTreeHeight + 1
+
+      # update the global tree diameter
+      self.treeDiameter = max(self.treeDiameter, diameter)
+
+    # height of the current node will be equal to the maximum of the heights of
+    # left or right subtrees plus '1' for the current node
+    return max(leftTreeHeight, rightTreeHeight) + 1
+```
+</p>
+</details>
+
+---
+## 🟥 [Path with Maximum Sum](https://www.educative.io/courses/grokking-the-coding-interview/B89q6NpX0Vx)
+
+Find the path with the maximum sum in a given binary tree. Write a function that returns the maximum sum.
+
+A path can be defined as a sequence of nodes between any two nodes and doesn’t necessarily pass through the root. The path must contain at least one node.
+
+<img src="resources/path-with-maximum-sum-1.png" width="500px"/>
+<img src="resources/path-with-maximum-sum-2.png" width="500px"/>
+
+<details><summary><b>Solution</b></summary>
+<p>
+
+### [**Depth First Search - Recursive**](./trees/path-with-maximum-sum.py)
+```python
+import math
+
+
+class TreeNode:
+  def __init__(self, val, left=None, right=None):
+    self.val = val
+    self.left = left
+    self.right = right
+
+
+class MaximumPathSum:
+
+   # O(n) Time - where n is the total number of nodes in the tree
+   # We traverse each node once. 
+   # O(n) Space worst case - where n is the total number of nodes in the tree that will be stored in the recursion stack
+   # Worst case is when the given tree is a linked list where every node has only one child
+  def find_maximum_path_sum(self, root):
+    self.globalMaximumSum = -math.inf
+    self.find_maximum_path_sum_recursive(root)
+    return self.globalMaximumSum
+
+  def find_maximum_path_sum_recursive(self, currentNode):
+    if currentNode is None:
+      return 0
+
+    maxPathSumFromLeft = self.find_maximum_path_sum_recursive(
+      currentNode.left)
+    maxPathSumFromRight = self.find_maximum_path_sum_recursive(
+      currentNode.right)
+
+    # ignore paths with negative sums, since we need to find the maximum sum we should
+    # ignore any path which has an overall negative sum.
+    maxPathSumFromLeft = max(maxPathSumFromLeft, 0)
+    maxPathSumFromRight = max(maxPathSumFromRight, 0)
+
+    # maximum path sum at the current node will be equal to the sum from the left subtree +
+    # the sum from right subtree + val of current node
+    localMaximumSum = maxPathSumFromLeft + maxPathSumFromRight + currentNode.val
+
+    # update the global maximum sum
+    self.globalMaximumSum = max(self.globalMaximumSum, localMaximumSum)
+
+    # maximum sum of any path from the current node will be equal to the maximum of
+    # the sums from left or right subtrees plus the value of the current node
+    return max(maxPathSumFromLeft, maxPathSumFromRight) + currentNode.val
+
+# Alternative Solution
+def maxPathSum(root): 
+  result = [root.value]
+
+  # Return max path sum without split
+  def maxPathSumRecursive(root): 
+    if root is None:
+      return 0
+    
+    leftMax = maxPathSumRecursive(root.left)
+    rightMax = maxPathSumRecursive(root.right)
+    leftMax = max(leftMax, 0)
+    rightMax = max(rightMax, 0)
+
+    # Compute max path sum with split
+    result[0] = max(result[0], root.value + leftMax + rightMax)
+    return root.value + max(leftMax, rightMax)
+
+  maxPathSumRecursive(root)
+  return result[0]
+```
+</p>
+</details>
+
+---
 # <div id='bfs'/> 🌳 **Breadth First Search Pattern**
+#### To perform root to leaf computations
+```python
+from collections import deque
+# 1: Base edge case to break the depth first search when we have arrived None child nodes of the leaf node
+if node is None:
+    return
+
+# 2: Initialise a queue with root node
+queue = deque()
+queue.append(root)
+
+# 3: Iterate all elements of the queue in FIFO order
+while len(queue) > 0: 
+   levelSize = len(queue)
+   for _ in range(levelSize): 
+      currentNode = queue.popleft() # Pop the bottom-most element
+      currentLevel.append(currentNode.value)  
+
+      # 4: Perform forwardtracking computations
+      doSomething()
+
+      # 5: Push child nodes to queue to traverse down the tree
+      if currentNode.left is not None: # if currentNode.left
+        queue.append(currentNode.left)
+      if currentNode.right is not None: # if currentNode.right
+        queue.append(currentNode.right)
+
+   result.append(computedResult)
+```
 #### [📋 **Back to Table of Contents**](#toc)
+
+---
+## [🟩 Binary Tree Level Order Traversal](https://www.educative.io/courses/grokking-the-coding-interview/xV7E64m4lnz)
+
+Given a binary tree, populate an array to represent its level-by-level traversal. You should populate the values of all nodes of each level from left to right in separate sub-arrays.
+
+
+<img src="resources/binary-tree-level-order-traversal-1.png" width="500px"/>
+<img src="resources/binary-tree-level-order-traversal-2.png" width="500px"/>
+
+<details><summary><b>Solution</b></summary>
+<p>
+
+### [**Depth First Search - Recursive**](./trees/binary-tree-level-order-traversal.py)
+```python
+from collections import deque
+class TreeNode: 
+  def __init__(self, value, left=None, right=None): 
+    self.value = value
+    self.left = left
+    self.right = right
+
+# O(n) Time - where n is the total number of nodes in the tree
+# We traverse each node once. 
+# O(n) Space worst case - where n is the total number of nodes in the tree
+# We need to return a list containing the level order traversal
+# We also need O(n) for the queue. We can have a max of n/2 nodes at any level (at the lowest level of BT)
+def traverse(root): 
+  result = [] 
+  # 1: Base case for when we reach the branch end with None child nodes
+  if root is None: 
+    return result 
+  
+  # 2: Instantiate the deque() for O(1) insertion on both sides of array
+  queue = deque()
+  # 3: Start by pushing the root node to the queu
+  queue.append(root) 
+  
+  # 4: Keep iterating until the queue is empty
+  while len(queue) > 0: # while queue
+    levelSize = len(queue)
+    currentLevel = []
+    # 5: For each iteration, firstly, count the elements in the queue (levelSize)
+    # We will have these many nodes in the current level
+    for _ in range(levelSize): 
+      # 6: Remove levelSize nodes from the queue and push their node.value into an array to represent current level
+      currentNode = queue.popleft()
+      currentLevel.append(currentNode.value)
+
+      # 7: After popping node from the queue, insert both of its children into the queue
+      if currentNode.left is not None: # if currentNode.left
+        queue.append(currentNode.left)
+      if currentNode.right is not None: # if currentNode.right
+        queue.append(currentNode.right)
+
+    # 8: After fully traversing the current level, store currentLevel results
+    result.append(currentLevel)
+    # 9: # If the queue is not empty, repeat from Step 5 to traverse the next level
+  return result
+```
+</p>
+</details>
