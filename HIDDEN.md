@@ -4256,6 +4256,166 @@ def lengthOfLongestSubstring(array, k):
 ✅ **Sliding Window:** Use windowStart and windowEnd pointers to move the sliding window and compute sliding window in every iteration. Increment maxOneCount counter for every 1s going in. Start shrinking if windowLength - maxOneCount > k. Use max function to keep track of longest substring so far.
 
 ---
+## [🟥 Permutation in a String](https://www.educative.io/courses/grokking-the-coding-interview/N0o9QnPLKNv)
+>Given a string and a pattern, find out if the `string contains any permutation of the pattern`.
+Permutation is defined as the re-arranging of the characters of the string. For example, “abc” has the following six permutations:
+* abc
+* acb
+* bac
+* bca
+* cab
+* cba
+
+If a string has ‘n’ distinct characters, it will have n!
+n!
+ permutations.
+##### Example 1: 
+- [x] Input: String=`"oidbcaf"`, Pattern=`"abc"`
+- [x] Output: `true`
+- [x] Explanation: The string contains `"bca"` which is a permutation of the given pattern.
+
+##### Example 2: 
+- [x] Input: String=`"odicf"`, Pattern=`"dc"`
+- [x] Output: `false`
+- [x] Explanation: No permutation of the pattern is present in the given string as a substring.
+
+##### Example 3:
+- [x] Input: String=`"bcdxabcdy"`, Pattern=`"bcdyabcdx"`
+- [x] Output: `true`
+- [x] Explanation: Both the string and the pattern are a permutation of each other.
+##### Example 4:
+- [x] Input: String=`"aaacb"`, Pattern=`"abc"`
+- [x] Output: `true`
+- [x] Explanation: The string contains `"acb"` which is a permutation of the given pattern.
+
+<details><summary><b>Solution</b></summary>
+<p>
+
+### [**Sliding Window**](./arrays/sliding-window/permutation-in-a-string.py)
+```python
+# O(N + M) Time - where ‘N’ and ‘M’ are the number of characters in the input string and the pattern, respectively.
+# O(M) Space - since, in the worst case, the whole pattern can have distinct characters that will go into the HashMap.
+def findPermutation(string, pattern): 
+    windowStart, matched = 0, 0
+    charFrequency = {}
+    
+    # 1: Create a HashMap to calculate the frequencies of all characters in the pattern.
+    for char in pattern:
+        if char not in charFrequency: 
+            charFrequency[char] = 0 
+        charFrequency[char] += 1
+        
+    # 2: Iterate through the string, adding one character at a time in the sliding window.
+    for windowEnd in range(len(string)): 
+        rightChar = string[windowEnd]
+        
+        # 3: If the character being added matches a character in the HashMap, decrement its frequency in the map. 
+        # If the character frequency becomes zero, we got a complete match.
+        if rightChar in charFrequency: 
+            charFrequency[rightChar] -= 1
+            if charFrequency[rightChar] == 0:
+                matched += 1
+        
+        # 4: If at any time, the number of characters matched is equal to the number of distinct characters in the pattern
+        # (i.e., total characters in the HashMap), we have gotten our required permutation.
+        if matched == len(charFrequency): 
+            return True
+        
+        # 5: If the window size is greater than the length of the pattern, shrink the window to make it equal to the pattern’s size. 
+        if windowEnd >= len(pattern) - 1: 
+            leftChar = string[windowStart]
+            windowStart += 1
+            # 6: At the same time, if the character going out was part of the pattern, put it back in the frequency HashMap.
+            if leftChar in charFrequency: 
+                if charFrequency[leftChar] == 0:
+                    matched -= 1
+                charFrequency[leftChar] += 1
+    return False
+```
+</p>
+</details>
+
+---
+## [🟥 Smallest Window containing Substring](https://www.educative.io/courses/grokking-the-coding-interview/xoyL4q6ApNE)
+
+> Given a string and a pattern, find the smallest substring in the given string which has all the character occurrences of the given pattern.
+
+##### Example 1:
+- [x] Input: String="aabdec", Pattern="abc"
+- [x] Output: "abdec"
+- [x] Explanation: The smallest substring having all characters of the pattern is "abdec"
+##### Example 2:
+- [x] Input: String="aabdec", Pattern="abac"
+- [x] Output: "aabdec"
+- [x] Explanation: The smallest substring having all character occurrences of the pattern is "aabdec"
+##### Example 3:
+- [x] Input: String="abdbca", Pattern="abc"
+- [x] Output: "bca"
+- [x] Explanation: The smallest substring having all characters of the pattern is "bca".
+##### Example 4:
+- [x] Input: String="adcad", Pattern="abc"
+- [x] Output: ""
+- [x] Explanation: No substring in the given string has all characters of the pattern.
+
+<details><summary><b>Solution</b></summary>
+<p>
+
+### [**Sliding Window**](./arrays/sliding-window/smallest-window-containing-substring.py)
+```python
+# O(N + M) Time - where ‘N’ and ‘M’ are the number of characters in the input string and the pattern, respectively.
+# O(M) Space - since, in the worst case, the whole pattern can have distinct characters that will go into the HashMap.
+def smallestWindowSubstring(string, pattern): 
+    windowStart, substringStart, matched = 0, 0, 0
+    minLength = len(string) + 1
+    charFrequency = {} 
+    
+    # 1: Create a HashMap to calculate the frequencies of all characters in the pattern.
+    for char in pattern: 
+        if char not in charFrequency: 
+            charFrequency[char] = 0
+        charFrequency[char] += 1
+        
+    # 2: Iterate through the string, adding one character at a time in the sliding window.
+    for windowEnd in range(len(string)): 
+        rightChar = string[windowEnd]
+        
+        # 3: If the character being added matches a character in the HashMap, decrement its frequency in the map. 
+        if rightChar in charFrequency: 
+            charFrequency[rightChar] -= 1
+            
+            # 4: We will keep a running count of every matching instance of a character.
+            if charFrequency[rightChar] >= 0:
+                matched += 1
+
+    # 5: Whenever we have matched all the characters, we will try to shrink the window from the beginning, 
+    # keeping track of the smallest substring that has all the matching characters.
+    # We will stop the shrinking process as soon as we remove a matched character from the sliding window. 
+    while matched == len(pattern): 
+        if minLength > windowEnd - windowStart + 1: 
+            minLength = windowEnd - windowStart + 1
+            substringStart = windowStart
+        
+        leftChar = string[windowStart]
+        windowStart += 1
+        if leftChar in charFrequency: 
+            # 6: Note that we could have redundant matching characters, therefore we'll decrement the
+            # matched count only when a useful occurrence of a matched character is going out of the window
+            # One thing to note here is that we could have redundant matching characters, 
+            # e.g., we might have two ‘a’ in the sliding window when we only need one ‘a’. 
+            # In that case, when we encounter the first ‘a’, we will simply shrink the window without decrementing the matched count. 
+            # We will decrement the matched count when the second ‘a’ goes out of the window.
+            if charFrequency[leftChar] == 0: 
+                matched -= 1
+            charFrequency[leftChar] += 1
+            
+    if minLength > len(string): 
+        return "" 
+    return string[substringStart : substringStart + minLength]
+```
+</p>
+</details>
+
+---
 # <div id='twopointers'/> ✌️ **Two Pointers Pattern**
 #### To traverse and compute all elements of an array
 ```python
@@ -4621,8 +4781,8 @@ def hasPath(currentNode, requiredSum):
 ## 🟨 [All Paths for a Sum](https://www.educative.io/courses/grokking-the-coding-interview/B815A0y2Ajn)
 
 Given a binary tree and a number ‘S’, find all paths from root-to-leaf such that the sum of all the node values of each path equals ‘S’.
-<img src="resources/all-paths-for-a-sum-1.png" width="500px"/>
-<img src="resources/all-paths-for-a-sum-2.png" width="500px"/>
+<img src="resources/all-paths-for-a-sum-1.png" align="left" width="500px"/>
+<img src="resources/all-paths-for-a-sum-2.png" align="middle" width="500px"/>
 
 <details><summary><b>Solution</b></summary>
 <p>
@@ -4678,8 +4838,8 @@ def findPathsRecursive(currentNode, requiredSum, currentPath, allPaths):
 ## 🟨 [Sum of Path Numbers](https://www.educative.io/courses/grokking-the-coding-interview/YQ5o5vEXP69)
 Given a binary tree where each node can only have a digit (0-9) value, each root-to-leaf path will represent a number. Find the total sum of all the numbers represented by all paths.
 
-<img src="resources/sum-of-path-numbers-1.png" width="500px"/>
-<img src="resources/sum-of-path-numbers-2.png" width="500px"/>
+<img src="resources/sum-of-path-numbers-1.png" align="left" width="500px"/>
+<img src="resources/sum-of-path-numbers-2.png" align="middle" width="500px"/>
 
 <details><summary><b>Solution</b></summary>
 <p>
@@ -4724,8 +4884,8 @@ def findPathSumRecursive(currentNode, pathSum):
 ## [🟨 Path With Given Sequence ](https://www.educative.io/courses/grokking-the-coding-interview/m280XNlPOkn)
 Given a binary tree and a number sequence, find if the sequence is present as a root-to-leaf path in the given tree.
 
-<img src="resources/path-with-given-sequence-1.png" width="500px"/>
-<img src="resources/path-with-given-sequence-2.png" width="500px"/>
+<img src="resources/path-with-given-sequence-1.png" align="left" width="500px"/>
+<img src="resources/path-with-given-sequence-2.png" align="middle" width="500px"/>
 
 <details><summary><b>Solution</b></summary>
 <p>
@@ -4776,8 +4936,8 @@ def findPathRecursive(currentNode, sequence, sequenceIdx):
 ## 🟨 [Count Paths for a Sum](https://www.educative.io/courses/grokking-the-coding-interview/xV2J7jvN1or)
 Given a binary tree and a number ‘S’, find all paths in the tree such that the sum of all the node values of each path equals ‘S’. Please note that the paths can start or end at any node but all paths must follow direction from parent to child (top to bottom).
 
-<img src="resources/count-paths-for-a-sum-1.png" width="500px"/>
-<img src="resources/count-paths-for-a-sum-2.png" width="500px"/>
+<img src="resources/count-paths-for-a-sum-1.png" align="left" width="500px"/>
+<img src="resources/count-paths-for-a-sum-2.png" align="middle" width="500px"/>
 
 <details><summary><b>Solution</b></summary>
 <p>
@@ -4838,8 +4998,8 @@ Given a binary tree, find the length of its diameter. The diameter of a tree is 
 
 Note: You can always assume that there are at least two leaf nodes in the given tree.
 
-<img src="resources/tree-diameter-1.png" width="500px"/>
-<img src="resources/tree-diameter-2.png" width="500px"/>
+<img src="resources/tree-diameter-1.png" align="left" width="500px"/>
+<img src="resources/tree-diameter-2.png" align="middle" width="500px"/>
 
 <details><summary><b>Solution</b></summary>
 <p>
@@ -4897,8 +5057,8 @@ Find the path with the maximum sum in a given binary tree. Write a function that
 
 A path can be defined as a sequence of nodes between any two nodes and doesn’t necessarily pass through the root. The path must contain at least one node.
 
-<img src="resources/path-with-maximum-sum-1.png" width="500px"/>
-<img src="resources/path-with-maximum-sum-2.png" width="500px"/>
+<img src="resources/path-with-maximum-sum-1.png" align="left" width="500px"/>
+<img src="resources/path-with-maximum-sum-2.png" align="middle" width="500px"/>
 
 <details><summary><b>Solution</b></summary>
 <p>
@@ -5014,13 +5174,13 @@ while len(queue) > 0:
 Given a binary tree, populate an array to represent its level-by-level traversal. You should populate the values of all nodes of each level from left to right in separate sub-arrays.
 
 
-<img src="resources/binary-tree-level-order-traversal-1.png" width="500px"/>
-<img src="resources/binary-tree-level-order-traversal-2.png" width="500px"/>
+<img src="resources/binary-tree-level-order-traversal-1.png" align="left" width="500px"/>
+<img src="resources/binary-tree-level-order-traversal-2.png" align="middle" width="500px"/>
 
 <details><summary><b>Solution</b></summary>
 <p>
 
-### [**Depth First Search - Recursive**](./trees/binary-tree-level-order-traversal.py)
+### [**Breadth First Search - Iterative**](./trees/binary-tree-level-order-traversal.py)
 ```python
 from collections import deque
 class TreeNode: 
@@ -5066,6 +5226,427 @@ def traverse(root):
     result.append(currentLevel)
     # 9: # If the queue is not empty, repeat from Step 5 to traverse the next level
   return result
+```
+</p>
+</details>
+
+---
+## [🟩 Reverse Level Order Traversal ](https://www.educative.io/courses/grokking-the-coding-interview/m2N6GwARL8r)
+
+Given a binary tree, populate an array to represent its level-by-level traversal in reverse order, i.e., the lowest level comes first. You should populate the values of all nodes in each level from left to right in separate sub-arrays.
+
+<img src="resources/reverse-level-order-traversal-1.png" align="left" width="500px"/>
+<img src="resources/reverse-level-order-traversal-2.png" align="middle" width="500px"/>
+
+<details><summary><b>Solution</b></summary>
+<p>
+
+### [**Breadth First Search - Iterative**](./trees/reverse-level-order-traversal.py)
+```python
+from collections import deque
+class TreeNode: 
+  def __init__(self, value, left=None, right=None): 
+    self.value = value
+    self.left = left
+    self.right = right
+
+# O(n) Time - where n is the total number of nodes in the tree
+# We traverse each node once. 
+# O(n) Space worst case - where n is the total number of nodes in the tree
+# We need to return a list containing the level order traversal
+# We also need O(n) for the queue. We can have a max of n/2 nodes at any level (at the lowest level of BT)
+def traverse(root): 
+  result = deque() # To enable .appendleft method
+  # 1: Base case for when we reach the branch end with None child nodes
+  if root is None: 
+    return result 
+  
+  # 2: Instantiate the deque() for O(1) insertion on both sides of array
+  queue = deque()
+  # 3: Start by pushing the root node to the queu
+  queue.append(root) 
+  
+  # 4: Keep iterating until the queue is empty
+  while len(queue) > 0: # while queue
+    levelSize = len(queue)
+    currentLevel = []
+    # 5: Traverse every node in the current level
+    for _ in range(levelSize): 
+      # 6: Remove levelSize nodes from the queue and push their node.value into an array to represent current level
+      currentNode = queue.popleft()
+      currentLevel.append(currentNode.value)
+
+      # 7: After popping node from the queue, insert both of its children into the queue
+      if currentNode.left is not None: # if currentNode.left
+        queue.append(currentNode.left)
+      if currentNode.right is not None: # if currentNode.right
+        queue.append(currentNode.right)
+
+    # 8: After fully traversing the current level, store currentLevel results
+    # # Appending each level from the left will store levels from the lowest to highest of BT
+    result.appendleft(currentLevel) 
+    # 9: If the queue is not empty, repeat from Step 5 to traverse the next level
+  return list(result)
+```
+</p>
+</details>
+
+---
+## [🟨 Zigzag Traversal](https://www.educative.io/courses/grokking-the-coding-interview/qVA27MMYYn0)
+
+Given a binary tree, populate an array to represent its zigzag level order traversal. You should populate the values of all nodes of the first level from left to right, then right to left for the next level and keep alternating in the same manner for the following levels.
+
+<img src="resources/zigzag-traversal-1.png" align="left" width="500px"/>
+<img src="resources/zigzag-traversal-2.png" align="middle" width="500px"/>
+
+<details><summary><b>Solution</b></summary>
+<p>
+
+### [**Breadth First Search - Iterative**](./trees/zigzag-traversal.py)
+```python
+from collections import deque
+class TreeNode: 
+  def __init__(self, value, left=None, right=None): 
+    self.value = value
+    self.left = left
+    self.right = right
+
+# O(n) Time - where n is the total number of nodes in the tree
+# We traverse each node once. 
+# O(n) Space worst case - where n is the total number of nodes in the tree
+# We need to return a list containing the level order traversal
+# We also need O(n) for the queue. We can have a max of n/2 nodes at any level (at the lowest level of BT)
+def traverse(root): 
+  result = []
+  # 1: Base case for when we reach the branch end with None child nodes
+  if root is None: 
+    return result 
+  
+  # 2: Instantiate the deque() for O(1) insertion on both sides of array
+  queue = deque()
+  # 3: Start by pushing the root node to the queu
+  queue.append(root) 
+
+  leftToRight = True
+  
+  # 4: Keep iterating until the queue is empty
+  while len(queue) > 0: # while queue
+    levelSize = len(queue)
+    currentLevel = deque() # To enable .appendleft method
+    # 5: Traverse every node in the current level
+    for _ in range(levelSize): 
+      # 6: Remove levelSize nodes from the queue and push their node.value into an array to represent current level
+      currentNode = queue.popleft()
+      
+      if leftToRight: 
+        currentLevel.append(currentNode.value)
+      else:
+        currentLevel.appendleft(currentNode.value)
+
+      # 7: After popping node from the queue, insert both of its children into the queue
+      if currentNode.left is not None: # if currentNode.left
+        queue.append(currentNode.left)
+      if currentNode.right is not None: # if currentNode.right
+        queue.append(currentNode.right)
+
+    # 8: After fully traversing the current level, store currentLevel results
+    result.append(list(currentLevel)) # Convert .deque() object to list
+    leftToRight = not leftToRight
+    # 9: # If the queue is not empty, repeat from Step 5 to traverse the next level
+  return result
+```
+</p>
+</details>
+
+---
+## [🟩Level Averages in a Binary Tree ](https://www.educative.io/courses/grokking-the-coding-interview/YQWkA2l67GW)
+
+Given a binary tree, populate an array to represent the averages of all of its levels.
+
+<img src="resources/level-averages-in-a-binary-tree-1.png" align="left" width="500px"/>
+<img src="resources/level-averages-in-a-binary-tree-2.png" align="middle" width="500px"/>
+
+<details><summary><b>Solution</b></summary>
+<p>
+
+### [**Breadth First Search - Iterative**](./trees/level-averages-in-a-binary-tree.py)
+```python
+from collections import deque
+class TreeNode: 
+  def __init__(self, value, left=None, right=None): 
+    self.value = value
+    self.left = left
+    self.right = right
+
+# O(n) Time - where n is the total number of nodes in the tree
+# We traverse each node once. 
+# O(n) Space worst case - where n is the total number of nodes in the tree
+# We need to return a list containing the level order traversal
+# We also need O(n) for the queue. We can have a max of n/2 nodes at any level (at the lowest level of BT)
+def findLevelAverages(root): 
+  result = []
+  # 1: Base case for when we reach the branch end with None child nodes
+  if root is None: 
+    return result 
+  
+  # 2: Instantiate the deque() for O(1) insertion on both sides of array
+  queue = deque()
+  # 3: Start by pushing the root node to the queu
+  queue.append(root) 
+  
+  # 4: Keep iterating until the queue is empty
+  while len(queue) > 0: # while queue
+    levelSize = len(queue)
+    levelSum = 0.0 # Initalise float type for level averages
+    # 5: Traverse every node in the current level
+    for _ in range(levelSize): 
+      # 6: Remove levelSize nodes from the queue and push their node.value into an array to represent current level
+      currentNode = queue.popleft()
+      # 7: Add the currentNode.value to the running sum for each level
+      levelSum += currentNode.value
+
+      # 8: After popping node from the queue, insert both of its children into the queue
+      if currentNode.left is not None: # if currentNode.left
+        queue.append(currentNode.left)
+      if currentNode.right is not None: # if currentNode.right
+        queue.append(currentNode.right)
+
+    # 9: After fully traversing the current level, append the current level's average to result
+    result.append(levelSum / levelSize) 
+    # 10: # If the queue is not empty, repeat from Step 5 to traverse the next level
+  return result
+```
+</p>
+</details>
+
+---
+## [🟩Level Maxes in a Binary Tree ](https://www.educative.io/courses/grokking-the-coding-interview/YQWkA2l67GW)
+
+Given a binary tree, populate an array to represent the max values of all of its levels.
+
+<details><summary><b>Solution</b></summary>
+<p>
+
+### [**Breadth First Search - Iterative**](./trees/maxes-in-a-binary-tree.py)
+```python
+from collections import deque
+class TreeNode: 
+  def __init__(self, value, left=None, right=None): 
+    self.value = value
+    self.left = left
+    self.right = right
+
+# O(n) Time - where n is the total number of nodes in the tree
+# We traverse each node once. 
+# O(n) Space worst case - where n is the total number of nodes in the tree
+# We need to return a list containing the level order traversal
+# We also need O(n) for the queue. We can have a max of n/2 nodes at any level (at the lowest level of BT)
+def findMaxValues(root): 
+  result = []
+  # 1: Base case for when we reach the branch end with None child nodes
+  if root is None: 
+    return result 
+  
+  # 2: Instantiate the deque() for O(1) insertion on both sides of array
+  queue = deque()
+  # 3: Start by pushing the root node to the queu
+  queue.append(root) 
+  
+  # 4: Keep iterating until the queue is empty
+  while len(queue) > 0: # while queue
+    levelSize = len(queue)
+    maxValue = 0
+    # 5: Traverse every node in the current level
+    for _ in range(levelSize): 
+      # 6: Remove levelSize nodes from the queue and push their node.value into an array to represent current level
+      currentNode = queue.popleft()
+      # 7: Add the max value so far
+      maxValue = max(maxValue, currentNode.value)
+
+      # 8: After popping node from the queue, insert both of its children into the queue
+      if currentNode.left is not None: # if currentNode.left
+        queue.append(currentNode.left)
+      if currentNode.right is not None: # if currentNode.right
+        queue.append(currentNode.right)
+
+    # 9: After fully traversing the current level, append the current level's max to result
+    result.append(maxValue) 
+    # 10: # If the queue is not empty, repeat from Step 5 to traverse the next level
+  return result
+
+def main():
+  root = TreeNode(12)
+  root.left = TreeNode(7)
+  root.right = TreeNode(1)
+  root.left.left = TreeNode(9)
+  root.left.right = TreeNode(2)
+  root.right.left = TreeNode(10)
+  root.right.right = TreeNode(5)
+  print("Level maxes are: " + str(findMaxValues(root)))
+
+if __name__ == "__main__":
+  main()
+```
+</p>
+</details>
+
+---
+## [🟩 Minimum Depth of a Binary Tree](https://www.educative.io/courses/grokking-the-coding-interview/3jwVx84OMkO)
+Find the minimum depth of a binary tree. The minimum depth is the number of nodes along the shortest path from the root node to the nearest leaf node.
+
+<img src="resources/minimum-depth-of-a-binary-tree-1.png" align="left" width="500px"/>
+<img src="resources/minimum-depth-of-a-binary-tree-2.png" align="middle" width="500px"/>
+
+<details><summary><b>Solution</b></summary>
+<p>
+
+### [**Breadth First Search - Iterative**](./trees/minimum-depth-of-a-binary-tree.py)
+```python
+from collections import deque
+class TreeNode: 
+  def __init__(self, value, left=None, right=None): 
+    self.value = value
+    self.left = left
+    self.right = right
+
+# O(n) Time - where n is the total number of nodes in the tree
+# We traverse each node once. 
+# O(n) Space worst case - where n is the total number of nodes in the tree
+# We need to return a list containing the level order traversal
+# We also need O(n) for the queue. We can have a max of n/2 nodes at any level (at the lowest level of BT)
+def findMinimumDepth(root): 
+  # 1: Base case for when we reach the branch end with None child nodes
+  if root is None: 
+    return 0 
+  
+  # 2: Instantiate the deque() for O(1) insertion on both sides of array
+  queue = deque()
+  # 3: Start by pushing the root node to the queu
+  queue.append(root) 
+  minimumDepth = 0
+  # 4: Keep iterating until the queue is empty
+  while len(queue) > 0: # while queue
+    levelSize = len(queue)
+    # 5: Increment minimumDepth for every level traversal
+    minimumDepth += 1 
+    # 6: Traverse every node in the current level
+    for _ in range(levelSize): 
+      # 7: Remove levelSize nodes from the queue and push their node.value into an array to represent current level
+      currentNode = queue.popleft()
+      # 8: If currentNode is a leaf, return the result immediately for shortest depth
+      if not currentNode.left and not currentNode.right:
+        return minimumDepth
+
+      # 9: After popping node from the queue, insert both of its children into the queue
+      if currentNode.left is not None: # if currentNode.left
+        queue.append(currentNode.left)
+      if currentNode.right is not None: # if currentNode.right
+        queue.append(currentNode.right)
+    # 10: # If the queue is not empty, repeat from Step 5 to traverse the next level
+```
+</p>
+</details>
+
+
+---
+## [🟩 Maximum Depth of a Binary Tree](https://www.educative.io/courses/grokking-the-coding-interview/3jwVx84OMkO)
+Find the minimum depth of a binary tree. The minimum depth is the number of nodes along the shortest path from the root node to the nearest leaf node.
+
+<details><summary><b>Solution</b></summary>
+<p>
+
+### [**Breadth First Search - Iterative**](./trees/maximum-depth-of-a-binary-tree.py)
+```python
+from collections import deque
+class TreeNode: 
+  def __init__(self, value, left=None, right=None): 
+    self.value = value
+    self.left = left
+    self.right = right
+
+# O(n) Time - where n is the total number of nodes in the tree
+# We traverse each node once. 
+# O(n) Space worst case - where n is the total number of nodes in the tree
+# We need to return a list containing the level order traversal
+# We also need O(n) for the queue. We can have a max of n/2 nodes at any level (at the lowest level of BT)
+def findMaximumDepth(root): 
+  # 1: Base case for when we reach the branch end with None child nodes
+  if root is None: 
+    return 0 
+  
+  # 2: Instantiate the deque() for O(1) insertion on both sides of array
+  queue = deque()
+  # 3: Start by pushing the root node to the queu
+  queue.append(root) 
+  maximumDepth = 0
+  # 4: Keep iterating until the queue is empty
+  while len(queue) > 0: # while queue
+    levelSize = len(queue)
+    # 5: Increment maximumDepth for every level traversal
+    maximumDepth += 1 
+    # 6: Traverse every node in the current level
+    for _ in range(levelSize): 
+      # 7: Remove levelSize nodes from the queue and push their node.value into an array to represent current level
+      currentNode = queue.popleft()
+
+      # 9: After popping node from the queue, insert both of its children into the queue
+      if currentNode.left is not None: # if currentNode.left
+        queue.append(currentNode.left)
+      if currentNode.right is not None: # if currentNode.right
+        queue.append(currentNode.right)
+
+  # 10: # If the queue is not empty, repeat from Step 5 to traverse the next level
+  return maximumDepth
+```
+</p>
+</details>
+
+---
+## [🟩 Level Order Successor](https://www.educative.io/courses/grokking-the-coding-interview/7nO4VmA74Lr)
+
+Given a binary tree and a node, find the level order successor of the given node in the tree. The level order successor is the node that appears right after the given node in the level order traversal.
+
+<img src="resources/level-order-successor-1.png" align="left" width="500px"/>
+<img src="resources/level-order-successor-2.png" align="middle" width="500px"/>
+<img src="resources/level-order-successor-3.png" align="middle" width="500px"/>
+
+<details><summary><b>Solution</b></summary>
+<p>
+
+### [**Breadth First Search - Iterative**](./trees/level-order-successor.py)
+```python
+from collections import deque
+class TreeNode:
+  def __init__(self, value, left=None, right=None):
+    self.value = value
+    self.left = left
+    self.right = right
+    
+# O(n) Time - where n is the total number of nodes in the tree
+# We traverse each node once. 
+# O(n) Space worst case - where n is the total number of nodes in the tree
+# We need to return a list containing the level order traversal
+# We also need O(n) for the queue. We can have a max of n/2 nodes at any level (at the lowest level of BT)
+def findSuccessor(root, key):
+  if root is None:
+    return None 
+  
+  queue = deque()
+  queue.append(root) 
+  
+  while len(queue) > 0: 
+    currentNode = queue.popleft()
+    # We will not keep track of all the levels. 
+    # Instead we will keep inserting child nodes to the queue.
+    if currentNode.left is not None: 
+      queue.append(currentNode.left)
+    if currentNode.right is not None: 
+      queue.append(currentNode.right)
+
+    # As soon as we find the given node, we will return the next node from the queue as the level order successor.
+    if currentNode.value == key: 
+      break
+  return queue[0] if queue else None
 ```
 </p>
 </details>

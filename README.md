@@ -20,8 +20,8 @@ Blind 75 questions, coding patterns and in-depth solutions for FAANG coding inte
 1. ### [🔤 **Strings**](#strings)
 1. ### [📝 **Linked Lists**](#linkedlists)
 1. ### [📈 **Graphs**](#graphs) 
-1. ### [🎄 **Trees**](#trees)
-1. ### [🌲 **Binary Search Trees**](#bst)
+1. ### [🌲 **Trees**](#trees)
+1. ### [🎄 **Binary Search Trees**](#bst)
 1. ### [📚 **Sorting Algorithms**](#sort)
 1. ### [🔎 **Search Algorithms**](#search)
 1. ### [🧠 **Famous Algorithms**](#algorithms)
@@ -33,6 +33,12 @@ Blind 75 questions, coding patterns and in-depth solutions for FAANG coding inte
 
 ---
 ## 📱 [Coding Patterns](https://seanprashad.com/leetcode-patterns/)
+
+1. ### [🪟 **Sliding Window**](#window)
+1. ### [✌️ **Two Pointers**](#twopointers)
+1. ### [🌲 **Depth First Search**](#dfs)
+1. ### [🌳 **Breadth First Search**](#bfs)
+
 #### 🎹 **If input array is sorted:**
 - `Binary search`
 - `Two pointers`
@@ -970,611 +976,6 @@ def kadane(array):
 3. profit = currentPrice - minBuyPriceEndingHere
 4. maxProfitSoFar = max(maxProfitSoFar, profit)
 
----
-# 🪟 Sliding Window Pattern
-## [🟩 Average of Subarrays of Size k](https://www.educative.io/courses/grokking-the-coding-interview/7D5NNZWQ8Wr)
->* Given an `array`, find the average of all subarrays of `k` contiguous elements in it.
-- [x] Input: `array = [1, 3, 2, 6, -1, 4, 1, 8, 2], k = 5`
-- [x] Output: `[2.2, 2.8, 2.4, 3.6, 2.8]`
-
-### **Sliding Window**
-```python
-# Brute Force
-# Time O(n * k) | Space O(k) where n is the number of elements in the array and k is the size of subarray
-def findAverageOfSubarrays(k, array): 
-    result = []
-    # 1: Loop through each element of the array but keep track of completed elements with - k + 1
-    for idx in range(len(array) - k + 1):
-        # 2: Initialise _sum variable of float type
-        _sum = 0.0
-        # 3: Loop through each element of the array again from idx to idx + k
-        for jdx in range(idx, idx + k):
-            # 4: Sum all traversed elements of the array
-            _sum += array[jdx]
-        # 5: Append the mean of total sum as the answer 
-        result.append(_sum/k)
-    return result
-
-# Sliding Window
-# Time O(n) | Space O(k) where n is the number of elements in the array and k is the size of subarray
-def findAverageOfSubarrays(k, array): 
-    result = []
-    # 1: Initialise windowSum for the sum of k elements of subarray and windowStart pointer for the beginning of the sliding window
-    windowSum, windowStart = 0.0, 0
-    # 2: Increment the windowEnd pointer in a for loop
-    for windowEnd in range(len(array)): 
-        # 3: Sliding the window, we add the next element going in
-        windowSum += array[windowEnd]
-        # 4: Don't start the sliding window until we have incremented windowEnd to the required window size of k
-        if windowEnd >= k - 1:
-            # 5: Calculate the average of current windowSum and append the result
-            result.append(windowSum / k) 
-            # 6: Sliding the window, we subtract the element going out
-            windowSum -= array[windowStart]
-            # 7: Move the sliding window one element at a time
-            windowStart += 1
-    return result
-```
-
-✅ **Sliding Window:** Use windowStart and windowEnd pointers to move the sliding window and compute windowSum (and its average) in every iteration.
-
----
-## [🟩 Maximum Sum Subarrays of Size k](https://www.educative.io/courses/grokking-the-coding-interview/JPKr0kqLGNP)
-> Given an array of positive numbers and a positive number ‘k,’ find the `maximum sum of any contiguous subarray of size ‘k’.`
-##### Example 1:
-- [x] Input: `array = [2, 1, 5, 1, 3, 2], k = 3`
-- [x] Output: `9`
-- [x] Explanation: Subarray with maximum sum is `[5, 1, 3]`.
-
-##### Example 2:
-- [x] Input: `[2, 3, 4, 1, 5], k = 2`
-- [x] Output: `7`
-- [x] Explanation: Subarray with maximum sum is `[3, 4]`.
-
-<img src="resources/max-sum-of-subarrays.png" width="400px"/>
-
-### **Sliding Window**
-```python
-# Brute Force
-# Time O(n * k) | Space O(1) where n is the number of elements in the array
-def maxSumSubarraysOfSizeK(k, array): 
-  maxSum, windowSum = 0, 0 
-  for idx in range(len(array) - k + 1): 
-    windowSum = 0
-    for jdx in range(idx, idx + k): 
-      windowSum += array[jdx]
-    maxSum = max(maxSum, windowSum)
-  return maxSum
- 
-# Time O(n) | Space O(1) where n is the number of elements in the array
-def maxSumSubarraysOfSizeK(k, array):
-    windowSum, windowStart, maxSum = 0, 0, float("-inf")
-    for windowEnd in range(len(array)): 
-        windowSum += array[windowEnd]
-        if windowEnd >= k - 1:
-            maxSum = max(maxSum, windowSum)
-            windowSum -= array[windowStart]
-            windowStart += 1
-    return maxSum
-```
-
-✅ **Sliding Window:** Use windowStart and windowEnd pointers to move the sliding window and compute windowSum in every iteration.
-
----
-## [🟩 Smallest Subarray With a Greater Sum](https://www.educative.io/courses/grokking-the-coding-interview/7XMlMEQPnnQ)
-> Given an array of positive numbers and a positive number ‘S,’ find the length of the `smallest` contiguous subarray whose sum is `greater than or equal to ‘S’`. Return 0 if no such subarray exists.
-##### Example 1: 
-- [x] Input: `array = [2, 1, 5, 2, 3, 2], S = 7`
-- [x] Output: `2`
-- [x] Explanation: The smallest subarray with a sum greater than or equal to '7' is `[5, 2]`.
-
-##### Example 2: 
-- [x] Input: `array = [2, 1, 5, 2, 8], S = 7`
-- [x] Output: `1`
-- [x] Explanation: The smallest subarray with a sum greater than or equal to '7' is `[8]`.
-
-##### Example 3: 
-- [x] Input: `array = [3, 4, 1, 1, 6], S = 8`
-- [x] Output: `3`
-- [x] Explanation: The smallest subarray with a sum greater than or equal to '8' is `[3, 4, 1]`.
-
-<img src="resources/smallest-subarray-sum-1.png" align="left" width="400px"/>
-<img src="resources/smallest-subarray-sum-2.png" align="middle" width="400px"/>
-
-
-### **Sliding Window**
-```python
-# Sliding Window
-# Time O(n) | Space O(1) where n is the number of elements in the array
-def smallestSubarraySum(s, array):
-    windowStart, windowSum, minLength = 0, 0, float("inf")
-    # 1: Increment the windowEnd pointer in a for loop to create sliding window
-    for windowEnd in range(len(array)): 
-        # 2: Sliding the window, we keep adding elements from the beginning of the array
-        windowSum += array[windowEnd]
-        # 3: When the windowSum becomes >= s,
-        while windowSum >= s: 
-            # 4: Record the minimum length as the smallest window so far
-            minLength = min(minLength, windowEnd - windowStart + 1)
-            # 5: Sliding the window, we subtract the element going out
-            windowSum -= array[windowStart]
-            # 6: Move the sliding window one element at a time
-            windowStart += 1
-    # 7: If minLength is unchanged because no subarray exists, return 0
-    if minLength == float("inf"):
-        return 0
-    return minLength
-
-# Time O(n): The outer for loop runs for all elements, and the inner while loop processes each element only once; therefore, the time complexity of the algorithm will be O(N+N) which is asymptotically equivalent to O(N)
-# Space O(1): The algorithm runs in constant space O(1) because no additional memory is used and the input array is computed in place. 
-```
-
-✅ **Sliding Window:** Use windowStart and windowEnd pointers to move the sliding window and compute windowSum in every iteration. Use min function to keep track on smallest length of subarray so far.
-
----
-## [🟨 Longest Substring with Maximum K Distinct Characters](https://www.educative.io/courses/grokking-the-coding-interview/YQQwQMWLx80)
-> Given a string, find the length of the `longest substring` in it `with no more than K distinct characters.`
-##### Example 1: 
-- [x] Input: `String="araaci", K=2`
-- [x] Output: `4`
-- [x] Explanation: The longest substring with no more than '2' distinct characters is "araa".
-
-##### Example 2: 
-- [x] Input: `String="araaci", K=1`
-- [x] Output: `2`
-- [x] Explanation: The longest substring with no more than '1' distinct characters is "aa".
-
-##### Example 3: 
-- [x] Input: `String="cbbebi", K=3`
-- [x] Output: `5`
-- [x] Explanation: The longest substrings with no more than '3' distinct characters are "cbbeb" & "bbebi".
-
-<img src="resources/longest-substring-with-k-distinct-1.png" align="left" width="400px"/>
-<img src="resources/longest-substring-with-k-distinct-2.png" align="middle" width="430px"/>
-
-
-### **Sliding Window**
-```python
-# Sliding Window
-# Time O(N) | Space O(K) where N is the number of elements in the array and K is the number of distinct characters
-def longestSubstrinWithKDistinct(k, string):
-    windowStart, maxLength = 0, 0
-    charFrequency = {}
-
-    # 1: Increment the windowEnd pointer to create sliding window
-    for windowEnd in range(len(string)): 
-        # 2: Create the right-most character (using windowEnd pointer) going into the sliding window
-        rightChar = string[windowEnd]
-        # 3: If rightChar is not seen in the dictionary, initialise char:frequency key-value pair
-        if rightChar not in charFrequency: 
-            charFrequency[rightChar] = 0
-        # 4: Sliding the window, increment the frequency of any rightChars going into the window
-        charFrequency[rightChar] += 1
-        
-        # 5: If the number of distinct characters exceeds k (tracked by the number of key-value pairs in dict)
-        while len(charFrequency) > k: 
-            # 6: Shrink the sliding window from the beginning of string until we have no more than k distinct characters in the dictionary 
-            leftChar = string[windowStart]
-            # 7: Shrinking the sliding window, decrement the frequency of the left-most character going out of the window
-            charFrequency[leftChar] -= 1
-            # 8: At any point, if the frequency of any left-most character reduces to zero, we remove it from the dictionary
-            if charFrequency[leftChar] == 0:
-                del charFrequency[leftChar]
-            # 9: Increment the windowStart pointer to shrink the sliding window one element at a time
-            windowStart += 1
-            
-        # 10: Keep track of the maximum length so far
-        maxLength = max(maxLength, windowEnd - windowStart + 1)
-    return maxLength
-
-# Time O(N): The above algorithm’s time complexity will be O(N) where N is the number of characters in the input string. The outer for loop runs for all characters, and the inner while loop processes each character only once; therefore, the time complexity of the algorithm will be O(N+N) which is asymptotically equivalent to O(N)
-# Space O(K): The algorithm’s space complexity is O(K) as we will be storing a maximum of K+1 characters in the HashMap.
-```
-
-✅ **Sliding Window:** Use windowStart and windowEnd pointers to move the sliding window and compute sliding window in every iteration. Use dictionary to keep track of character frequencies and max function to keep track of longest substring so far.
-
----
-## [🟥 Longest Substring with Distinct Characters](https://www.educative.io/courses/grokking-the-coding-interview/YMzBx1gE5EO)
-> Given a string, find the `length of the longest substring`, which has `all distinct characters`.
-##### Example 1: 
-- [x] Input: `String="aabccbb"`
-- [x] Output: `3`
-- [x] Explanation: The longest substring with distinct characters is "abc".
-
-##### Example 2: 
-- [x] Input: `String="abbbb"`
-- [x] Output: `2`
-- [x] Explanation: The longest substring with distinct characters is "ab".
-
-##### Example 3: 
-- [x] Input: `String="abccde"`
-- [x] Output: `3`
-- [x] Explanation: The longest substrings with distinct characters are "abc" & "cde".
-
-
-### **Sliding Window**
-```python
-# Time O(N) | Space O(K) where N is the number of elements in the array and K is the number of distinct characters
-def nonRepeatSubstring(string): 
-    windowStart, maxLength = 0, float("-inf")
-    charIndexMap = {}
-    # 1: Increment the windowEnd pointer to create sliding window
-    for windowEnd in range(len(string)): 
-        # 2: Set the right-most character using the windowEnd of the string
-        rightChar = string[windowEnd]
-        # 3: If we get a duplicate character going into the window, shrink the window to ensure we always have distinct characters in the window
-        if rightChar in charIndexMap:
-            # 4: Set the windowStart pointer to point at the index of the last duplicated character (skipping any previous duplicate characters) 
-            # or at the windowStart (if windowStart is already ahead of the index of the last duplicated character) whichever is the biggest  
-            windowStart = max(windowStart, charIndexMap[rightChar] + 1)
-        # 5: Add rightChar:windowEnd (char:index) into the dictionary
-        charIndexMap[rightChar] = windowEnd
-        # 6: Keep track of the maximum length so far
-        maxLength = max(maxLength, windowEnd - windowStart + 1)
-    return maxLength
-
-# Time O(N): The above algorithm’s time complexity will be O(N) where ‘N’ is the number of characters in the input string.
-# Space O(K): The algorithm’s space complexity will be O(K) where K is the number of distinct characters in the input string. 
-# This also means K<=N because in the worst case, the whole string might not have any duplicate character, so the entire string will be added to the HashMap. 
-# Having said that, since we can expect a fixed set of characters in the input string (e.g., 26 for English letters), we can say that the algorithm runs in fixed space O(1)
-# In this case, we can use a fixed-size array instead of the HashMap.
-```
-
-✅ **Sliding Window:** Use windowStart and windowEnd pointers to move the sliding window and compute sliding window in every iteration. Use dictionary to keep track of the last index of each character we have processed. Whenever we get a duplicate character, shrink the sliding window to ensure we always have distinct characters in sliding window. Use max function to keep track of longest substring so far.
-
----
-## [🟥 Longest Substring with Same Letters after Replacement](https://www.educative.io/courses/grokking-the-coding-interview/R8DVgjq78yR)
-> Given a string with lowercase letters only, if you are allowed to `replace no more than k letters` with any letter, find the `length of the longest substring having the same letters` after replacement.
-##### Example 1: 
-- [x] Input: `String="aabccbb", k=2`
-- [x] Output: `5`
-- [x] Explanation: Replace the two 'c' with 'b' to have the longest repeating substring "bbbbb".
-
-##### Example 2: 
-- [x] Input: `String="abbcb", k=1`
-- [x] Output: `4`
-- [x] Explanation: Replace the 'c' with 'b' to have the longest repeating substring "bbbb".
-
-##### Example 3: 
-- [x] Input: `String="abccde", k=1`
-- [x] Output: `3`
-- [x] Explanation: Replace the 'b' or 'd' with 'c' to have the longest repeating substring "ccc".
-
-
-### **Sliding Window**
-```python
-# Time O(N) | Space O(1) where N is the number of letters in the input string.
-def lengthOfLongestSubstring(string, k):
-    windowStart, maxLength, maxRepeatingLetterCount = 0, 0, 0
-    frequencyMap = {}
-    
-    # 1: Increment the windowEnd pointer to create sliding window
-    for windowEnd in range(len(string)): 
-        # 2: Create the right-most character (using windowEnd pointer) going into the sliding window
-        rightChar = string[windowEnd]
-        # 3: If rightChar is not seen in the dictionary, initialise char:frequency key-value pair
-        if rightChar not in frequencyMap:
-            frequencyMap[rightChar] = 0
-        # 4: Sliding the window, increment the frequency of any rightChars going into the window
-        frequencyMap[rightChar] += 1
-        
-        # 5: Keep track of the count of the maximum repeating letter in any window
-        maxRepeatingLetterCount = max(maxRepeatingLetterCount, frequencyMap[rightChar])
-        
-        # 6: At any window, if windowLength - maxRepeatingLetterCount >  k, we need to shrink window (too much k!)
-        if (windowEnd - windowStart + 1 - maxRepeatingLetterCount) > k:
-            # 7: Shrink the sliding window from the beginning of the string 
-            leftChar = string[windowStart]
-            # 8: Decrement frequency of left-most char going out of the window
-            frequencyMap[leftChar] -= 1
-            # 9: Increment the windowStart pointer to shrink the sliding window one element at a time
-            windowStart += 1
-        # 10: Keep track of the maximum length so far
-        maxLength = max(maxLength, windowEnd - windowStart + 1)
-    return maxLength
-
-# Time O(N) where ‘N’ is the number of letters in the input string.
-# Space O(1) as we expect only the lower case letters in the input string, we can conclude that the space complexity will be O(26) to store each letter’s frequency in the HashMap, which is asymptotically equal to O(1).
-```
-
-✅ **Sliding Window:** Use windowStart and windowEnd pointers to move the sliding window and compute sliding window in every iteration. Use dictionary to keep track of characters going in and their frequencies. Start shrinking if windowLength - maxRepeatingLetterCount > k. Use max function to keep track of longest substring so far.
-
----
-## [🟥 Longest Subarray with Ones after Replacement](https://www.educative.io/courses/grokking-the-coding-interview/B6VypRxPolJ)
-> Given an array containing 0s and 1s, if you are allowed to `replace no more than ‘k’ 0s with 1s`, find the length of the `longest contiguous subarray having all 1s.`
-##### Example 1: 
-- [x] Input: `Array=[0, 1, 1, 0, 0, 0, 1, 1, 0, 1, 1], k=2`
-- [x] Output: `6`
-- [x] Explanation: Replace the '0' at index 5 and 8 to have the longest contiguous subarray of 1s having length 6.
-
-##### Example 2: 
-- [x] Input: `Array=[0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 0, 1, 1], k=3`
-- [x] Output: `9`
-- [x] Explanation: Replace the '0' at index 6, 9, and 10 to have the longest contiguous subarray of 1s having length 9.
-
-
-
-### **Sliding Window**
-```python
-# Time O(N) | Space O(1) where N is the number of letters in the input string.
-def lengthOfLongestSubstring(array, k):
-  windowStart, maxLength, maxOneCount = 0, 0, 0
-  # 1: Increment the windowEnd pointer to create sliding window
-  for windowEnd in range(len(array)):
-    # 2: If number going in is a 1, increment the maxOneCount counter
-    if array[windowEnd] == 1:
-      maxOneCount += 1
-    # 3: At any window, if windowLength - maxOneCount > k, we need to shrink window (too much k!)
-    if (windowEnd - windowStart + 1 - maxOneCount) > k:
-      # 4: If left-most number in window is a 1, decrement the maxOneCount counter as we will slide this number out!
-      if array[windowStart] == 1:
-        maxOneCount -= 1
-      # 5: Increment the windowStart pointer to shrink the sliding window one element at a time
-      windowStart += 1
-    # 6: Keep track of the maximum length so far
-    maxLength = max(maxLength, windowEnd - windowStart + 1)
-  return maxLength
-```
-
-✅ **Sliding Window:** Use windowStart and windowEnd pointers to move the sliding window and compute sliding window in every iteration. Increment maxOneCount counter for every 1s going in. Start shrinking if windowLength - maxOneCount > k. Use max function to keep track of longest substring so far.
-
----
-# ✌️ Two Pointers Pattern
-## [🟩 Remove Duplicates](https://www.educative.io/courses/grokking-the-coding-interview/mEEA22L5mNA)
->* Given an array of sorted numbers, remove all duplicates from it. You should not use any extra space; after removing the duplicates in-place return the length of the subarray that has no duplicate in it.
-##### Example 1: 
-- [x] Input: `array = [2, 3, 3, 3, 6, 9, 9]`
-- [x] Output: `4`
-- [x] Explanation: The first four elements after removing the duplicates will be [2, 3, 6, 9].
-
-##### Example 2: 
-- [x] Input: `array = [2, 2, 2, 11]`
-- [x] Output: `2`
-- [x] Explanation: The first two elements after removing the duplicates will be [2, 11].
-
-<img src="resources/remove-duplicates.png" width="500px"/>
-
-### **Two Pointers**
-```python
-# O(n) Time | O(1) Space where n is the number of elements in the array
-def removeDuplicates(array): 
-    idx, nextNonDuplicate = 0, 1
-
-    # 1: While we haven't fully traversed the array,
-    while (idx < len(array)):
-        # 2: If adjacent elements are not duplicates,
-        if array[nextNonDuplicate - 1] != array[idx]:
-            # 3: Replace nextNonDuplicate element with current iteration element
-            array[nextNonDuplicate] = array[idx]
-            # 4: Increment *nextNonDuplicate to find the next non duplicate element
-            nextNonDuplicate += 1
-        # 5: Increment *idx to keep traversing the array
-        idx += 1
-    return nextNonDuplicate
-```
-
-✅ **Two Pointers:** `*idx` iterates the array. `*nextNonDuplicate` replaces element with the next non-duplicate number. Hence, algorithm iterates through the array and whenever we see a non-duplicate number, we move it next to the last non-duplicate number we've seen.
-
----
-
-## [🟩 Squaring a Sorted Array](https://www.educative.io/courses/grokking-the-coding-interview/R1ppNG3nV9R)
->* Given a sorted array, create a new array containing squares of all the numbers of the input array in the sorted order.
-##### Example 1: 
-- [x] Input: `array = [-2, -1, 0, 2, 3]`
-- [x] Output: `[0, 1, 4, 4, 9]`
-
-##### Example 2: 
-- [x] Input: `array = [-3, -1, 0, 1, 2]`
-- [x] Output: `[0, 1, 1, 4, 9]`
-
-<img src="resources/sorted-squared-array.png" width="750px"/>
-
-
-### **Two Pointers**
-```python
-# O(n) Time | O(n) Space - where n is the length of the input array
-def sortedSquaredArray(array):
-    squares = [0 for _ in array]
-    highestSquareIdx = len(array) - 1
-    left, right = 0, len(array) - 1
-    
-    while left <= right: 
-        leftSquare = array[left] * array[left]
-        rightSquare = array[right] * array[right]
-        if leftSquare > rightSquare: 
-            squares[highestSquareIdx] = leftSquare
-            left += 1
-        else:
-            squares[highestSquareIdx] = rightSquare
-            right -= 1
-        highestSquareIdx -= 1
-    return squares
-```
-
-✅ **Two Pointers:** `*left` iterates the array from beginning to end. `*right` iterates the array from end to beginning. Compute `leftSquare` and `rightSquare`. Increment `*left` or `*right` depending `leftSquare` > `rightSquare` and save results in `squares` array.
-
----
-
-## [🟩 Triplets with Smaller Sum](https://www.educative.io/courses/grokking-the-coding-interview/mElknO5OKBO)
->* Given an array `arr` of unsorted numbers and a target sum, `count all triplets` in it such that `arr[i] + arr[j] + arr[k] < target` where `i`, `j`, and `k` are three different indices. Write a function to return the count of such triplets.
-##### Example 1: 
-- [x] Input: `array = [-1, 0, 2, 3], target = 3`
-- [x] Output: `2`
-- [x] Explanation: There are two triplets whose sum is less than the target: `[-1, 0, 3], [-1, 0, 2]`
-
-##### Example 2: 
-- [x] Input: `array = [-1, 4, 2, 1, 3], target = 5`
-- [x] Output: `4`
-- [x] Explanation: There are two triplets whose sum is less than the target: `[-1, 1, 4], [-1, 1, 3], [-1, 1, 2], [-1, 2, 3]`
-
-
-### **Return the count of triplets with smaller sum**
-```python
-# O(nlogn) Time 
-def threeSumSmaller(array, targetSum): 
-    array.sort()
-    totalCount = 0 
-    
-    # 1: Iterate *idx for X 
-    for idx in range(len(array) - 2):
-        # 2: We need to search a pair of numbers (Y & Z) such that it is less than targetSum - X 
-        # Since the equation goes X + Y + Z < targetSum so Y + Z < targetSum - X
-        totalCount += searchPair(array, targetSum - array[idx], idx)
-        
-    return totalCount
-
-# O(n) Time 
-# 3: Helper function to search for Y and Z such that they are < targetSum - X using two pointers approach
-def searchPair(array, targetSum, idx):
-    count = 0
-    left, right = idx + 1, len(array) - 1
-    while left < right: 
-        _sum = array[left] + array[right]
-        if _sum < targetSum: 
-            count += right - left
-            left += 1
-        else: 
-            right -= 1
-    return count
-
-# Total Time Complexity: O(nlogn + n) is asymptotically equivalent to O(n)
-# Total Space Complexity: O(n) for the output array
-```
-### **Return the array of triplets with smaller sum**
-```python
-# O(nlogn) Time 
-def threeSumSmaller(array, targetSum): 
-    array.sort()
-    triplets = []
-    
-    # 1: Iterate *idx for X 
-    for idx in range(len(array) - 2):
-        # 2: We need to search a pair of numbers (Y & Z) such that it is less than targetSum - X 
-        # Since the equation goes X + Y + Z < targetSum so Y + Z < targetSum - X
-        searchPair(array, targetSum - array[idx], idx, triplets)
-    return triplets
-
-# O(n^2) Time
-# 3: Helper function to search for Y and Z such that they are < targetSum - X using two pointers approach
-def searchPair(array, targetSum, idx, triplets):
-    left, right = idx + 1, len(array) - 1
-    while left < right: 
-        _sum = array[left] + array[right]
-        if _sum < targetSum: 
-            # With *left and *right correctly in place with _sum < targetSum, append all the triplets within in a for loop 
-            for jdx in range(right, left, -1):
-                triplets.append([array[idx], array[left], array[jdx]])
-            left += 1
-        else: 
-            right -= 1
-    return triplets
-
-# Total Time Complexity: O(nlogn + n^2) is asymptotically equivalent to O(n^3)
-# Total Space Complexity: O(n) for the output array
-```
-
-✅ **Two Pointers:** `*left` iterates the array from beginning to end. `*right` iterates the array from end to beginning. If `_sum` < `targetSum - X`, `left += 1` else `right -= 1`
-
----
-
-## [🟨 Subarrays with Product Less than a Target](https://www.educative.io/courses/grokking-the-coding-interview/RMV1GV1yPYz)
->* Given an array with positive numbers and a positive target number, find all of its contiguous subarrays whose `product is less than the target number.`
-##### Example 1: 
-- [x] Input: `array = [2, 5, 3, 10], target=30`
-- [x] Output: `[2], [5], [2, 5], [3], [5, 3], [10]`
-- [x] Explanation: There are six contiguous subarrays whose product is less than the target.
-##### Example 2: 
-- [x] Input: `array = [[8, 2, 6, 5], target=50`
-- [x] Output: `[8], [2], [8, 2], [6], [2, 6], [5], [6, 5]`
-- [x] Explanation: There are seven contiguous subarrays whose product is less than the target.
-
-
-### **Sliding Window**
-```python
-# O(n) Time - Sliding Window
-# O(n^2) Time - Nested For-Loop (Worst Case)
-# O(n^3) Total Time | O(n) Space 
-from collections import deque
-def findSubarrays(array, target):
-    result = []
-    product, left = 1, 0
-    # 1: Increment *right to start the sliding window
-    for right in range(len(array)): 
-        # 2: Sliding the window, multiply all elements going in
-        product *= array[right]
-        # 3: If product >= target and left < len(array), start shrinking the sliding window!
-        while product >= target and left < len(array): 
-            # 4: Sliding the window, divide all elements going out
-            product /= array[left]
-            # 5: Shrink the window one element at a time
-            left += 1
-            
-        # Note: Since the product of all numbers from left to right is less than the target therefore,
-        # all subarrays from left to right will have a product less than the target too; to avoid
-        # duplicates, we will start with a subarray containing only arr[right] and then extend it
-        
-        # 6: Instantiate the deque() object - a doubly ended queue with O(1) Time append or pop operations
-        tempList = deque()
-        # 7: With *left and *right pointers correctly in place, iterate *idx and append all the answers from *right to *left      
-        for idx in reversed(range(left, right + 1)): # or for idx in range(right, left - 1, -1):
-            # 8: Append all the answers into a temporary subarray (inserting from the left)
-            tempList.appendleft(array[idx])
-            # 9: Append the subarray into the final result array
-            result.append(list(tempList))
-    return result
-```
-
-✅ **Two Pointers:** Use `*right` and `*left` pointers to move the sliding window and compute product in a sliding window. If `product >= target` and `left < len(array)`, shrink the sliding window. Append all answer elements in a deque subarray. Append all answer subarrays into result array.
-
----
-
-## [🟨 Dutch National Flag Problem](https://www.educative.io/courses/grokking-the-coding-interview/RMBxV6jz6Q0)
->* Given an array containing `0s, 1s and 2s`, sort the array in-place. You should treat numbers of the array as objects, hence, we can’t count 0s, 1s, and 2s to recreate the array.
->* The flag of the Netherlands consists of three colors: red, white and blue; and since our input array also consists of three different numbers that is why it is called Dutch National Flag problem.
-##### Example 1: 
-- [x] Input: [1, 0, 2, 1, 0]
-- [x] Output: [0, 0, 1, 1, 2]
-##### Example 2: 
-- [x] Input: [2, 2, 0, 1, 2, 0]
-- [x] Output: [0, 0, 1, 2, 2, 2,]
-
-
-### **Two Pointers**
-```python
-# O(n) Time | O(1) Space - we are iterating through the array only once
-def dutchFlagSort(array): 
-    # All elements < low are 0
-    # All elements > high are 2
-    # All elements from >= low < i are 1
-    # *low is the pivot for all 0s and *high is the pivot for all 2s
-    # [0, 0, 1, 1,  2, 2]
-    # [  LOW    IDX HI  ]
-    idx, low, high = 0, 0, len(array) - 1 
-    
-    # 1: While we haven't traversed all elements in the array,
-    while idx <= high:
-        # 2: If array[idx] == 0, swap array[idx] and array[left] values
-        if array[idx] == 0: 
-            array[idx], array[low] = array[low], array[idx]
-            # 3: Increment *idx and *low pointers
-            idx += 1
-            low += 1 # This ensures *low pivot is always moving and positioned at the final "0" element
-        # 4: If array[idx] == 1, 
-        elif array[idx] == 1: 
-            # 5: Increment *idx pointer
-            idx += 1 # This ensures *idx pivot is always moving and positioned at the final "1" element
-        # 6: If array[idx] == 2, swap array[idx] and array[right] values
-        else: 
-            array[idx], array[high] = array[high], array[idx]
-            # 7: Decrement *high pointer
-            high -= 1 # This ensures *high pivot is always moving and positioned at the first "2" element
-```
-
-✅ **Two Pointers:** 
-1. Use `*low` for 0s, `*idx` for  1s and `*high` for 2s. 
-1. If `array[idx] == 0`, swap `array[idx] and array[left]` values and increment `*idx and *low`
-1. If `array[idx] == 1`, increment `*idx`
-1. If `array[idx] == 2`, swap `array[idx] and array[high]` values and decrement `*high`
 ---
 # <div id='matrix'/> 🔢 **Matrix**
 
@@ -3205,7 +2606,7 @@ def getUnvisitedNeighbours(i, j, matrix, visited):
 ✅ **DEPTH FIRST SEARCH (ITERATIVE STACK)**: _for each cell, if cell is 1 and unvisited, run dfs, increment count and mark each contiguous 1's as visited in auxiliary matrix_
 
 ---
-# <div id='trees'/> 🎄 **Trees**
+# <div id='trees'/> 🌲 **Trees**
 
 - ✅ Maximum Depth of Binary Tree - https://leetcode.com/problems/maximum-depth-of-binary-tree/
 - Same Tree - https://leetcode.com/problems/same-tree/
@@ -3593,9 +2994,9 @@ def findMaxSum(node):
 - `maxBranchSum` = max(`maxChildSum` + value, value)
 - `maxRootSum` = max(leftBranchSum + value + rightBranchSum, `maxBranchSum`)
 - `maxPathSum` = max(leftPathSum, rightPathSum, `maxRootSum`)
-    
+- 
 ---
-# <div id='bst'/> 🌲 **Binary Search Trees**
+# <div id='bst'/> 🎄 **Binary Search Trees**
 #### [📋 **Back to Table of Contents**](#toc)
 ---
 ## [🟩 Find Closest Value in BST](https://www.algoexpert.io/questions/Find%20Closest%20Value%20In%20BST)
@@ -4203,3 +3604,1681 @@ def longestCommonSubsequence(s1: str, s2: str) -> int:
 - Reverse Bits - https://leetcode.com/problems/reverse-bits/
 #### [📋 **Back to Table of Contents**](#toc)
 ---
+# <div id='window'/> 🪟 **Sliding Window Pattern**
+#### To perform beginning to end computations of an array in O(n) time complexity
+```python
+windowSum, windowStart = 0, 0
+# 1: Increment the windowEnd pointer to start creating the sliding window
+for windowEnd in range(len(array)): 
+    
+    # 2: Sliding the window, add elements going in
+    windowSum += array[windowEnd]
+
+    # 3: Set conditions required to start sliding the window
+    if condition():
+        
+        # 4: Perform computations on elements in window
+        result.append(doSomethingToWindow())
+
+        # 5: Sliding the window, subtract the element going out
+        windowSum -= array[windowStart]
+
+        # 6: Move the sliding window one element at a time for the next iteration
+        windowStart += 1
+return result
+```
+#### [📋 **Back to Table of Contents**](#toc)
+---
+## [🟩 Average of Subarrays of Size k](https://www.educative.io/courses/grokking-the-coding-interview/7D5NNZWQ8Wr)
+>* Given an `array`, find the average of all subarrays of `k` contiguous elements in it.
+- [x] Input: `array = [1, 3, 2, 6, -1, 4, 1, 8, 2], k = 5`
+- [x] Output: `[2.2, 2.8, 2.4, 3.6, 2.8]`
+
+### **Sliding Window**
+```python
+# Brute Force
+# Time O(n * k) | Space O(k) where n is the number of elements in the array and k is the size of subarray
+def findAverageOfSubarrays(k, array): 
+    result = []
+    # 1: Loop through each element of the array but keep track of completed elements with - k + 1
+    for idx in range(len(array) - k + 1):
+        # 2: Initialise _sum variable of float type
+        _sum = 0.0
+        # 3: Loop through each element of the array again from idx to idx + k
+        for jdx in range(idx, idx + k):
+            # 4: Sum all traversed elements of the array
+            _sum += array[jdx]
+        # 5: Append the mean of total sum as the answer 
+        result.append(_sum/k)
+    return result
+
+# Sliding Window
+# Time O(n) | Space O(k) where n is the number of elements in the array and k is the size of subarray
+def findAverageOfSubarrays(k, array): 
+    result = []
+    # 1: Initialise windowSum for the sum of k elements of subarray and windowStart pointer for the beginning of the sliding window
+    windowSum, windowStart = 0.0, 0
+    # 2: Increment the windowEnd pointer in a for loop
+    for windowEnd in range(len(array)): 
+        # 3: Sliding the window, we add the next element going in
+        windowSum += array[windowEnd]
+        # 4: Don't start the sliding window until we have incremented windowEnd to the required window size of k
+        if windowEnd >= k - 1:
+            # 5: Calculate the average of current windowSum and append the result
+            result.append(windowSum / k) 
+            # 6: Sliding the window, we subtract the element going out
+            windowSum -= array[windowStart]
+            # 7: Move the sliding window one element at a time
+            windowStart += 1
+    return result
+```
+
+✅ **Sliding Window:** Use windowStart and windowEnd pointers to move the sliding window and compute windowSum (and its average) in every iteration.
+
+---
+## [🟩 Maximum Sum Subarrays of Size k](https://www.educative.io/courses/grokking-the-coding-interview/JPKr0kqLGNP)
+> Given an array of positive numbers and a positive number ‘k,’ find the `maximum sum of any contiguous subarray of size ‘k’.`
+##### Example 1:
+- [x] Input: `array = [2, 1, 5, 1, 3, 2], k = 3`
+- [x] Output: `9`
+- [x] Explanation: Subarray with maximum sum is `[5, 1, 3]`.
+
+##### Example 2:
+- [x] Input: `[2, 3, 4, 1, 5], k = 2`
+- [x] Output: `7`
+- [x] Explanation: Subarray with maximum sum is `[3, 4]`.
+
+<img src="resources/max-sum-of-subarrays.png" width="400px"/>
+
+### **Sliding Window**
+```python
+# Brute Force
+# Time O(n * k) | Space O(1) where n is the number of elements in the array
+def maxSumSubarraysOfSizeK(k, array): 
+  maxSum, windowSum = 0, 0 
+  for idx in range(len(array) - k + 1): 
+    windowSum = 0
+    for jdx in range(idx, idx + k): 
+      windowSum += array[jdx]
+    maxSum = max(maxSum, windowSum)
+  return maxSum
+ 
+# Time O(n) | Space O(1) where n is the number of elements in the array
+def maxSumSubarraysOfSizeK(k, array):
+    windowSum, windowStart, maxSum = 0, 0, float("-inf")
+    for windowEnd in range(len(array)): 
+        windowSum += array[windowEnd]
+        if windowEnd >= k - 1:
+            maxSum = max(maxSum, windowSum)
+            windowSum -= array[windowStart]
+            windowStart += 1
+    return maxSum
+```
+
+✅ **Sliding Window:** Use windowStart and windowEnd pointers to move the sliding window and compute windowSum in every iteration.
+
+---
+## [🟩 Smallest Subarray With a Greater Sum](https://www.educative.io/courses/grokking-the-coding-interview/7XMlMEQPnnQ)
+> Given an array of positive numbers and a positive number ‘S,’ find the length of the `smallest` contiguous subarray whose sum is `greater than or equal to ‘S’`. Return 0 if no such subarray exists.
+##### Example 1: 
+- [x] Input: `array = [2, 1, 5, 2, 3, 2], S = 7`
+- [x] Output: `2`
+- [x] Explanation: The smallest subarray with a sum greater than or equal to '7' is `[5, 2]`.
+
+##### Example 2: 
+- [x] Input: `array = [2, 1, 5, 2, 8], S = 7`
+- [x] Output: `1`
+- [x] Explanation: The smallest subarray with a sum greater than or equal to '7' is `[8]`.
+
+##### Example 3: 
+- [x] Input: `array = [3, 4, 1, 1, 6], S = 8`
+- [x] Output: `3`
+- [x] Explanation: The smallest subarray with a sum greater than or equal to '8' is `[3, 4, 1]`.
+
+<img src="resources/smallest-subarray-sum-1.png" align="left" width="400px"/>
+<img src="resources/smallest-subarray-sum-2.png" align="middle" width="400px"/>
+
+
+### **Sliding Window**
+```python
+# Sliding Window
+# Time O(n) | Space O(1) where n is the number of elements in the array
+def smallestSubarraySum(s, array):
+    windowStart, windowSum, minLength = 0, 0, float("inf")
+    # 1: Increment the windowEnd pointer in a for loop to create sliding window
+    for windowEnd in range(len(array)): 
+        # 2: Sliding the window, we keep adding elements from the beginning of the array
+        windowSum += array[windowEnd]
+        # 3: When the windowSum becomes >= s,
+        while windowSum >= s: 
+            # 4: Record the minimum length as the smallest window so far
+            minLength = min(minLength, windowEnd - windowStart + 1)
+            # 5: Sliding the window, we subtract the element going out
+            windowSum -= array[windowStart]
+            # 6: Move the sliding window one element at a time
+            windowStart += 1
+    # 7: If minLength is unchanged because no subarray exists, return 0
+    if minLength == float("inf"):
+        return 0
+    return minLength
+
+# Time O(n): The outer for loop runs for all elements, and the inner while loop processes each element only once; therefore, the time complexity of the algorithm will be O(N+N) which is asymptotically equivalent to O(N)
+# Space O(1): The algorithm runs in constant space O(1) because no additional memory is used and the input array is computed in place. 
+```
+
+✅ **Sliding Window:** Use windowStart and windowEnd pointers to move the sliding window and compute windowSum in every iteration. Use min function to keep track on smallest length of subarray so far.
+
+---
+## [🟨 Longest Substring with Maximum K Distinct Characters](https://www.educative.io/courses/grokking-the-coding-interview/YQQwQMWLx80)
+> Given a string, find the length of the `longest substring` in it `with no more than K distinct characters.`
+##### Example 1: 
+- [x] Input: `String="araaci", K=2`
+- [x] Output: `4`
+- [x] Explanation: The longest substring with no more than '2' distinct characters is "araa".
+
+##### Example 2: 
+- [x] Input: `String="araaci", K=1`
+- [x] Output: `2`
+- [x] Explanation: The longest substring with no more than '1' distinct characters is "aa".
+
+##### Example 3: 
+- [x] Input: `String="cbbebi", K=3`
+- [x] Output: `5`
+- [x] Explanation: The longest substrings with no more than '3' distinct characters are "cbbeb" & "bbebi".
+
+<img src="resources/longest-substring-with-k-distinct-1.png" align="left" width="400px"/>
+<img src="resources/longest-substring-with-k-distinct-2.png" align="middle" width="430px"/>
+
+
+### **Sliding Window**
+```python
+# Sliding Window
+# Time O(N) | Space O(K) where N is the number of elements in the array and K is the number of distinct characters
+def longestSubstrinWithKDistinct(k, string):
+    windowStart, maxLength = 0, 0
+    charFrequency = {}
+
+    # 1: Increment the windowEnd pointer to create sliding window
+    for windowEnd in range(len(string)): 
+        # 2: Create the right-most character (using windowEnd pointer) going into the sliding window
+        rightChar = string[windowEnd]
+        # 3: If rightChar is not seen in the dictionary, initialise char:frequency key-value pair
+        if rightChar not in charFrequency: 
+            charFrequency[rightChar] = 0
+        # 4: Sliding the window, increment the frequency of any rightChars going into the window
+        charFrequency[rightChar] += 1
+        
+        # 5: If the number of distinct characters exceeds k (tracked by the number of key-value pairs in dict)
+        while len(charFrequency) > k: 
+            # 6: Shrink the sliding window from the beginning of string until we have no more than k distinct characters in the dictionary 
+            leftChar = string[windowStart]
+            # 7: Shrinking the sliding window, decrement the frequency of the left-most character going out of the window
+            charFrequency[leftChar] -= 1
+            # 8: At any point, if the frequency of any left-most character reduces to zero, we remove it from the dictionary
+            if charFrequency[leftChar] == 0:
+                del charFrequency[leftChar]
+            # 9: Increment the windowStart pointer to shrink the sliding window one element at a time
+            windowStart += 1
+            
+        # 10: Keep track of the maximum length so far
+        maxLength = max(maxLength, windowEnd - windowStart + 1)
+    return maxLength
+
+# Time O(N): The above algorithm’s time complexity will be O(N) where N is the number of characters in the input string. The outer for loop runs for all characters, and the inner while loop processes each character only once; therefore, the time complexity of the algorithm will be O(N+N) which is asymptotically equivalent to O(N)
+# Space O(K): The algorithm’s space complexity is O(K) as we will be storing a maximum of K+1 characters in the HashMap.
+```
+
+✅ **Sliding Window:** Use windowStart and windowEnd pointers to move the sliding window and compute sliding window in every iteration. Use dictionary to keep track of character frequencies and max function to keep track of longest substring so far.
+
+---
+## [🟥 Longest Substring with Distinct Characters](https://www.educative.io/courses/grokking-the-coding-interview/YMzBx1gE5EO)
+> Given a string, find the `length of the longest substring`, which has `all distinct characters`.
+##### Example 1: 
+- [x] Input: `String="aabccbb"`
+- [x] Output: `3`
+- [x] Explanation: The longest substring with distinct characters is "abc".
+
+##### Example 2: 
+- [x] Input: `String="abbbb"`
+- [x] Output: `2`
+- [x] Explanation: The longest substring with distinct characters is "ab".
+
+##### Example 3: 
+- [x] Input: `String="abccde"`
+- [x] Output: `3`
+- [x] Explanation: The longest substrings with distinct characters are "abc" & "cde".
+
+
+### **Sliding Window**
+```python
+# Time O(N) | Space O(K) where N is the number of elements in the array and K is the number of distinct characters
+def nonRepeatSubstring(string): 
+    windowStart, maxLength = 0, float("-inf")
+    charIndexMap = {}
+    # 1: Increment the windowEnd pointer to create sliding window
+    for windowEnd in range(len(string)): 
+        # 2: Set the right-most character using the windowEnd of the string
+        rightChar = string[windowEnd]
+        # 3: If we get a duplicate character going into the window, shrink the window to ensure we always have distinct characters in the window
+        if rightChar in charIndexMap:
+            # 4: Set the windowStart pointer to point at the index of the last duplicated character (skipping any previous duplicate characters) 
+            # or at the windowStart (if windowStart is already ahead of the index of the last duplicated character) whichever is the biggest  
+            windowStart = max(windowStart, charIndexMap[rightChar] + 1)
+        # 5: Add rightChar:windowEnd (char:index) into the dictionary
+        charIndexMap[rightChar] = windowEnd
+        # 6: Keep track of the maximum length so far
+        maxLength = max(maxLength, windowEnd - windowStart + 1)
+    return maxLength
+
+# Time O(N): The above algorithm’s time complexity will be O(N) where ‘N’ is the number of characters in the input string.
+# Space O(K): The algorithm’s space complexity will be O(K) where K is the number of distinct characters in the input string. 
+# This also means K<=N because in the worst case, the whole string might not have any duplicate character, so the entire string will be added to the HashMap. 
+# Having said that, since we can expect a fixed set of characters in the input string (e.g., 26 for English letters), we can say that the algorithm runs in fixed space O(1)
+# In this case, we can use a fixed-size array instead of the HashMap.
+```
+
+✅ **Sliding Window:** Use windowStart and windowEnd pointers to move the sliding window and compute sliding window in every iteration. Use dictionary to keep track of the last index of each character we have processed. Whenever we get a duplicate character, shrink the sliding window to ensure we always have distinct characters in sliding window. Use max function to keep track of longest substring so far.
+
+---
+## [🟥 Longest Substring with Same Letters after Replacement](https://www.educative.io/courses/grokking-the-coding-interview/R8DVgjq78yR)
+> Given a string with lowercase letters only, if you are allowed to `replace no more than k letters` with any letter, find the `length of the longest substring having the same letters` after replacement.
+##### Example 1: 
+- [x] Input: `String="aabccbb", k=2`
+- [x] Output: `5`
+- [x] Explanation: Replace the two 'c' with 'b' to have the longest repeating substring "bbbbb".
+
+##### Example 2: 
+- [x] Input: `String="abbcb", k=1`
+- [x] Output: `4`
+- [x] Explanation: Replace the 'c' with 'b' to have the longest repeating substring "bbbb".
+
+##### Example 3: 
+- [x] Input: `String="abccde", k=1`
+- [x] Output: `3`
+- [x] Explanation: Replace the 'b' or 'd' with 'c' to have the longest repeating substring "ccc".
+
+
+### **Sliding Window**
+```python
+# Time O(N) | Space O(1) where N is the number of letters in the input string.
+def lengthOfLongestSubstring(string, k):
+    windowStart, maxLength, maxRepeatingLetterCount = 0, 0, 0
+    frequencyMap = {}
+    
+    # 1: Increment the windowEnd pointer to create sliding window
+    for windowEnd in range(len(string)): 
+        # 2: Create the right-most character (using windowEnd pointer) going into the sliding window
+        rightChar = string[windowEnd]
+        # 3: If rightChar is not seen in the dictionary, initialise char:frequency key-value pair
+        if rightChar not in frequencyMap:
+            frequencyMap[rightChar] = 0
+        # 4: Sliding the window, increment the frequency of any rightChars going into the window
+        frequencyMap[rightChar] += 1
+        
+        # 5: Keep track of the count of the maximum repeating letter in any window
+        maxRepeatingLetterCount = max(maxRepeatingLetterCount, frequencyMap[rightChar])
+        
+        # 6: At any window, if windowLength - maxRepeatingLetterCount >  k, we need to shrink window (too much k!)
+        if (windowEnd - windowStart + 1 - maxRepeatingLetterCount) > k:
+            # 7: Shrink the sliding window from the beginning of the string 
+            leftChar = string[windowStart]
+            # 8: Decrement frequency of left-most char going out of the window
+            frequencyMap[leftChar] -= 1
+            # 9: Increment the windowStart pointer to shrink the sliding window one element at a time
+            windowStart += 1
+        # 10: Keep track of the maximum length so far
+        maxLength = max(maxLength, windowEnd - windowStart + 1)
+    return maxLength
+
+# Time O(N) where ‘N’ is the number of letters in the input string.
+# Space O(1) as we expect only the lower case letters in the input string, we can conclude that the space complexity will be O(26) to store each letter’s frequency in the HashMap, which is asymptotically equal to O(1).
+```
+
+✅ **Sliding Window:** Use windowStart and windowEnd pointers to move the sliding window and compute sliding window in every iteration. Use dictionary to keep track of characters going in and their frequencies. Start shrinking if windowLength - maxRepeatingLetterCount > k. Use max function to keep track of longest substring so far.
+
+---
+## [🟥 Longest Subarray with Ones after Replacement](https://www.educative.io/courses/grokking-the-coding-interview/B6VypRxPolJ)
+> Given an array containing 0s and 1s, if you are allowed to `replace no more than ‘k’ 0s with 1s`, find the length of the `longest contiguous subarray having all 1s.`
+##### Example 1: 
+- [x] Input: `Array=[0, 1, 1, 0, 0, 0, 1, 1, 0, 1, 1], k=2`
+- [x] Output: `6`
+- [x] Explanation: Replace the '0' at index 5 and 8 to have the longest contiguous subarray of 1s having length 6.
+
+##### Example 2: 
+- [x] Input: `Array=[0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 0, 1, 1], k=3`
+- [x] Output: `9`
+- [x] Explanation: Replace the '0' at index 6, 9, and 10 to have the longest contiguous subarray of 1s having length 9.
+
+
+
+### **Sliding Window**
+```python
+# Time O(N) | Space O(1) where N is the number of letters in the input string.
+def lengthOfLongestSubstring(array, k):
+  windowStart, maxLength, maxOneCount = 0, 0, 0
+  # 1: Increment the windowEnd pointer to create sliding window
+  for windowEnd in range(len(array)):
+    # 2: If number going in is a 1, increment the maxOneCount counter
+    if array[windowEnd] == 1:
+      maxOneCount += 1
+    # 3: At any window, if windowLength - maxOneCount > k, we need to shrink window (too much k!)
+    if (windowEnd - windowStart + 1 - maxOneCount) > k:
+      # 4: If left-most number in window is a 1, decrement the maxOneCount counter as we will slide this number out!
+      if array[windowStart] == 1:
+        maxOneCount -= 1
+      # 5: Increment the windowStart pointer to shrink the sliding window one element at a time
+      windowStart += 1
+    # 6: Keep track of the maximum length so far
+    maxLength = max(maxLength, windowEnd - windowStart + 1)
+  return maxLength
+```
+
+✅ **Sliding Window:** Use windowStart and windowEnd pointers to move the sliding window and compute sliding window in every iteration. Increment maxOneCount counter for every 1s going in. Start shrinking if windowLength - maxOneCount > k. Use max function to keep track of longest substring so far.
+
+---
+## [🟥 Permutation in a String](https://www.educative.io/courses/grokking-the-coding-interview/N0o9QnPLKNv)
+>Given a string and a pattern, find out if the `string contains any permutation of the pattern`.
+Permutation is defined as the re-arranging of the characters of the string. For example, “abc” has the following six permutations:
+* abc
+* acb
+* bac
+* bca
+* cab
+* cba
+
+If a string has ‘n’ distinct characters, it will have n!
+n!
+ permutations.
+##### Example 1: 
+- [x] Input: String=`"oidbcaf"`, Pattern=`"abc"`
+- [x] Output: `true`
+- [x] Explanation: The string contains `"bca"` which is a permutation of the given pattern.
+
+##### Example 2: 
+- [x] Input: String=`"odicf"`, Pattern=`"dc"`
+- [x] Output: `false`
+- [x] Explanation: No permutation of the pattern is present in the given string as a substring.
+
+##### Example 3:
+- [x] Input: String=`"bcdxabcdy"`, Pattern=`"bcdyabcdx"`
+- [x] Output: `true`
+- [x] Explanation: Both the string and the pattern are a permutation of each other.
+##### Example 4:
+- [x] Input: String=`"aaacb"`, Pattern=`"abc"`
+- [x] Output: `true`
+- [x] Explanation: The string contains `"acb"` which is a permutation of the given pattern.
+
+
+### [**Sliding Window**](./arrays/sliding-window/permutation-in-a-string.py)
+```python
+# O(N + M) Time - where ‘N’ and ‘M’ are the number of characters in the input string and the pattern, respectively.
+# O(M) Space - since, in the worst case, the whole pattern can have distinct characters that will go into the HashMap.
+def findPermutation(string, pattern): 
+    windowStart, matched = 0, 0
+    charFrequency = {}
+    
+    # 1: Create a HashMap to calculate the frequencies of all characters in the pattern.
+    for char in pattern:
+        if char not in charFrequency: 
+            charFrequency[char] = 0 
+        charFrequency[char] += 1
+        
+    # 2: Iterate through the string, adding one character at a time in the sliding window.
+    for windowEnd in range(len(string)): 
+        rightChar = string[windowEnd]
+        
+        # 3: If the character being added matches a character in the HashMap, decrement its frequency in the map. 
+        # If the character frequency becomes zero, we got a complete match.
+        if rightChar in charFrequency: 
+            charFrequency[rightChar] -= 1
+            if charFrequency[rightChar] == 0:
+                matched += 1
+        
+        # 4: If at any time, the number of characters matched is equal to the number of distinct characters in the pattern
+        # (i.e., total characters in the HashMap), we have gotten our required permutation.
+        if matched == len(charFrequency): 
+            return True
+        
+        # 5: If the window size is greater than the length of the pattern, shrink the window to make it equal to the pattern’s size. 
+        if windowEnd >= len(pattern) - 1: 
+            leftChar = string[windowStart]
+            windowStart += 1
+            # 6: At the same time, if the character going out was part of the pattern, put it back in the frequency HashMap.
+            if leftChar in charFrequency: 
+                if charFrequency[leftChar] == 0:
+                    matched -= 1
+                charFrequency[leftChar] += 1
+    return False
+```
+
+---
+## [🟥 Smallest Window containing Substring](https://www.educative.io/courses/grokking-the-coding-interview/xoyL4q6ApNE)
+
+> Given a string and a pattern, find the smallest substring in the given string which has all the character occurrences of the given pattern.
+
+##### Example 1:
+- [x] Input: String="aabdec", Pattern="abc"
+- [x] Output: "abdec"
+- [x] Explanation: The smallest substring having all characters of the pattern is "abdec"
+##### Example 2:
+- [x] Input: String="aabdec", Pattern="abac"
+- [x] Output: "aabdec"
+- [x] Explanation: The smallest substring having all character occurrences of the pattern is "aabdec"
+##### Example 3:
+- [x] Input: String="abdbca", Pattern="abc"
+- [x] Output: "bca"
+- [x] Explanation: The smallest substring having all characters of the pattern is "bca".
+##### Example 4:
+- [x] Input: String="adcad", Pattern="abc"
+- [x] Output: ""
+- [x] Explanation: No substring in the given string has all characters of the pattern.
+
+
+### [**Sliding Window**](./arrays/sliding-window/smallest-window-containing-substring.py)
+```python
+# O(N + M) Time - where ‘N’ and ‘M’ are the number of characters in the input string and the pattern, respectively.
+# O(M) Space - since, in the worst case, the whole pattern can have distinct characters that will go into the HashMap.
+def smallestWindowSubstring(string, pattern): 
+    windowStart, substringStart, matched = 0, 0, 0
+    minLength = len(string) + 1
+    charFrequency = {} 
+    
+    # 1: Create a HashMap to calculate the frequencies of all characters in the pattern.
+    for char in pattern: 
+        if char not in charFrequency: 
+            charFrequency[char] = 0
+        charFrequency[char] += 1
+        
+    # 2: Iterate through the string, adding one character at a time in the sliding window.
+    for windowEnd in range(len(string)): 
+        rightChar = string[windowEnd]
+        
+        # 3: If the character being added matches a character in the HashMap, decrement its frequency in the map. 
+        if rightChar in charFrequency: 
+            charFrequency[rightChar] -= 1
+            
+            # 4: We will keep a running count of every matching instance of a character.
+            if charFrequency[rightChar] >= 0:
+                matched += 1
+
+    # 5: Whenever we have matched all the characters, we will try to shrink the window from the beginning, 
+    # keeping track of the smallest substring that has all the matching characters.
+    # We will stop the shrinking process as soon as we remove a matched character from the sliding window. 
+    while matched == len(pattern): 
+        if minLength > windowEnd - windowStart + 1: 
+            minLength = windowEnd - windowStart + 1
+            substringStart = windowStart
+        
+        leftChar = string[windowStart]
+        windowStart += 1
+        if leftChar in charFrequency: 
+            # 6: Note that we could have redundant matching characters, therefore we'll decrement the
+            # matched count only when a useful occurrence of a matched character is going out of the window
+            # One thing to note here is that we could have redundant matching characters, 
+            # e.g., we might have two ‘a’ in the sliding window when we only need one ‘a’. 
+            # In that case, when we encounter the first ‘a’, we will simply shrink the window without decrementing the matched count. 
+            # We will decrement the matched count when the second ‘a’ goes out of the window.
+            if charFrequency[leftChar] == 0: 
+                matched -= 1
+            charFrequency[leftChar] += 1
+            
+    if minLength > len(string): 
+        return "" 
+    return string[substringStart : substringStart + minLength]
+```
+
+---
+# <div id='twopointers'/> ✌️ **Two Pointers Pattern**
+#### To traverse and compute all elements of an array
+```python
+# 1: Initialise two pointers on each end of the array
+left, right = 0, len(array) - 1
+
+# 2: While pointers have not traversed and crossed each other,
+while left < right: 
+    
+    # 3: Perform some computation
+    computeSomething()
+
+    # 4: Set a condition that requires *left to increment and move to the right
+    if condition1(): 
+        left += 1
+
+    # 5: Set a condition that requires *right to decrement and move to the left
+    elif condition2():
+        right -= 1
+    
+    baseCase()
+return result
+```
+#### [📋 **Back to Table of Contents**](#toc)
+---
+## [🟩 Remove Duplicates](https://www.educative.io/courses/grokking-the-coding-interview/mEEA22L5mNA)
+>* Given an array of sorted numbers, remove all duplicates from it. You should not use any extra space; after removing the duplicates in-place return the length of the subarray that has no duplicate in it.
+##### Example 1: 
+- [x] Input: `array = [2, 3, 3, 3, 6, 9, 9]`
+- [x] Output: `4`
+- [x] Explanation: The first four elements after removing the duplicates will be [2, 3, 6, 9].
+
+##### Example 2: 
+- [x] Input: `array = [2, 2, 2, 11]`
+- [x] Output: `2`
+- [x] Explanation: The first two elements after removing the duplicates will be [2, 11].
+
+<img src="resources/remove-duplicates.png" width="500px"/>
+
+### **Two Pointers**
+```python
+# O(n) Time | O(1) Space where n is the number of elements in the array
+def removeDuplicates(array): 
+    idx, nextNonDuplicate = 0, 1
+
+    # 1: While we haven't fully traversed the array,
+    while (idx < len(array)):
+        # 2: If adjacent elements are not duplicates,
+        if array[nextNonDuplicate - 1] != array[idx]:
+            # 3: Replace nextNonDuplicate element with current iteration element
+            array[nextNonDuplicate] = array[idx]
+            # 4: Increment *nextNonDuplicate to find the next non duplicate element
+            nextNonDuplicate += 1
+        # 5: Increment *idx to keep traversing the array
+        idx += 1
+    return nextNonDuplicate
+```
+
+✅ **Two Pointers:** `*idx` iterates the array. `*nextNonDuplicate` replaces element with the next non-duplicate number. Hence, algorithm iterates through the array and whenever we see a non-duplicate number, we move it next to the last non-duplicate number we've seen.
+
+---
+
+## [🟩 Squaring a Sorted Array](https://www.educative.io/courses/grokking-the-coding-interview/R1ppNG3nV9R)
+>* Given a sorted array, create a new array containing squares of all the numbers of the input array in the sorted order.
+##### Example 1: 
+- [x] Input: `array = [-2, -1, 0, 2, 3]`
+- [x] Output: `[0, 1, 4, 4, 9]`
+
+##### Example 2: 
+- [x] Input: `array = [-3, -1, 0, 1, 2]`
+- [x] Output: `[0, 1, 1, 4, 9]`
+
+<img src="resources/sorted-squared-array.png" width="750px"/>
+
+
+### **Two Pointers**
+```python
+# O(n) Time | O(n) Space - where n is the length of the input array
+def sortedSquaredArray(array):
+    squares = [0 for _ in array]
+    highestSquareIdx = len(array) - 1
+    left, right = 0, len(array) - 1
+    
+    while left <= right: 
+        leftSquare = array[left] * array[left]
+        rightSquare = array[right] * array[right]
+        if leftSquare > rightSquare: 
+            squares[highestSquareIdx] = leftSquare
+            left += 1
+        else:
+            squares[highestSquareIdx] = rightSquare
+            right -= 1
+        highestSquareIdx -= 1
+    return squares
+```
+
+✅ **Two Pointers:** `*left` iterates the array from beginning to end. `*right` iterates the array from end to beginning. Compute `leftSquare` and `rightSquare`. Increment `*left` or `*right` depending `leftSquare` > `rightSquare` and save results in `squares` array.
+
+---
+
+## [🟩 Triplets with Smaller Sum](https://www.educative.io/courses/grokking-the-coding-interview/mElknO5OKBO)
+>* Given an array `arr` of unsorted numbers and a target sum, `count all triplets` in it such that `arr[i] + arr[j] + arr[k] < target` where `i`, `j`, and `k` are three different indices. Write a function to return the count of such triplets.
+##### Example 1: 
+- [x] Input: `array = [-1, 0, 2, 3], target = 3`
+- [x] Output: `2`
+- [x] Explanation: There are two triplets whose sum is less than the target: `[-1, 0, 3], [-1, 0, 2]`
+
+##### Example 2: 
+- [x] Input: `array = [-1, 4, 2, 1, 3], target = 5`
+- [x] Output: `4`
+- [x] Explanation: There are two triplets whose sum is less than the target: `[-1, 1, 4], [-1, 1, 3], [-1, 1, 2], [-1, 2, 3]`
+
+
+### **Return the count of triplets with smaller sum**
+```python
+# O(nlogn) Time 
+def threeSumSmaller(array, targetSum): 
+    array.sort()
+    totalCount = 0 
+    
+    # 1: Iterate *idx for X 
+    for idx in range(len(array) - 2):
+        # 2: We need to search a pair of numbers (Y & Z) such that it is less than targetSum - X 
+        # Since the equation goes X + Y + Z < targetSum so Y + Z < targetSum - X
+        totalCount += searchPair(array, targetSum - array[idx], idx)
+        
+    return totalCount
+
+# O(n) Time 
+# 3: Helper function to search for Y and Z such that they are < targetSum - X using two pointers approach
+def searchPair(array, targetSum, idx):
+    count = 0
+    left, right = idx + 1, len(array) - 1
+    while left < right: 
+        _sum = array[left] + array[right]
+        if _sum < targetSum: 
+            count += right - left
+            left += 1
+        else: 
+            right -= 1
+    return count
+
+# Total Time Complexity: O(nlogn + n) is asymptotically equivalent to O(n)
+# Total Space Complexity: O(n) for the output array
+```
+### **Return the array of triplets with smaller sum**
+```python
+# O(nlogn) Time 
+def threeSumSmaller(array, targetSum): 
+    array.sort()
+    triplets = []
+    
+    # 1: Iterate *idx for X 
+    for idx in range(len(array) - 2):
+        # 2: We need to search a pair of numbers (Y & Z) such that it is less than targetSum - X 
+        # Since the equation goes X + Y + Z < targetSum so Y + Z < targetSum - X
+        searchPair(array, targetSum - array[idx], idx, triplets)
+    return triplets
+
+# O(n^2) Time
+# 3: Helper function to search for Y and Z such that they are < targetSum - X using two pointers approach
+def searchPair(array, targetSum, idx, triplets):
+    left, right = idx + 1, len(array) - 1
+    while left < right: 
+        _sum = array[left] + array[right]
+        if _sum < targetSum: 
+            # With *left and *right correctly in place with _sum < targetSum, append all the triplets within in a for loop 
+            for jdx in range(right, left, -1):
+                triplets.append([array[idx], array[left], array[jdx]])
+            left += 1
+        else: 
+            right -= 1
+    return triplets
+
+# Total Time Complexity: O(nlogn + n^2) is asymptotically equivalent to O(n^3)
+# Total Space Complexity: O(n) for the output array
+```
+
+✅ **Two Pointers:** `*left` iterates the array from beginning to end. `*right` iterates the array from end to beginning. If `_sum` < `targetSum - X`, `left += 1` else `right -= 1`
+
+---
+
+## [🟨 Subarrays with Product Less than a Target](https://www.educative.io/courses/grokking-the-coding-interview/RMV1GV1yPYz)
+>* Given an array with positive numbers and a positive target number, find all of its contiguous subarrays whose `product is less than the target number.`
+##### Example 1: 
+- [x] Input: `array = [2, 5, 3, 10], target=30`
+- [x] Output: `[2], [5], [2, 5], [3], [5, 3], [10]`
+- [x] Explanation: There are six contiguous subarrays whose product is less than the target.
+##### Example 2: 
+- [x] Input: `array = [[8, 2, 6, 5], target=50`
+- [x] Output: `[8], [2], [8, 2], [6], [2, 6], [5], [6, 5]`
+- [x] Explanation: There are seven contiguous subarrays whose product is less than the target.
+
+
+### **Sliding Window**
+```python
+# O(n) Time - Sliding Window
+# O(n^2) Time - Nested For-Loop (Worst Case)
+# O(n^3) Total Time | O(n) Space 
+from collections import deque
+def findSubarrays(array, target):
+    result = []
+    product, left = 1, 0
+    # 1: Increment *right to start the sliding window
+    for right in range(len(array)): 
+        # 2: Sliding the window, multiply all elements going in
+        product *= array[right]
+        # 3: If product >= target and left < len(array), start shrinking the sliding window!
+        while product >= target and left < len(array): 
+            # 4: Sliding the window, divide all elements going out
+            product /= array[left]
+            # 5: Shrink the window one element at a time
+            left += 1
+            
+        # Note: Since the product of all numbers from left to right is less than the target therefore,
+        # all subarrays from left to right will have a product less than the target too; to avoid
+        # duplicates, we will start with a subarray containing only arr[right] and then extend it
+        
+        # 6: Instantiate the deque() object - a doubly ended queue with O(1) Time append or pop operations
+        tempList = deque()
+        # 7: With *left and *right pointers correctly in place, iterate *idx and append all the answers from *right to *left      
+        for idx in reversed(range(left, right + 1)): # or for idx in range(right, left - 1, -1):
+            # 8: Append all the answers into a temporary subarray (inserting from the left)
+            tempList.appendleft(array[idx])
+            # 9: Append the subarray into the final result array
+            result.append(list(tempList))
+    return result
+```
+
+✅ **Two Pointers:** Use `*right` and `*left` pointers to move the sliding window and compute product in a sliding window. If `product >= target` and `left < len(array)`, shrink the sliding window. Append all answer elements in a deque subarray. Append all answer subarrays into result array.
+
+---
+
+## [🟨 Dutch National Flag Problem](https://www.educative.io/courses/grokking-the-coding-interview/RMBxV6jz6Q0)
+>* Given an array containing `0s, 1s and 2s`, sort the array in-place. You should treat numbers of the array as objects, hence, we can’t count 0s, 1s, and 2s to recreate the array.
+>* The flag of the Netherlands consists of three colors: red, white and blue; and since our input array also consists of three different numbers that is why it is called Dutch National Flag problem.
+##### Example 1: 
+- [x] Input: [1, 0, 2, 1, 0]
+- [x] Output: [0, 0, 1, 1, 2]
+##### Example 2: 
+- [x] Input: [2, 2, 0, 1, 2, 0]
+- [x] Output: [0, 0, 1, 2, 2, 2,]
+
+
+### **Two Pointers**
+```python
+# O(n) Time | O(1) Space - we are iterating through the array only once
+def dutchFlagSort(array): 
+    # All elements < low are 0
+    # All elements > high are 2
+    # All elements from >= low < i are 1
+    # *low is the pivot for all 0s and *high is the pivot for all 2s
+    # [0, 0, 1, 1,  2, 2]
+    # [  LOW    IDX HI  ]
+    idx, low, high = 0, 0, len(array) - 1 
+    
+    # 1: While we haven't traversed all elements in the array,
+    while idx <= high:
+        # 2: If array[idx] == 0, swap array[idx] and array[left] values
+        if array[idx] == 0: 
+            array[idx], array[low] = array[low], array[idx]
+            # 3: Increment *idx and *low pointers
+            idx += 1
+            low += 1 # This ensures *low pivot is always moving and positioned at the final "0" element
+        # 4: If array[idx] == 1, 
+        elif array[idx] == 1: 
+            # 5: Increment *idx pointer
+            idx += 1 # This ensures *idx pivot is always moving and positioned at the final "1" element
+        # 6: If array[idx] == 2, swap array[idx] and array[right] values
+        else: 
+            array[idx], array[high] = array[high], array[idx]
+            # 7: Decrement *high pointer
+            high -= 1 # This ensures *high pivot is always moving and positioned at the first "2" element
+```
+
+✅ **Two Pointers:** 
+1. Use `*low` for 0s, `*idx` for  1s and `*high` for 2s. 
+1. If `array[idx] == 0`, swap `array[idx] and array[left]` values and increment `*idx and *low`
+1. If `array[idx] == 1`, increment `*idx`
+1. If `array[idx] == 2`, swap `array[idx] and array[high]` values and decrement `*high`
+
+---
+# <div id='dfs'/> 🌲 **Depth First Search Pattern**
+
+```python
+def recursiveFunction(currentNode, currentPath=[]): 
+  if currentNode is None:
+    return  # return 0, return False
+
+  currentPath.append(currentNode.value)
+
+  # return
+  recursiveFunction(currentNode.left, informationToPassDown, currentPath)
+  recursiveFunction(currentNode.right, informationToPassDown, currentPath)
+
+  del currentPath[-1]
+```
+#### [📋 **Back to Table of Contents**](#toc)
+---
+## 🟩 [Binary Tree Path Sum](https://www.educative.io/courses/grokking-the-coding-interview/RMlGwgpoKKY)
+Given a binary tree and a number ‘S’, find if the tree has a path from root-to-leaf such that the sum of all the node values of that path equals ‘S’.
+
+<img src="resources/binary-tree-path-sum-1.png" width="500px"/>
+<img src="resources/binary-tree-path-sum-2.png" width="500px"/>
+
+
+### [**Depth First Search - Recursive**](./trees/binary-tree-path-sum.py)
+```python
+class TreeNode: 
+  def __init__(self, value): 
+    self.value = value 
+    self.left = None
+    self.right = None
+
+# O(n) Time - where n is the total number of nodes in the tree.
+# We need to traverse each node once.
+# O(n) Space worst case - where n is the total number of nodes in the tree that will be stored in the recursion stack
+# Worst case is when the given tree is a single linked list (where every node has only one child)
+def hasPath(currentNode, requiredSum): 
+  # 1: Base case for when we reach the branch end with None child nodes and leaf.value != sum
+  if currentNode is None: 
+    return False
+
+  # 2: Compute the currentSum which will be passed down during DFS
+  # We keep trimming node.value from input total sum so that
+  # when we reach the leaf, if leaf.value == trimmedSum, we found our path!
+  currentSum = requiredSum - currentNode.value
+
+  # 3: If currentNode is a leaf node and leaf.value == sum,
+  # we have found our root-to-leaf path! so return True
+  if currentNode.value == requiredSum and currentNode.left is None and currentNode.right is None: 
+    return True
+
+  # 4: If currentNode is NOT a leaf node, perform DFS recursion on child nodes while passing down the new sum value
+  return hasPath(currentNode.left, currentSum) or hasPath(currentNode.right, currentSum)
+```
+
+---
+## 🟨 [All Paths for a Sum](https://www.educative.io/courses/grokking-the-coding-interview/B815A0y2Ajn)
+
+Given a binary tree and a number ‘S’, find all paths from root-to-leaf such that the sum of all the node values of each path equals ‘S’.
+<img src="resources/all-paths-for-a-sum-1.png" align="left" width="500px"/>
+<img src="resources/all-paths-for-a-sum-2.png" align="middle" width="500px"/>
+
+
+### [**Depth First Search - Recursive**](./trees/all-paths-for-a-sum.py)
+```python
+class TreeNode:
+  def __init__(self, value): 
+    self.value = value 
+    self.left = None
+    self.right = None 
+
+# O(n^2) Time - where n is the total number of nodes in the tree
+# We traverse each node once (taking O(n)) and for every leaf node, 
+# we might store its path by making a copy of currentPath (taking O(n) too)
+# O(n) Space worst case - where n is the total number of nodes in the tree that will be stored in the recursion stack
+# Worst case is when the given tree is a linked list where every node has only one child
+def findPaths(root, requiredSum):
+  allPaths = []
+  currentPath = []
+  findPathsRecursive(root, requiredSum, currentPath, allPaths)
+  return allPaths
+
+def findPathsRecursive(currentNode, requiredSum, currentPath, allPaths):
+  # 1: Base case for when we reach the branch end with None child nodes and leaf.value != sum
+  if currentNode is None: 
+    return
+  
+  # 2: Update currentPath array with currentNode.value for every node traversal
+  currentPath.append(currentNode.value)
+
+  # 3: If currentNode is a leaf node and leaf.value == requiredSum,  
+  # save the resulting currentPath list into our allPaths array!
+  if currentNode.value == requiredSum and currentNode.left is None and currentNode.right is None: 
+    allPaths.append(list(currentPath))
+
+  # 4: Calculate the currentSum remaining after trimming requiredSum with currentNode.value
+  # This is so that when we reach the leaf, if leaf.value == requiredSum, we found a path!
+  currentSum = requiredSum - currentNode.value
+
+  # 5: If currentNode is NOT a leaf node, perform DFS recursion on child nodes and pass down all current information
+  findPathsRecursive(currentNode.left, currentSum, currentPath, allPaths)
+  findPathsRecursive(currentNode.right, currentSum, currentPath, allPaths)
+
+  # 6: Remove the currentNode from the path to backtrack!
+  # We remove the currentNode as we are going back up the recusrive call stack!
+  del currentPath[-1]
+```
+
+---
+## 🟨 [Sum of Path Numbers](https://www.educative.io/courses/grokking-the-coding-interview/YQ5o5vEXP69)
+Given a binary tree where each node can only have a digit (0-9) value, each root-to-leaf path will represent a number. Find the total sum of all the numbers represented by all paths.
+
+<img src="resources/sum-of-path-numbers-1.png" align="left" width="500px"/>
+<img src="resources/sum-of-path-numbers-2.png" align="middle" width="500px"/>
+
+
+### [**Depth First Search - Recursive**](./trees/sum-of-path-numbers.py)
+```python
+class TreeNode:
+  def __init__(self, value): 
+    self.value = value
+    self.left = None
+    self.right = None
+
+def findPathSum(root): 
+  pathSum = 0
+  return findPathSumRecursive(root, pathSum)
+
+# O(n) Time - where n is the total number of nodes in the tree
+# We traverse each node once. 
+# O(n) Space worst case - where n is the total number of nodes in the tree that will be stored in the recursion stack
+# Worst case is when the given tree is a linked list where every node has only one child
+def findPathSumRecursive(currentNode, pathSum): 
+  # 1: Base case for when we reach the branch end with None child nodes
+  if currentNode is None:
+    return 0
+  
+  # 2: For each update to pathSum, we are adding the next digit!
+  # Hence, the currentNode.value will be appended as the LSB
+  # while 10 * pathSum will be shifted to be MSB
+  pathSum = 10 * pathSum + currentNode.value
+
+  # 3: If currentNode is a leaf node, return the branch pathSum   
+  if currentNode.left is None and currentNode.right is None: 
+    return pathSum
+  
+  # 4: Sum all branchPathSums in both left and right subtrees
+  return findPathSumRecursive(currentNode.left, pathSum) + findPathSumRecursive(currentNode.right, pathSum)
+```
+
+---
+## [🟨 Path With Given Sequence ](https://www.educative.io/courses/grokking-the-coding-interview/m280XNlPOkn)
+Given a binary tree and a number sequence, find if the sequence is present as a root-to-leaf path in the given tree.
+
+<img src="resources/path-with-given-sequence-1.png" align="left" width="500px"/>
+<img src="resources/path-with-given-sequence-2.png" align="middle" width="500px"/>
+
+
+### [**Depth First Search - Recursive**](./trees/path-with-given-sequence.py)
+```python
+class TreeNode: 
+  def __init__(self, value): 
+    self.value = value 
+    self.left = None
+    self.right = None 
+
+def findPath(root, sequence):
+  sequenceIdx = 0 
+  # EDGE: If treeNode is empty, return True if sequence is empty, else return False
+  if not root: 
+    return len(sequence) == 0
+  return findPathRecursive(root, sequence, sequenceIdx)
+
+# O(n) Time - where n is the total number of nodes in the tree
+# We traverse each node once. 
+# O(n) Space worst case - where n is the total number of nodes in the tree that will be stored in the recursion stack
+# Worst case is when the given tree is a linked list where every node has only one child
+def findPathRecursive(currentNode, sequence, sequenceIdx): 
+  # 1: Base case for when we reach the branch end with None child nodes
+  if currentNode is None: 
+    return False
+
+  # 2: If sequenceIdx has moved and exceeded past sequenceLength 
+  # or if there is a mismatch between currentNode.value and currentSequenceValue,
+  sequenceLength = len(sequence)
+  if sequenceIdx >= sequenceLength or currentNode.value != sequence[sequenceIdx]:
+    return False
+  
+  # 3: If currentNode is a leaf node and sequenceIdx == sequenceLength - 1, return True 
+  if currentNode.left is None and currentNode.right is None and sequenceIdx == sequenceLength - 1: 
+    return True
+
+  # 4: If currentNode is NOT a leaf node, perform DFS recursion on child nodes
+  # and increment sequenceIdx to iterate the sequence array
+  return findPathRecursive(currentNode.left, sequence, sequenceIdx + 1) or findPathRecursive(currentNode.right, sequence, sequenceIdx + 1)
+```
+
+---
+
+## 🟨 [Count Paths for a Sum](https://www.educative.io/courses/grokking-the-coding-interview/xV2J7jvN1or)
+Given a binary tree and a number ‘S’, find all paths in the tree such that the sum of all the node values of each path equals ‘S’. Please note that the paths can start or end at any node but all paths must follow direction from parent to child (top to bottom).
+
+<img src="resources/count-paths-for-a-sum-1.png" align="left" width="500px"/>
+<img src="resources/count-paths-for-a-sum-2.png" align="middle" width="500px"/>
+
+
+### [**Depth First Search - Recursive**](./trees/count-paths-for-a-sum.py)
+```python
+class TreeNode:
+  def __init__(self, value, left=None, right=None): 
+    self.value = value
+    self.left = left
+    self.right = right
+
+def countPaths(root, targetSum): 
+  currentPath = []
+  return countPathsRecursive(root, targetSum, currentPath)
+
+# Time Complexity: O(n^2) worst or O(nlogn) best - where n is the total number of nodes in the tree
+# We traverse each node once, but for every node, we also iterate the currentPath.
+# For a skewed tree, currentPath iterates at worst case O(n)
+# For a balanced tree, currentPath iterates at best case O(log(n))
+
+# Space Complexity: O(n) worst - where n is the total number of nodes in the tree that will be stored in the recursion stack
+# Worst case is when the given tree is a linked list where every node has only one child
+def countPathsRecursive(currentNode, targetSum, currentPath): 
+  # 1: Base case for when we reach the branch end with None child nodes
+  if currentNode is None: 
+    return 0
+  
+  # 2: Append currentNode.value to currentPath[]
+  currentPath.append(currentNode.value)
+  pathCount, pathSum = 0, 0 # Initialise pathCount and pathSum
+
+  # 3: Find the sums of all subpaths in the currentPath[] so far
+  for idx in range(len(currentPath) - 1, -1, -1): # Iterate backwards!
+    pathSum += currentPath[idx]
+    # 4: If the sum of any subpath == targetSum, we found a path! so we increment pathCount
+    if pathSum == targetSum: 
+      pathCount += 1
+
+  # 5: Perform recursive DFS on child nodes while passing down all current information
+  # Aggregate pathCount from all recursive calls in both left and right subtrees
+  pathCount += countPathsRecursive(currentNode.left, targetSum, currentPath)
+  pathCount += countPathsRecursive(currentNode.right, targetSum, currentPath)
+
+  # 6: Remove currentNode from currentPath[] to backtrack
+  # We need to remove currentNode while we are going up the recursive call stack
+  del currentPath[-1]
+
+  return pathCount
+```
+
+---
+## 🟨 [Tree Diameter](https://www.educative.io/courses/grokking-the-coding-interview/xVV1jA29YK9)
+
+Given a binary tree, find the length of its diameter. The diameter of a tree is the number of nodes on the longest path between any two leaf nodes. The diameter of a tree may or may not pass through the root.
+
+Note: You can always assume that there are at least two leaf nodes in the given tree.
+
+<img src="resources/tree-diameter-1.png" align="left" width="500px"/>
+<img src="resources/tree-diameter-2.png" align="middle" width="500px"/>
+
+
+### [**Depth First Search - Recursive**](./trees/tree-diameter.py)
+```python
+class TreeNode:
+  def __init__(self, val, left=None, right=None):
+    self.val = val
+    self.left = left
+    self.right = right
+
+class TreeDiameter:
+
+  def __init__(self):
+    self.treeDiameter = 0
+
+  def find_diameter(self, root):
+    self.calculate_height(root)
+    return self.treeDiameter
+
+   # O(n) Time - where n is the total number of nodes in the tree
+   # We traverse each node once. 
+   # O(n) Space worst case - where n is the total number of nodes in the tree that will be stored in the recursion stack
+   # Worst case is when the given tree is a linked list where every node has only one child
+  def calculate_height(self, currentNode):
+    if currentNode is None:
+      return 0
+
+    leftTreeHeight = self.calculate_height(currentNode.left)
+    rightTreeHeight = self.calculate_height(currentNode.right)
+
+    # if the current node doesn't have a left or right subtree, we can't have
+    # a path passing through it, since we need a leaf node on each side
+    if leftTreeHeight is not None and rightTreeHeight is not None:
+
+      # diameter at the current node will be equal to the height of left subtree +
+      # the height of right sub-trees + '1' for the current node
+      diameter = leftTreeHeight + rightTreeHeight + 1
+
+      # update the global tree diameter
+      self.treeDiameter = max(self.treeDiameter, diameter)
+
+    # height of the current node will be equal to the maximum of the heights of
+    # left or right subtrees plus '1' for the current node
+    return max(leftTreeHeight, rightTreeHeight) + 1
+```
+
+---
+## 🟥 [Path with Maximum Sum](https://www.educative.io/courses/grokking-the-coding-interview/B89q6NpX0Vx)
+
+Find the path with the maximum sum in a given binary tree. Write a function that returns the maximum sum.
+
+A path can be defined as a sequence of nodes between any two nodes and doesn’t necessarily pass through the root. The path must contain at least one node.
+
+<img src="resources/path-with-maximum-sum-1.png" align="left" width="500px"/>
+<img src="resources/path-with-maximum-sum-2.png" align="middle" width="500px"/>
+
+
+### [**Depth First Search - Recursive**](./trees/path-with-maximum-sum.py)
+```python
+import math
+
+
+class TreeNode:
+  def __init__(self, val, left=None, right=None):
+    self.val = val
+    self.left = left
+    self.right = right
+
+
+class MaximumPathSum:
+
+   # O(n) Time - where n is the total number of nodes in the tree
+   # We traverse each node once. 
+   # O(n) Space worst case - where n is the total number of nodes in the tree that will be stored in the recursion stack
+   # Worst case is when the given tree is a linked list where every node has only one child
+  def find_maximum_path_sum(self, root):
+    self.globalMaximumSum = -math.inf
+    self.find_maximum_path_sum_recursive(root)
+    return self.globalMaximumSum
+
+  def find_maximum_path_sum_recursive(self, currentNode):
+    if currentNode is None:
+      return 0
+
+    maxPathSumFromLeft = self.find_maximum_path_sum_recursive(
+      currentNode.left)
+    maxPathSumFromRight = self.find_maximum_path_sum_recursive(
+      currentNode.right)
+
+    # ignore paths with negative sums, since we need to find the maximum sum we should
+    # ignore any path which has an overall negative sum.
+    maxPathSumFromLeft = max(maxPathSumFromLeft, 0)
+    maxPathSumFromRight = max(maxPathSumFromRight, 0)
+
+    # maximum path sum at the current node will be equal to the sum from the left subtree +
+    # the sum from right subtree + val of current node
+    localMaximumSum = maxPathSumFromLeft + maxPathSumFromRight + currentNode.val
+
+    # update the global maximum sum
+    self.globalMaximumSum = max(self.globalMaximumSum, localMaximumSum)
+
+    # maximum sum of any path from the current node will be equal to the maximum of
+    # the sums from left or right subtrees plus the value of the current node
+    return max(maxPathSumFromLeft, maxPathSumFromRight) + currentNode.val
+
+# Alternative Solution
+def maxPathSum(root): 
+  result = [root.value]
+
+  # Return max path sum without split
+  def maxPathSumRecursive(root): 
+    if root is None:
+      return 0
+    
+    leftMax = maxPathSumRecursive(root.left)
+    rightMax = maxPathSumRecursive(root.right)
+    leftMax = max(leftMax, 0)
+    rightMax = max(rightMax, 0)
+
+    # Compute max path sum with split
+    result[0] = max(result[0], root.value + leftMax + rightMax)
+    return root.value + max(leftMax, rightMax)
+
+  maxPathSumRecursive(root)
+  return result[0]
+```
+
+---
+# <div id='bfs'/> 🌳 **Breadth First Search Pattern**
+#### To perform root to leaf computations
+```python
+from collections import deque
+# 1: Base edge case to break the depth first search when we have arrived None child nodes of the leaf node
+if node is None:
+    return
+
+# 2: Initialise a queue with root node
+queue = deque()
+queue.append(root)
+
+# 3: Iterate all elements of the queue in FIFO order
+while len(queue) > 0: 
+   levelSize = len(queue)
+   for _ in range(levelSize): 
+      currentNode = queue.popleft() # Pop the bottom-most element
+      currentLevel.append(currentNode.value)  
+
+      # 4: Perform forwardtracking computations
+      doSomething()
+
+      # 5: Push child nodes to queue to traverse down the tree
+      if currentNode.left is not None: # if currentNode.left
+        queue.append(currentNode.left)
+      if currentNode.right is not None: # if currentNode.right
+        queue.append(currentNode.right)
+
+   result.append(computedResult)
+```
+#### [📋 **Back to Table of Contents**](#toc)
+
+---
+## [🟩 Binary Tree Level Order Traversal](https://www.educative.io/courses/grokking-the-coding-interview/xV7E64m4lnz)
+
+Given a binary tree, populate an array to represent its level-by-level traversal. You should populate the values of all nodes of each level from left to right in separate sub-arrays.
+
+
+<img src="resources/binary-tree-level-order-traversal-1.png" align="left" width="500px"/>
+<img src="resources/binary-tree-level-order-traversal-2.png" align="middle" width="500px"/>
+
+
+### [**Breadth First Search - Iterative**](./trees/binary-tree-level-order-traversal.py)
+```python
+from collections import deque
+class TreeNode: 
+  def __init__(self, value, left=None, right=None): 
+    self.value = value
+    self.left = left
+    self.right = right
+
+# O(n) Time - where n is the total number of nodes in the tree
+# We traverse each node once. 
+# O(n) Space worst case - where n is the total number of nodes in the tree
+# We need to return a list containing the level order traversal
+# We also need O(n) for the queue. We can have a max of n/2 nodes at any level (at the lowest level of BT)
+def traverse(root): 
+  result = [] 
+  # 1: Base case for when we reach the branch end with None child nodes
+  if root is None: 
+    return result 
+  
+  # 2: Instantiate the deque() for O(1) insertion on both sides of array
+  queue = deque()
+  # 3: Start by pushing the root node to the queu
+  queue.append(root) 
+  
+  # 4: Keep iterating until the queue is empty
+  while len(queue) > 0: # while queue
+    levelSize = len(queue)
+    currentLevel = []
+    # 5: For each iteration, firstly, count the elements in the queue (levelSize)
+    # We will have these many nodes in the current level
+    for _ in range(levelSize): 
+      # 6: Remove levelSize nodes from the queue and push their node.value into an array to represent current level
+      currentNode = queue.popleft()
+      currentLevel.append(currentNode.value)
+
+      # 7: After popping node from the queue, insert both of its children into the queue
+      if currentNode.left is not None: # if currentNode.left
+        queue.append(currentNode.left)
+      if currentNode.right is not None: # if currentNode.right
+        queue.append(currentNode.right)
+
+    # 8: After fully traversing the current level, store currentLevel results
+    result.append(currentLevel)
+    # 9: # If the queue is not empty, repeat from Step 5 to traverse the next level
+  return result
+```
+
+---
+## [🟩 Reverse Level Order Traversal ](https://www.educative.io/courses/grokking-the-coding-interview/m2N6GwARL8r)
+
+Given a binary tree, populate an array to represent its level-by-level traversal in reverse order, i.e., the lowest level comes first. You should populate the values of all nodes in each level from left to right in separate sub-arrays.
+
+<img src="resources/reverse-level-order-traversal-1.png" align="left" width="500px"/>
+<img src="resources/reverse-level-order-traversal-2.png" align="middle" width="500px"/>
+
+
+### [**Breadth First Search - Iterative**](./trees/reverse-level-order-traversal.py)
+```python
+from collections import deque
+class TreeNode: 
+  def __init__(self, value, left=None, right=None): 
+    self.value = value
+    self.left = left
+    self.right = right
+
+# O(n) Time - where n is the total number of nodes in the tree
+# We traverse each node once. 
+# O(n) Space worst case - where n is the total number of nodes in the tree
+# We need to return a list containing the level order traversal
+# We also need O(n) for the queue. We can have a max of n/2 nodes at any level (at the lowest level of BT)
+def traverse(root): 
+  result = deque() # To enable .appendleft method
+  # 1: Base case for when we reach the branch end with None child nodes
+  if root is None: 
+    return result 
+  
+  # 2: Instantiate the deque() for O(1) insertion on both sides of array
+  queue = deque()
+  # 3: Start by pushing the root node to the queu
+  queue.append(root) 
+  
+  # 4: Keep iterating until the queue is empty
+  while len(queue) > 0: # while queue
+    levelSize = len(queue)
+    currentLevel = []
+    # 5: Traverse every node in the current level
+    for _ in range(levelSize): 
+      # 6: Remove levelSize nodes from the queue and push their node.value into an array to represent current level
+      currentNode = queue.popleft()
+      currentLevel.append(currentNode.value)
+
+      # 7: After popping node from the queue, insert both of its children into the queue
+      if currentNode.left is not None: # if currentNode.left
+        queue.append(currentNode.left)
+      if currentNode.right is not None: # if currentNode.right
+        queue.append(currentNode.right)
+
+    # 8: After fully traversing the current level, store currentLevel results
+    # # Appending each level from the left will store levels from the lowest to highest of BT
+    result.appendleft(currentLevel) 
+    # 9: If the queue is not empty, repeat from Step 5 to traverse the next level
+  return list(result)
+```
+
+---
+## [🟨 Zigzag Traversal](https://www.educative.io/courses/grokking-the-coding-interview/qVA27MMYYn0)
+
+Given a binary tree, populate an array to represent its zigzag level order traversal. You should populate the values of all nodes of the first level from left to right, then right to left for the next level and keep alternating in the same manner for the following levels.
+
+<img src="resources/zigzag-traversal-1.png" align="left" width="500px"/>
+<img src="resources/zigzag-traversal-2.png" align="middle" width="500px"/>
+
+
+### [**Breadth First Search - Iterative**](./trees/zigzag-traversal.py)
+```python
+from collections import deque
+class TreeNode: 
+  def __init__(self, value, left=None, right=None): 
+    self.value = value
+    self.left = left
+    self.right = right
+
+# O(n) Time - where n is the total number of nodes in the tree
+# We traverse each node once. 
+# O(n) Space worst case - where n is the total number of nodes in the tree
+# We need to return a list containing the level order traversal
+# We also need O(n) for the queue. We can have a max of n/2 nodes at any level (at the lowest level of BT)
+def traverse(root): 
+  result = []
+  # 1: Base case for when we reach the branch end with None child nodes
+  if root is None: 
+    return result 
+  
+  # 2: Instantiate the deque() for O(1) insertion on both sides of array
+  queue = deque()
+  # 3: Start by pushing the root node to the queu
+  queue.append(root) 
+
+  leftToRight = True
+  
+  # 4: Keep iterating until the queue is empty
+  while len(queue) > 0: # while queue
+    levelSize = len(queue)
+    currentLevel = deque() # To enable .appendleft method
+    # 5: Traverse every node in the current level
+    for _ in range(levelSize): 
+      # 6: Remove levelSize nodes from the queue and push their node.value into an array to represent current level
+      currentNode = queue.popleft()
+      
+      if leftToRight: 
+        currentLevel.append(currentNode.value)
+      else:
+        currentLevel.appendleft(currentNode.value)
+
+      # 7: After popping node from the queue, insert both of its children into the queue
+      if currentNode.left is not None: # if currentNode.left
+        queue.append(currentNode.left)
+      if currentNode.right is not None: # if currentNode.right
+        queue.append(currentNode.right)
+
+    # 8: After fully traversing the current level, store currentLevel results
+    result.append(list(currentLevel)) # Convert .deque() object to list
+    leftToRight = not leftToRight
+    # 9: # If the queue is not empty, repeat from Step 5 to traverse the next level
+  return result
+```
+
+---
+## [🟩Level Averages in a Binary Tree ](https://www.educative.io/courses/grokking-the-coding-interview/YQWkA2l67GW)
+
+Given a binary tree, populate an array to represent the averages of all of its levels.
+
+<img src="resources/level-averages-in-a-binary-tree-1.png" align="left" width="500px"/>
+<img src="resources/level-averages-in-a-binary-tree-2.png" align="middle" width="500px"/>
+
+
+### [**Breadth First Search - Iterative**](./trees/level-averages-in-a-binary-tree.py)
+```python
+from collections import deque
+class TreeNode: 
+  def __init__(self, value, left=None, right=None): 
+    self.value = value
+    self.left = left
+    self.right = right
+
+# O(n) Time - where n is the total number of nodes in the tree
+# We traverse each node once. 
+# O(n) Space worst case - where n is the total number of nodes in the tree
+# We need to return a list containing the level order traversal
+# We also need O(n) for the queue. We can have a max of n/2 nodes at any level (at the lowest level of BT)
+def findLevelAverages(root): 
+  result = []
+  # 1: Base case for when we reach the branch end with None child nodes
+  if root is None: 
+    return result 
+  
+  # 2: Instantiate the deque() for O(1) insertion on both sides of array
+  queue = deque()
+  # 3: Start by pushing the root node to the queu
+  queue.append(root) 
+  
+  # 4: Keep iterating until the queue is empty
+  while len(queue) > 0: # while queue
+    levelSize = len(queue)
+    levelSum = 0.0 # Initalise float type for level averages
+    # 5: Traverse every node in the current level
+    for _ in range(levelSize): 
+      # 6: Remove levelSize nodes from the queue and push their node.value into an array to represent current level
+      currentNode = queue.popleft()
+      # 7: Add the currentNode.value to the running sum for each level
+      levelSum += currentNode.value
+
+      # 8: After popping node from the queue, insert both of its children into the queue
+      if currentNode.left is not None: # if currentNode.left
+        queue.append(currentNode.left)
+      if currentNode.right is not None: # if currentNode.right
+        queue.append(currentNode.right)
+
+    # 9: After fully traversing the current level, append the current level's average to result
+    result.append(levelSum / levelSize) 
+    # 10: # If the queue is not empty, repeat from Step 5 to traverse the next level
+  return result
+```
+
+---
+## [🟩Level Maxes in a Binary Tree ](https://www.educative.io/courses/grokking-the-coding-interview/YQWkA2l67GW)
+
+Given a binary tree, populate an array to represent the max values of all of its levels.
+
+
+### [**Breadth First Search - Iterative**](./trees/maxes-in-a-binary-tree.py)
+```python
+from collections import deque
+class TreeNode: 
+  def __init__(self, value, left=None, right=None): 
+    self.value = value
+    self.left = left
+    self.right = right
+
+# O(n) Time - where n is the total number of nodes in the tree
+# We traverse each node once. 
+# O(n) Space worst case - where n is the total number of nodes in the tree
+# We need to return a list containing the level order traversal
+# We also need O(n) for the queue. We can have a max of n/2 nodes at any level (at the lowest level of BT)
+def findMaxValues(root): 
+  result = []
+  # 1: Base case for when we reach the branch end with None child nodes
+  if root is None: 
+    return result 
+  
+  # 2: Instantiate the deque() for O(1) insertion on both sides of array
+  queue = deque()
+  # 3: Start by pushing the root node to the queu
+  queue.append(root) 
+  
+  # 4: Keep iterating until the queue is empty
+  while len(queue) > 0: # while queue
+    levelSize = len(queue)
+    maxValue = 0
+    # 5: Traverse every node in the current level
+    for _ in range(levelSize): 
+      # 6: Remove levelSize nodes from the queue and push their node.value into an array to represent current level
+      currentNode = queue.popleft()
+      # 7: Add the max value so far
+      maxValue = max(maxValue, currentNode.value)
+
+      # 8: After popping node from the queue, insert both of its children into the queue
+      if currentNode.left is not None: # if currentNode.left
+        queue.append(currentNode.left)
+      if currentNode.right is not None: # if currentNode.right
+        queue.append(currentNode.right)
+
+    # 9: After fully traversing the current level, append the current level's max to result
+    result.append(maxValue) 
+    # 10: # If the queue is not empty, repeat from Step 5 to traverse the next level
+  return result
+
+def main():
+  root = TreeNode(12)
+  root.left = TreeNode(7)
+  root.right = TreeNode(1)
+  root.left.left = TreeNode(9)
+  root.left.right = TreeNode(2)
+  root.right.left = TreeNode(10)
+  root.right.right = TreeNode(5)
+  print("Level maxes are: " + str(findMaxValues(root)))
+
+if __name__ == "__main__":
+  main()
+```
+
+---
+## [🟩 Minimum Depth of a Binary Tree](https://www.educative.io/courses/grokking-the-coding-interview/3jwVx84OMkO)
+Find the minimum depth of a binary tree. The minimum depth is the number of nodes along the shortest path from the root node to the nearest leaf node.
+
+<img src="resources/minimum-depth-of-a-binary-tree-1.png" align="left" width="500px"/>
+<img src="resources/minimum-depth-of-a-binary-tree-2.png" align="middle" width="500px"/>
+
+
+### [**Breadth First Search - Iterative**](./trees/minimum-depth-of-a-binary-tree.py)
+```python
+from collections import deque
+class TreeNode: 
+  def __init__(self, value, left=None, right=None): 
+    self.value = value
+    self.left = left
+    self.right = right
+
+# O(n) Time - where n is the total number of nodes in the tree
+# We traverse each node once. 
+# O(n) Space worst case - where n is the total number of nodes in the tree
+# We need to return a list containing the level order traversal
+# We also need O(n) for the queue. We can have a max of n/2 nodes at any level (at the lowest level of BT)
+def findMinimumDepth(root): 
+  # 1: Base case for when we reach the branch end with None child nodes
+  if root is None: 
+    return 0 
+  
+  # 2: Instantiate the deque() for O(1) insertion on both sides of array
+  queue = deque()
+  # 3: Start by pushing the root node to the queu
+  queue.append(root) 
+  minimumDepth = 0
+  # 4: Keep iterating until the queue is empty
+  while len(queue) > 0: # while queue
+    levelSize = len(queue)
+    # 5: Increment minimumDepth for every level traversal
+    minimumDepth += 1 
+    # 6: Traverse every node in the current level
+    for _ in range(levelSize): 
+      # 7: Remove levelSize nodes from the queue and push their node.value into an array to represent current level
+      currentNode = queue.popleft()
+      # 8: If currentNode is a leaf, return the result immediately for shortest depth
+      if not currentNode.left and not currentNode.right:
+        return minimumDepth
+
+      # 9: After popping node from the queue, insert both of its children into the queue
+      if currentNode.left is not None: # if currentNode.left
+        queue.append(currentNode.left)
+      if currentNode.right is not None: # if currentNode.right
+        queue.append(currentNode.right)
+    # 10: # If the queue is not empty, repeat from Step 5 to traverse the next level
+```
+
+
+---
+## [🟩 Maximum Depth of a Binary Tree](https://www.educative.io/courses/grokking-the-coding-interview/3jwVx84OMkO)
+Find the minimum depth of a binary tree. The minimum depth is the number of nodes along the shortest path from the root node to the nearest leaf node.
+
+
+### [**Breadth First Search - Iterative**](./trees/maximum-depth-of-a-binary-tree.py)
+```python
+from collections import deque
+class TreeNode: 
+  def __init__(self, value, left=None, right=None): 
+    self.value = value
+    self.left = left
+    self.right = right
+
+# O(n) Time - where n is the total number of nodes in the tree
+# We traverse each node once. 
+# O(n) Space worst case - where n is the total number of nodes in the tree
+# We need to return a list containing the level order traversal
+# We also need O(n) for the queue. We can have a max of n/2 nodes at any level (at the lowest level of BT)
+def findMaximumDepth(root): 
+  # 1: Base case for when we reach the branch end with None child nodes
+  if root is None: 
+    return 0 
+  
+  # 2: Instantiate the deque() for O(1) insertion on both sides of array
+  queue = deque()
+  # 3: Start by pushing the root node to the queu
+  queue.append(root) 
+  maximumDepth = 0
+  # 4: Keep iterating until the queue is empty
+  while len(queue) > 0: # while queue
+    levelSize = len(queue)
+    # 5: Increment maximumDepth for every level traversal
+    maximumDepth += 1 
+    # 6: Traverse every node in the current level
+    for _ in range(levelSize): 
+      # 7: Remove levelSize nodes from the queue and push their node.value into an array to represent current level
+      currentNode = queue.popleft()
+
+      # 9: After popping node from the queue, insert both of its children into the queue
+      if currentNode.left is not None: # if currentNode.left
+        queue.append(currentNode.left)
+      if currentNode.right is not None: # if currentNode.right
+        queue.append(currentNode.right)
+
+  # 10: # If the queue is not empty, repeat from Step 5 to traverse the next level
+  return maximumDepth
+```
+
+---
+## [🟩 Level Order Successor](https://www.educative.io/courses/grokking-the-coding-interview/7nO4VmA74Lr)
+
+Given a binary tree and a node, find the level order successor of the given node in the tree. The level order successor is the node that appears right after the given node in the level order traversal.
+
+<img src="resources/level-order-successor-1.png" align="left" width="500px"/>
+<img src="resources/level-order-successor-2.png" align="middle" width="500px"/>
+<img src="resources/level-order-successor-3.png" align="middle" width="500px"/>
+
+
+### [**Breadth First Search - Iterative**](./trees/level-order-successor.py)
+```python
+from collections import deque
+class TreeNode:
+  def __init__(self, value, left=None, right=None):
+    self.value = value
+    self.left = left
+    self.right = right
+    
+# O(n) Time - where n is the total number of nodes in the tree
+# We traverse each node once. 
+# O(n) Space worst case - where n is the total number of nodes in the tree
+# We need to return a list containing the level order traversal
+# We also need O(n) for the queue. We can have a max of n/2 nodes at any level (at the lowest level of BT)
+def findSuccessor(root, key):
+  if root is None:
+    return None 
+  
+  queue = deque()
+  queue.append(root) 
+  
+  while len(queue) > 0: 
+    currentNode = queue.popleft()
+    # We will not keep track of all the levels. 
+    # Instead we will keep inserting child nodes to the queue.
+    if currentNode.left is not None: 
+      queue.append(currentNode.left)
+    if currentNode.right is not None: 
+      queue.append(currentNode.right)
+
+    # As soon as we find the given node, we will return the next node from the queue as the level order successor.
+    if currentNode.value == key: 
+      break
+  return queue[0] if queue else None
+```
