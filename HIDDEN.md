@@ -5650,3 +5650,193 @@ def findSuccessor(root, key):
 ```
 </p>
 </details>
+
+---
+## [🟨 Connect Level Order Siblings ](https://www.educative.io/courses/grokking-the-coding-interview/m2YYxXDOJ03)
+
+Given a binary tree, connect each node with its level order successor. The last node of each level should point to a null node.
+
+<img src="resources/connect-level-order-siblings-1.png" align="left" width="350px"/>
+<img src="resources/connect-level-order-siblings-2.png" align="middle" width="350px"/>
+
+<details><summary><b>Solution</b></summary>
+<p>
+
+### [**Breadth First Search - Iterative**](./trees/connect-level-order-siblings.py)
+```python
+from collections import deque 
+class TreeNode: 
+  def __init__(self, value, left=None, right=None, next=None): 
+    self.value = value 
+    self.left = left 
+    self.right = right
+    self.next = next 
+
+  def printLevelOrder(self): 
+    nextLevelRoot = self 
+    while nextLevelRoot is not None: 
+      currentNode = nextLevelRoot
+      nextLevelRoot = None 
+      while currentNode is not None: 
+        print(f'{str(currentNode.value)} ', end='')
+        if not nextLevelRoot: 
+          if currentNode.left is not None: 
+            nextLevelRoot = currentNode.left
+          elif currentNode.right is not None: 
+            nextLevelRoot = currentNode.right
+        currentNode = currentNode.next
+      print()
+
+# O(n) Time - where n is the total number of nodes in the tree
+# We traverse each node once. 
+# O(n) Space worst case - where n is the total number of nodes in the tree
+# We need to return a list containing the level order traversal
+# We also need O(n) for the queue. We can have a max of n/2 nodes at any level (at the lowest level of BT)
+def connectLevelOrderSiblings(root):
+  # 1: Base case for when we reach the branch end with None child nodes
+  if root is None:
+    return
+
+  # 2: Instantiate the deque() for O(1) insertion on both sides of array
+  queue = deque()
+  queue.append(root) # 3: Start by pushing the root node to the queue
+
+  # 4: Keep iterating until the queue is empty
+  while len(queue) > 0: 
+    previousNode = None
+    levelSize = len(queue)
+
+    # 5: Traverse every node in the current level and connect all nodes of this level
+    for _ in range(levelSize): 
+      currentNode = queue.popleft()
+
+      # 6: Store the previousNode to connect it with the currentNode
+      if previousNode is not None: 
+        previousNode.next = currentNode
+      previousNode = currentNode
+
+      # 7: After popping node from the queue, insert both of its children into the queue
+      if currentNode.left is not None:
+        queue.append(currentNode.left)
+      if currentNode.right is not None: 
+        queue.append(currentNode.right)
+```
+</p>
+</details>
+
+---
+## [🟨 Connect All Level Order Siblings](https://www.educative.io/courses/grokking-the-coding-interview/NE5109Jl02v)
+
+Given a binary tree, connect each node with its level order successor. The last node of each level should point to the first node of the next level.
+
+<img src="resources/connect-all-level-order-siblings-1.png" align="left" width="500px"/>
+<img src="resources/connect-all-level-order-siblings-2.png" align="middle" width="500px"/>
+
+<details><summary><b>Solution</b></summary>
+<p>
+
+### [**Breadth First Search - Iterative**](./trees/connect-all-level-order-siblings.py)
+```python
+from collections import deque
+class TreeNode:
+  def __init__(self, value):
+    self.value = value
+    self.left, self.right, self.next = None, None, None
+
+  # tree traversal using 'next' pointer
+  def printTree(self):
+    print("Traversal using 'next' pointer: ", end='')
+    current = self
+    while current:
+      print(str(current.value) + " ", end='')
+      current = current.next
+
+# O(n) Time - where n is the total number of nodes in the tree
+# We traverse each node once. 
+# O(n) Space worst case - where n is the total number of nodes in the tree
+# We need to return a list containing the level order traversal
+# We also need O(n) for the queue. We can have a max of n/2 nodes at any level (at the lowest level of BT)
+def connectAllSiblings(root):
+  # 1: Base case for when we reach the branch end with None child nodes
+  if root is None:
+    return
+
+  # 2: Instantiate the deque() for O(1) insertion on both sides of array
+  queue = deque()
+  queue.append(root) # 3: Start by pushing the root node to the queue
+  currentNode, previousNode = None, None
+
+  # 4: Keep iterating until the queue is empty
+  while len(queue) > 0: 
+    currentNode = queue.popleft()
+
+    # 5: Store the previousNode to connect it with the currentNode
+    if previousNode is not None: 
+      previousNode.next = currentNode
+    previousNode = currentNode
+
+    # 6: After popping node from the queue, insert both of its children into the queue
+    if currentNode.left is not None: 
+      queue.append(currentNode.left)
+    if currentNode.right is not None: 
+      queue.append(currentNode.right)
+```
+</p>
+</details>
+
+---
+## [🟩 Right View of a Binary Tree ](https://www.educative.io/courses/grokking-the-coding-interview/B8nj5RB1LJo)
+
+Given a binary tree, return an array containing nodes in its right view. The right view of a binary tree is the set of nodes visible when the tree is seen from the right side.
+
+<img src="resources/right-view-of-a-binary-tree-1.png" align="left" width="500px"/>
+<img src="resources/right-view-of-a-binary-tree-2.png" align="middle" width="500px"/>
+
+<details><summary><b>Solution</b></summary>
+<p>
+
+### [**Breadth First Search - Iterative**](./trees/right-view-of-a-binary-tree.py)
+```python
+from collections import deque
+class TreeNode:
+  def __init__(self, value, left=None, right=None):
+    self.value = value
+    self.left = left
+    self.right = right
+
+# O(n) Time - where n is the total number of nodes in the tree
+# We traverse each node once. 
+# O(n) Space worst case - where n is the total number of nodes in the tree
+# We need to return a list containing the level order traversal
+# We also need O(n) for the queue. We can have a max of n/2 nodes at any level (at the lowest level of BT)
+def treeRightView(root):
+  result = []
+  # 1: Base case for when we reach the branch end with None child nodes
+  if root is None: 
+    return
+
+  # 2: Instantiate the deque() for O(1) insertion on both sides of array
+  queue = deque()
+  queue.append(root) # 3: Start by pushing the root node to the queue
+
+  # 4: Keep iterating until the queue is empty
+  while len(queue) > 0: 
+    levelSize = len(queue)
+    
+    # 5: Traverse every node in the current level and connect all nodes of this level
+    for idx in range(levelSize): 
+      currentNode = queue.popleft()
+
+      # 6: If currentNode is the last node of this level, append to result
+      if idx == levelSize - 1: 
+        result.append(currentNode)
+      
+      # 7: After popping node from the queue, insert both of its children into the queue
+      if currentNode.left is not None:
+        queue.append(currentNode.left)
+      if currentNode.right is not None:
+        queue.append(currentNode.right)
+  return result
+```
+</p>
+</details>
