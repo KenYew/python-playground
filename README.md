@@ -36,6 +36,8 @@ Blind 75 questions, coding patterns and in-depth solutions for FAANG coding inte
 
 1. ### [🪟 **Sliding Window**](#window)
 1. ### [✌️ **Two Pointers**](#twopointers)
+1. ### [🔎 **Binary Search**](#binary-search)
+1. ### [🔗 **Linked List Reversal**](#linked-list-reversal)
 1. ### [🌲 **Depth First Search**](#dfs)
 1. ### [🌳 **Breadth First Search**](#bfs)
 
@@ -4410,7 +4412,378 @@ def dutchFlagSort(array):
 1. If `array[idx] == 2`, swap `array[idx] and array[high]` values and decrement `*high`
 
 ---
+# <div id='binary-search'/> 🔎 **Binary Search Pattern**
+<img src="resources/binary-and-linear-search-animations.gif" width="500px"/><br/>
+
+```python
+def binarySearch(array, target):
+    # 1: Initialise two pointers for each side of the array
+    left, right = 0, len(array) - 1
+	
+    # 2: While both pointers have not cross each other,
+    while (left <= right): # EDGE: <= is used for the edge case where array has only 1 element.  
+        # 3: Evaluate the midpoint pointer by calculating (left + right) // 2
+        mid = (left + right) // 2
+        # 4: Return the midpoint index if array[mid] == target
+        if array[mid] == target:
+            return mid
+        else:
+            # 5: Else, if array[mid] is already smaller than the target, then we should discard everything on the left and update the new lower boundary: left = mid + 1 
+            if (array[mid] < target):
+                left = mid + 1
+            # 6: Otherwise, we discard everything on the right and update the new upper boundary: right = mid - 1
+            else: 
+                right = mid - 1
+    # 7: Return -1 by default if we cannot find our target number in the array
+    return -1
+```
+#### [📋 **Back to Table of Contents**](#toc)
+---
+## 🟩 [Order-agnostic Binary Search](https://www.educative.io/courses/grokking-the-coding-interview/R8LzZQlj8lO)
+>* Given a sorted array of numbers, find if a given number ‘key’ is present in the array. Though we know that the array is sorted, we don’t know if it’s sorted in ascending or descending order. You should assume that the array can have duplicates.
+>* Write a function to return the index of the ‘key’ if it is present in the array, otherwise return -1.
+
+<img src="resources/order-agnostic-binary-search.png" width="500px"/>
+
+##### Example 1: 
+- [x] Input: [4, 6, 10], key = 10
+- [x] Output: 2
+##### Example 2: 
+- [x] Input: [1, 2, 3, 4, 5, 6, 7], key = 5
+- [x] Output: 4
+##### Example 3: 
+- [x] Input: [10, 6, 4], key = 10
+- [x] Output: 0
+
+##### Example 4: 
+- [x] Input: [10, 6, 4], key = 4
+- [x] Output: 2
+
+### [**Binary Search**](./searching/order-agnostic-binary-search.py)
+```python
+def binarySearch(array, key): 
+    # 1: Initialise two pointers for each side of the array
+    start, end = 0, len(array) - 1
+    isAscending = array[start] < array[end] # 2: Set Boolean if array is ascending or not
+
+    # 3: While both pointers have not finished traversing the array,
+    while start <= end: # EDGE: <= is used for the edge case where array has only 1 element. 
+        mid = (start + end) // 2 # 4: Evaluate the midpoint pointer
+        if key == array[mid]: # 5: Return mid pointer if we have found our element immediately!
+            return mid
+        # 6: If array is ascending,   
+        if isAscending: 
+            if key < array[mid]: 
+                end = mid - 1 # Key can be found in the first half, hence move the end pointer before mid
+            else: # key > array[mid]
+                start = mid + 1 # Key can be found in the second half, hence move the start pointer right of mid
+        else: # 7: If array is descending,
+            if key > array[mid]:
+                end = mid - 1 # Key can be found in the first half, hence move the end pointer left of mid
+            else: # key < array[mid]
+                start = mid + 1 # Key can be found in the second half, hence move the start pointer after mid
+    return -1 
+```
+
+---
+## 🟨 [Ceiling of a Number](https://www.educative.io/courses/grokking-the-coding-interview/qA5wW7R8ox7)
+>* Given an array of numbers sorted in an ascending order, find the ceiling of a given number ‘key’. The ceiling of the ‘key’ will be the smallest element in the given array greater than or equal to the ‘key’.
+>* Write a function to return the index of the ceiling of the ‘key’. If there isn’t any ceiling return -1.
+
+<img src="resources/ceiling-of-a-number.png" width="500px"/>
+
+##### Example 1:
+- [x] Input: [4, 6, 10], key = 6
+- [x] Output: 1
+- [x] Explanation: The smallest number greater than or equal to '6' is '6' having index '1'.
+##### Example 2:
+- [x] Input: [1, 3, 8, 10, 15], key = 12
+- [x] Output: 4
+- [x] Explanation: The smallest number greater than or equal to '12' is '15' having index '4'.
+##### Example 3:
+- [x] Input: [4, 6, 10], key = 17
+- [x] Output: -1
+- [x] Explanation: There is no number greater than or equal to '17' in the given array.
+##### Example 4:
+- [x] Input: [4, 6, 10], key = -1
+- [x] Output: 0
+- [x] Explanation: The smallest number greater than or equal to '-1' is '4' having index '0'.
+
+### [**Binary Search**](./searching/ceiling-of-a-number.py)
+```python
+
+```
+
+---
+## 🟨 [Next Letter](https://www.educative.io/courses/grokking-the-coding-interview/g2w6QPBA2Nk)
+>* Given an array of lowercase letters sorted in ascending order, find the smallest letter in the given array greater than a given ‘key’.
+>* Assume the given array is a circular list, which means that the last letter is assumed to be connected with the first letter. This also means that the smallest letter in the given array is greater than the last letter of the array and is also the first letter of the array.
+>* Write a function to return the next letter of the given ‘key’.
+##### Example 1:
+- [x] Input: ['a', 'c', 'f', 'h'], key = 'f'
+- [x] Output: 'h'
+- [x] Explanation: The smallest letter greater than 'f' is 'h' in the given array.
+##### Example 2:
+- [x] Input: ['a', 'c', 'f', 'h'], key = 'b'
+- [x] Output: 'c'
+- [x] Explanation: The smallest letter greater than 'b' is 'c'.
+##### Example 3:
+- [x] Input: ['a', 'c', 'f', 'h'], key = 'm'
+- [x] Output: 'a'
+- [x] Explanation: As the array is assumed to be circular, the smallest letter greater than 'm' is 'a'.
+##### Example 4:
+- [x] Input: ['a', 'c', 'f', 'h'], key = 'h'
+- [x] Output: 'a'
+- [x] Explanation: As the array is assumed to be circular, the smallest letter greater than 'h' is 'a'.
+
+### [**Binary Search**](./searching/next-letter.py)
+```python
+
+```
+
+---
+## 🟨 [Number Range](https://www.educative.io/courses/grokking-the-coding-interview/R1B78K9oBEz)
+>* Given an array of numbers sorted in ascending order, find the range of a given number ‘key’. The range of the ‘key’ will be the first and last position of the ‘key’ in the array.
+>* Write a function to return the range of the ‘key’. If the ‘key’ is not present return [-1, -1].iling of the ‘key’. If there isn’t any ceiling return -1.
+##### Example 1:
+- [x] Input: [4, 6, 6, 6, 9], key = 6
+- [x] Output: [1, 3]
+##### Example 2:
+- [x] Input: [1, 3, 8, 10, 15], key = 10
+- [x] Output: [3, 3]
+##### Example 3:
+- [x] Input: [1, 3, 8, 10, 15], key = 12
+- [x] Output: [-1, -1]
+
+### [**Binary Search**](./searching/number-range.py)
+```python
+
+```
+
+---
+## 🟨 [Search in a Sorted Infinite Array](https://www.educative.io/courses/grokking-the-coding-interview/B1ZW38kXJB2)
+>* Given an infinite sorted array (or an array with unknown size), find if a given number ‘key’ is present in the array. Write a function to return the index of the ‘key’ if it is present in the array, otherwise return -1.
+>* Since it is not possible to define an array with infinite (unknown) size, you will be provided with an interface ArrayReader to read elements of the array. ArrayReader.get(index) will return the number at index; if the array’s size is smaller than the index, it will return Integer.MAX_VALUE.
+
+<img src="resources/search-in-a-sorted-infinite-array.png" width="500px"/>
+
+##### Example 1:
+- [x] Input: [4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30], key = 16
+- [x] Output: 6
+- [x] Explanation: The key is present at index '6' in the array.
+##### Example 2:
+- [x] Input: [4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30], key = 11
+- [x] Output: -1
+- [x] Explanation: The key is not present in the array.
+##### Example 3:
+- [x] Input: [1, 3, 8, 10, 15], key = 15
+- [x] Output: 4
+- [x] Explanation: The key is present at index '4' in the array.
+##### Example 4:
+- [x] Input: [1, 3, 8, 10, 15], key = 200
+- [x] Output: -1
+- [x] Explanation: The key is not present in the array.
+
+### [**Binary Search**](./searching/search-in-a-sorted-infinite-array.py)
+```python
+
+```
+
+---
+## 🟨 [Minimum Difference Element](https://www.educative.io/courses/grokking-the-coding-interview/mymvP915LY9)
+>* Given an array of numbers sorted in ascending order, find the element in the array that has the minimum difference with the given ‘key’.
+##### Example 1:
+- [x] Input: [4, 6, 10], key = 7
+- [x] Output: 6
+- [x] Explanation: The difference between the key '7' and '6' is minimum than any other number in the array 
+##### Example 2:
+- [x] Input: [4, 6, 10], key = 4
+- [x] Output: 4
+##### Example 3:
+- [x] Input: [1, 3, 8, 10, 15], key = 12
+- [x] Output: 10
+##### Example 4:
+- [x] Input: [4, 6, 10], key = 17
+- [x] Output: 10
+
+### [**Binary Search**](./searching/minimum-difference-element.py)
+```python
+
+```
+
+---
+## 🟨 [Bitonic Array Maximum](https://www.educative.io/courses/grokking-the-coding-interview/RMyRR6wZoYK)
+>* Find the maximum value in a given Bitonic array. An array is considered bitonic if it is monotonically increasing and then monotonically decreasing. Monotonically increasing or decreasing means that for any index `i` in the `array arr[i] != arr[i+1].`
+##### Example 1:
+- [x] Input: [1, 3, 8, 12, 4, 2]
+- [x] Output: 12
+- [x] Explanation: The maximum number in the input bitonic array is '12'.
+##### Example 2:
+- [x] Input: [3, 8, 3, 1]
+- [x] Output: 8
+##### Example 3:
+- [x] Input: [1, 3, 8, 12]
+- [x] Output: 12
+##### Example 4:
+- [x] Input: [10, 9, 8]
+- [x] Output: 10
+
+### [**Binary Search**](./searching/bitonic-array-maximum.py)
+```python
+
+```
+
+---
+## 🟨 [Search Bitonic Array](https://www.educative.io/courses/grokking-the-coding-interview/7n3BlOvqW0r)
+>* Given a Bitonic array, find if a given ‘key’ is present in it. An array is considered bitonic if it is monotonically increasing and then monotonically decreasing. Monotonically increasing or decreasing means that for any index `i` in the array `arr[i] != arr[i+1]`.
+>* Write a function to return the index of the ‘key’. If the ‘key’ appears more than once, return the smaller index. If the ‘key’ is not present, return -1.
+##### Example 1:
+- [x] Input: [1, 3, 8, 4, 3], key=4
+- [x] Output: 3
+##### Example 2:
+- [x] Input: [3, 8, 3, 1], key=8
+- [x] Output: 1
+##### Example 3:
+- [x] Input: [1, 3, 8, 12], key=12
+- [x] Output: 3
+##### Example 4:
+- [x] Input: [10, 9, 8], key=10
+- [x] Output: 0
+
+### [**Binary Search**](./searching/search-bitonic-array.py)
+```python
+
+```
+
+---
+## 🟨 [Search in a Rotated Array](https://www.educative.io/courses/grokking-the-coding-interview/RMPVM2Y4PW0)
+>* Given an array of numbers which is sorted in ascending order and also rotated by some arbitrary number, find if a given ‘key’ is present in it.
+>* Write a function to return the index of the ‘key’ in the rotated array. If the ‘key’ is not present, return -1. You can assume that the given array does not have any duplicates.
+##### Example 1:
+- [x] Input: [10, 15, 1, 3, 8], key = 15
+- [x] Output: 1
+- [x] Explanation: '15' is present in the array at index '1'.
+
+<img src="resources/search-in-a-rotated-array-1.png" width="500px"/>
+
+##### Example 2:
+- [x] Input: [4, 5, 7, 9, 10, -1, 2], key = 10
+- [x] Output: 4
+- [x] Explanation: '10' is present in the array at index '4'.
+
+<img src="resources/search-in-a-rotated-array-2.png" width="500px"/>
+
+### [**Binary Search**](./searching/search-in-a-rotated-array.py)
+```python
+
+```
+
+---
+## 🟨 [Rotation Count](https://www.educative.io/courses/grokking-the-coding-interview/R1v4P0R7VZw)
+>* Given an array of numbers which is sorted in ascending order and is rotated ‘k’ times around a pivot, find ‘k’.
+>* You can assume that the array does not have any duplicates.
+##### Example 1:
+- [x] Input: [10, 15, 1, 3, 8]
+- [x] Output: 2
+- [x] Explanation: The array has been rotated 2 times.
+
+<img src="resources/rotation-count-1.png" width="500px"/>
+
+##### Example 2:
+- [x] Input: [4, 5, 7, 9, 10, -1, 2]
+- [x] Output: 5
+- [x] Explanation: The array has been rotated 5 times.
+
+<img src="resources/rotation-count-2.png" width="500px"/>
+
+##### Example 3:
+- [x] Input: [1, 3, 8, 10]
+- [x] Output: 0
+- [x] Explanation: The array has not been rotated.
+
+### [**Binary Search**](./searching/rotation-count.py)
+```python
+
+```
+
+---
+# <div id='linked-list-reversal'/> 🔗 **Linked List In-Place Reversal Pattern**
+<img src="resources/linked-lists-reversal.gif" width="750px"/><br/>
+
+```python
+def reverse(head):
+  previous, current, next = None, head, None
+  while current is not None:
+    next = current.next  # temporarily store the next node
+    current.next = previous  # reverse the current node
+    previous = current  # before we move to the next node, point previous to the current node
+    current = next  # move on the next node
+  return previous
+```
+#### [📋 **Back to Table of Contents**](#toc)
+
+---
+## 🟩 [Reverse a LinkedList](https://www.educative.io/courses/grokking-the-coding-interview/3wENz1N4WW9)
+Given the head of a Singly LinkedList, reverse the LinkedList. Write a function to return the new head of the reversed LinkedList.
+
+<img src="resources/reverse-a-linked-list.png" width="750px"/>
+
+### [**Linked List**](./linked-lists/reverse-a-linked-list.py)
+```python
+
+```
+
+
+---
+## 🟨 [Reverse a Sub-list](https://www.educative.io/courses/grokking-the-coding-interview/qVANqMonoB2)
+Given the head of a LinkedList and two positions ‘p’ and ‘q’, reverse the LinkedList from position ‘p’ to ‘q’.
+
+<img src="resources/reverse-a-sub-list.png" width="750px"/>
+
+### [**Linked List**](./linked-lists/reverse-a-sub-list.py)
+```python
+
+```
+
+---
+## 🟨 [Reverse every K-element Sub-list](https://www.educative.io/courses/grokking-the-coding-interview/RMZylvkGznR)
+>* Given the head of a LinkedList and a number ‘k’, reverse every ‘k’ sized sub-list starting from the head.
+>* If, in the end, you are left with a sub-list with less than ‘k’ elements, reverse it too.
+
+<img src="resources/reverse-every-k-element-sub-list.png" width="1000px"/>
+
+### [**Linked List**](./linked-lists/reverse-every-k-element-sub-list.py)
+```python
+
+```
+
+---
+## 🟨 [Reverse alternating K-element Sub-list](https://www.educative.io/courses/grokking-the-coding-interview/q2lZKgLm980)
+>* Given the head of a LinkedList and a number ‘k’, reverse every alternating ‘k’ sized sub-list starting from the head.
+>* If, in the end, you are left with a sub-list with less than ‘k’ elements, reverse it too.
+
+<img src="resources/reverse-alternating-k-element-sub-list.png" width="1000px"/>
+
+### [**Linked List**](./linked-lists/reverse-alternating-k-element-sub-list.py)
+```python
+
+```
+
+---
+## 🟨 [Rotate a LinkedList](https://www.educative.io/courses/grokking-the-coding-interview/gkAM9kxgY8Z)
+>* Given the head of a Singly LinkedList and a number ‘k’, rotate the LinkedList to the right by ‘k’ nodes.
+
+<img src="resources/rotate-a-linked-list-1.png" width="750px"/>
+<img src="resources/rotate-a-linked-list-2.png" width="750px"/>
+
+### [**Linked List**](./linked-lists/rotate-a-linked-list.py)
+```python
+
+```
+
+---
 # <div id='dfs'/> 🌲 **Depth First Search Pattern**
+<img src="resources/dfs-demo.gif" width="750px"/><br/>
 
 ```python
 def recursiveFunction(currentNode, currentPath=[]): 
@@ -4801,6 +5174,8 @@ def maxPathSum(root):
 
 ---
 # <div id='bfs'/> 🌳 **Breadth First Search Pattern**
+<img src="resources/bfs-demo.gif" width="750px"/><br/>
+
 #### To perform root to leaf computations
 ```python
 from collections import deque
@@ -5351,7 +5726,6 @@ def connectLevelOrderSiblings(root):
       if currentNode.right is not None: 
         queue.append(currentNode.right)
 ```
-
 
 ---
 ## [🟨 Connect All Level Order Siblings](https://www.educative.io/courses/grokking-the-coding-interview/NE5109Jl02v)
