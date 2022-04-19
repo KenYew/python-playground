@@ -4767,6 +4767,9 @@ def binarySearch(array, target):
 - [x] Input: [10, 6, 4], key = 4
 - [x] Output: 2
 
+<details><summary><b>Solution</b></summary>
+<p>
+
 ### [**Binary Search**](./searching/order-agnostic-binary-search.py)
 ```python
 def binarySearch(array, key): 
@@ -4792,6 +4795,8 @@ def binarySearch(array, key):
                 start = mid + 1 # Key can be found in the second half, hence move the start pointer after mid
     return -1 
 ```
+</p>
+</details>
 
 ---
 ## 🟨 [Ceiling of a Number](https://www.educative.io/courses/grokking-the-coding-interview/qA5wW7R8ox7)
@@ -4817,10 +4822,15 @@ def binarySearch(array, key):
 - [x] Output: 0
 - [x] Explanation: The smallest number greater than or equal to '-1' is '4' having index '0'.
 
+<details><summary><b>Solution</b></summary>
+<p>
+
 ### [**Binary Search**](./searching/ceiling-of-a-number.py)
 ```python
 
 ```
+</p>
+</details>
 
 ---
 ## 🟨 [Next Letter](https://www.educative.io/courses/grokking-the-coding-interview/g2w6QPBA2Nk)
@@ -4844,10 +4854,15 @@ def binarySearch(array, key):
 - [x] Output: 'a'
 - [x] Explanation: As the array is assumed to be circular, the smallest letter greater than 'h' is 'a'.
 
+<details><summary><b>Solution</b></summary>
+<p>
+
 ### [**Binary Search**](./searching/next-letter.py)
 ```python
 
 ```
+</p>
+</details>
 
 ---
 ## 🟨 [Number Range](https://www.educative.io/courses/grokking-the-coding-interview/R1B78K9oBEz)
@@ -4863,10 +4878,15 @@ def binarySearch(array, key):
 - [x] Input: [1, 3, 8, 10, 15], key = 12
 - [x] Output: [-1, -1]
 
+<details><summary><b>Solution</b></summary>
+<p>
+
 ### [**Binary Search**](./searching/number-range.py)
 ```python
 
 ```
+</p>
+</details>
 
 ---
 ## 🟨 [Search in a Sorted Infinite Array](https://www.educative.io/courses/grokking-the-coding-interview/B1ZW38kXJB2)
@@ -4892,10 +4912,15 @@ def binarySearch(array, key):
 - [x] Output: -1
 - [x] Explanation: The key is not present in the array.
 
+<details><summary><b>Solution</b></summary>
+<p>
+
 ### [**Binary Search**](./searching/search-in-a-sorted-infinite-array.py)
 ```python
 
 ```
+</p>
+</details>
 
 ---
 ## 🟨 [Minimum Difference Element](https://www.educative.io/courses/grokking-the-coding-interview/mymvP915LY9)
@@ -4914,10 +4939,15 @@ def binarySearch(array, key):
 - [x] Input: [4, 6, 10], key = 17
 - [x] Output: 10
 
+<details><summary><b>Solution</b></summary>
+<p>
+
 ### [**Binary Search**](./searching/minimum-difference-element.py)
 ```python
 
 ```
+</p>
+</details>
 
 ---
 ## 🟨 [Bitonic Array Maximum](https://www.educative.io/courses/grokking-the-coding-interview/RMyRR6wZoYK)
@@ -4936,10 +4966,15 @@ def binarySearch(array, key):
 - [x] Input: [10, 9, 8]
 - [x] Output: 10
 
+<details><summary><b>Solution</b></summary>
+<p>
+
 ### [**Binary Search**](./searching/bitonic-array-maximum.py)
 ```python
 
 ```
+</p>
+</details>
 
 ---
 ## 🟨 [Search Bitonic Array](https://www.educative.io/courses/grokking-the-coding-interview/7n3BlOvqW0r)
@@ -4958,10 +4993,15 @@ def binarySearch(array, key):
 - [x] Input: [10, 9, 8], key=10
 - [x] Output: 0
 
+<details><summary><b>Solution</b></summary>
+<p>
+
 ### [**Binary Search**](./searching/search-bitonic-array.py)
 ```python
 
 ```
+</p>
+</details>
 
 ---
 ## 🟨 [Search in a Rotated Array](https://www.educative.io/courses/grokking-the-coding-interview/RMPVM2Y4PW0)
@@ -4981,10 +5021,15 @@ def binarySearch(array, key):
 
 <img src="resources/search-in-a-rotated-array-2.png" width="500px"/>
 
+<details><summary><b>Solution</b></summary>
+<p>
+
 ### [**Binary Search**](./searching/search-in-a-rotated-array.py)
 ```python
 
 ```
+</p>
+</details>
 
 ---
 ## 🟨 [Rotation Count](https://www.educative.io/courses/grokking-the-coding-interview/R1v4P0R7VZw)
@@ -5009,10 +5054,15 @@ def binarySearch(array, key):
 - [x] Output: 0
 - [x] Explanation: The array has not been rotated.
 
+<details><summary><b>Solution</b></summary>
+<p>
+
 ### [**Binary Search**](./searching/rotation-count.py)
 ```python
 
 ```
+</p>
+</details>
 
 ---
 # <div id='linked-list-reversal'/> 🔗 **Linked List In-Place Reversal Pattern**
@@ -5036,11 +5086,15 @@ Given the head of a Singly LinkedList, reverse the LinkedList. Write a function 
 
 <img src="resources/reverse-a-linked-list.png" width="750px"/>
 
+<details><summary><b>Solution</b></summary>
+<p>
+
 ### [**Linked List**](./linked-lists/reverse-a-linked-list.py)
 ```python
 
 ```
-
+</p>
+</details>
 
 ---
 ## 🟨 [Reverse a Sub-list](https://www.educative.io/courses/grokking-the-coding-interview/qVANqMonoB2)
@@ -5048,10 +5102,15 @@ Given the head of a LinkedList and two positions ‘p’ and ‘q’, reverse th
 
 <img src="resources/reverse-a-sub-list.png" width="750px"/>
 
+<details><summary><b>Solution</b></summary>
+<p>
+
 ### [**Linked List**](./linked-lists/reverse-a-sub-list.py)
 ```python
 
 ```
+</p>
+</details>
 
 ---
 ## 🟨 [Reverse every K-element Sub-list](https://www.educative.io/courses/grokking-the-coding-interview/RMZylvkGznR)
@@ -5060,10 +5119,15 @@ Given the head of a LinkedList and two positions ‘p’ and ‘q’, reverse th
 
 <img src="resources/reverse-every-k-element-sub-list.png" width="1000px"/>
 
+<details><summary><b>Solution</b></summary>
+<p>
+
 ### [**Linked List**](./linked-lists/reverse-every-k-element-sub-list.py)
 ```python
 
 ```
+</p>
+</details>
 
 ---
 ## 🟨 [Reverse alternating K-element Sub-list](https://www.educative.io/courses/grokking-the-coding-interview/q2lZKgLm980)
@@ -5072,10 +5136,15 @@ Given the head of a LinkedList and two positions ‘p’ and ‘q’, reverse th
 
 <img src="resources/reverse-alternating-k-element-sub-list.png" width="1000px"/>
 
+<details><summary><b>Solution</b></summary>
+<p>
+
 ### [**Linked List**](./linked-lists/reverse-alternating-k-element-sub-list.py)
 ```python
 
 ```
+</p>
+</details>
 
 ---
 ## 🟨 [Rotate a LinkedList](https://www.educative.io/courses/grokking-the-coding-interview/gkAM9kxgY8Z)
@@ -5084,10 +5153,15 @@ Given the head of a LinkedList and two positions ‘p’ and ‘q’, reverse th
 <img src="resources/rotate-a-linked-list-1.png" width="750px"/>
 <img src="resources/rotate-a-linked-list-2.png" width="750px"/>
 
+<details><summary><b>Solution</b></summary>
+<p>
+
 ### [**Linked List**](./linked-lists/rotate-a-linked-list.py)
 ```python
 
 ```
+</p>
+</details>
 
 ---
 # <div id='dfs'/> 🌲 **Depth First Search Pattern**
