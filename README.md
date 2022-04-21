@@ -1179,6 +1179,187 @@ def firstNonRepeatingCharacter(string):
 ✅ **DICTIONARIES:** _Loop through each char and store the frequencies of each char using `charFrequencies[char] = charFrequencies.get(char, 0) + 1`. Then, loop through each char again and `if charFrequencies[char] == 1`, return `idx` else return `-1`_
 
 ---
+## 🟩 [Generate Document](https://www.algoexpert.io/questions/Generate%20Document)
+>* You're given a string of available characters and a string representing a document that you
+need to generate. 
+>* Write a function that determines if you can generate the document using the available characters. 
+>* If you can generate the document, your function should return
+`true`; otherwise, it should return `false`
+>* You're only able to generate the document if the frequency of unique characters in the
+characters string is greater than or equal to the frequency of unique characters iSthe
+document string. 
+>* For example, if you're given characters = `"abcabc"` and
+document =
+`"aabbccc"` you **cannot** generate the document because you're missing one `c`.
+>* The document that you need to create may contain any characters, including special
+characters, capital letters, numbers, and spaces.
+>* Note: You can always generate the empty string `""`
+
+- [x] Input: characters = `"Bste!hetsi ogEAxpelrt x "`
+  document = `"AlgoExpert is the Best!"`
+- [x] Output: `true`
+
+
+### [**Frequency Counters**](./strings/generate-document.py)
+```python
+# O(m * (n + m)) Time | O(1) Space 
+# where n is the number of characters
+# where m is the length of the document
+def generateDocument(chars, doc): 
+  # 1: For each character in doc, calculate frequency of that char in chars and doc input strings
+  for currentChar in doc: 
+    docFrequency = countCharFrequency(currentChar, doc)
+    charsFrequency = countCharFrequency(currentChar, chars)
+
+    # 2: At any point, if frequency of currentChar is not the same for both input strings (chars and doc),
+    if docFrequency > charsFrequency:
+      return False # 3: Return False as mismatch in character frequencies means chars and doc are not the same
+  return True # 4: Else docFrequency == charsFrequency, so return True as both chars and doc are the same
+
+# 1: Helper function to calculate the number of targetchar occurrences in inputString
+def countCharFrequency(targetChar, inputString): 
+  frequency = 0 
+  # 2: For each char in inputString,
+  for char in inputString: 
+    if char == targetChar: # 3: If currentChar == targetChar, increment the frequency by 1
+      frequency += 1
+  return frequency
+```
+
+---
+## 🟩 [Run-Length Encoding](https://www.algoexpert.io/questions/Run-Length%20Encoding)
+>* Write a function that takes in a non-empty string and returns its run-length encoding.
+>* From Wikipedia, "run-length encoding is a form of lossless data compression in which runs of
+data are stored as a single data value and count, rather than as the original run." 
+>* For this
+problem, a run of data is any sequence of consecutive, identical characters. 
+>* So the run
+"AAA" would be run-length-encoded as "3A"
+>* To make things more complicated, however, the input string can contain all sorts of special
+characters, including numbers. And since encoded data must be decodable, this means that
+we can't naively run-length-encode long runs. 
+>* For example, the run "AAAAAAAAAAAA" (12`A`s), can't naively be encoded as "12A" , since this string can be decoded as either
+"AAAAAAAAAAAA" Or "1AA". 
+>* Thus, long runs (runs of 10 or more characters) should be
+encoded in a split fashion; the aforementioned run should be encoded as "9A3A"
+
+##### Example 1
+- [x] Input: string = `"AAAAAAAAAAAAABBCCCCDD"`
+- [x] Output: `"9A4A2B4C2D"`
+
+
+### [**String Manipulation**](./strings/run-length-encoding.py)
+```python
+# O(n) Time | O(n) Space - where n is the length of the input string
+def runLengthEncoding(string): 
+  encodedString = []
+  currentLength = 1 # Since input string is always non-empty, first run will be of at least length 1
+
+  # 1: Loop through each char of string except the first char
+  for idx in range(1, len(string)):
+    # 2: Set currentChar at idx* and previousChar at idx* - 1  
+    currentChar = string[idx] 
+    previousChar = string[idx - 1]
+
+    # 4: If adjacent characters do not match or currentLength has reached 9,
+    if currentChar != previousChar or currentLength == 9:
+      # 5: Append the length of repeating chars followed by that repeating char
+      encodedString.append(str(currentLength))
+      encodedString.append(previousChar)
+      currentLength = 0 # 5: Reset currentLength to 0
+    
+    # 3: If adjacent characters are matching, keep incrementing the running currentLength to keep track of the number of repetitions
+    currentLength += 1
+
+  # 6: Handle the last running characters since if currentChar != previousChar check was skipped
+  encodedString.append(str(currentLength))
+  encodedString.append(string[len(string) - 1])
+
+  return "".join(encodedString) # 7: Convert list to string
+```
+
+✅ **String Manipulation**
+1. Loop through each char of string
+1. If two adjacent chars do not match, keep incrementing currentLength* to track length of repeating chars
+1. If two adjacent chars match, append str(currentLength) and previousChar into answer
+1. Handle the last running characters by appending str(currentLength) and lastChar
+
+---
+## 🟨 [Reverse Words in String](https://www.algoexpert.io/questions/Reverse%20Words%20In%20String)
+>* Write a function that takes in a string of words separated by one or more whitespaces and
+returns a string that has these words in reverse order. 
+>* For example, given the string
+`"tim is great"` , your function should return `"great is tim"`
+>* For this problem, a word can contain special characters, punctuation, and numbers. The words
+in the string will be separated by one or more whitespaces, and the reversed string must
+contain the same whitespaces as the original string. 
+>* For example, given the still
+`"whitespaces    4"` you would be expected to return `"4    whitespaces"`.
+>* Note that you're not allowed to to use any built-in `split` or `reverse` methods/functions.
+>* However, you are allowed to use a built-in join method/function.
+>* Also note that the input string isn't guaranteed to always contain words.
+
+- [x] Input: string = `"AlgoExpert is the best!"`
+- [x] Output: `"best! the is AlgoExpert"`
+
+
+### [**Two Pointers**](./strings/reverse-words-in-string.py)
+```python
+# METHOD 1
+# O(n) Time | O(n) Space - where n is the length of the string
+def reverseWordsInString(string): 
+  words = []
+  start = 0
+
+  # split() method implementation
+  for idx, char in enumerate(string): # 1: Loop through each char of string
+    # 2: If char is a whitespace, append spliced string (consisting of all chars between start* and idx* before that whitespace) to result
+    if char == " ":
+      words.append(string[start:idx])
+      start = idx # 3: Reset start pointer to next idx
+    # 4: If start pointer is still pointing at a whitespace, append whitespace character to result
+    elif string[start] == " ": 
+      words.append(" ")
+      start = idx # 5: Reset start pointer to next idx
+
+  # 6: Handle the last word of the string 
+  # start* will still point at the start of the last word
+  words.append(string[start:]) 
+  reverseList(words) # 7: Call the reverse list helper function to reverse all words in list
+  return "".join(words) # 8: Convert list to string
+
+# reverse() method implementation
+def reverseList(list): 
+  # Use two pointers that move inwards while swapping elements
+  start, end = 0, len(list) - 1
+  while start < end: 
+    list[start], list[end] = list[end], list[start]
+    start += 1
+    end -= 1
+
+# METHOD 2
+def reverseWordsInString(string): 
+  chars = [char for char in string] # Pre-allocate space for chars list
+  reverseListRange(chars, 0, len(chars) - 1)
+
+  start = 0
+  while start < len(chars): 
+    end = start
+    while end < len(chars) and chars[end] != " ":
+      end += 1
+    
+    reverseListRange(chars, start, end - 1)
+    start = end + 1
+  return "".join(chars)
+
+def reverseListRange(list, start, end): 
+  while start < end: 
+    list[start], list[end] = list[end], list[start]
+    start += 1
+    end -= 1
+```
+
+---
 ## [🟨 Group Anagrams](https://leetcode.com/problems/group-anagrams/)
 >* Given an array of strings `strs`, group the **anagrams** together. You can return the answer in **any order**.
 >* An **Anagram** is a word or phrase formed by rearranging the letters of a different word or phrase, typically using all the original letters exactly once.
@@ -4459,6 +4640,7 @@ def binarySearch(array, target):
 - [x] Input: [10, 6, 4], key = 4
 - [x] Output: 2
 
+
 ### [**Binary Search**](./searching/order-agnostic-binary-search.py)
 ```python
 def binarySearch(array, key): 
@@ -4509,9 +4691,31 @@ def binarySearch(array, key):
 - [x] Output: 0
 - [x] Explanation: The smallest number greater than or equal to '-1' is '4' having index '0'.
 
+
 ### [**Binary Search**](./searching/ceiling-of-a-number.py)
 ```python
+def searchCeilingOfANumber(array, key): 
+  start, end = 0, len(array) - 1
 
+  # EDGE: If the key is bigger than the biggest element, return -1
+  if key > array[end]: 
+    return -1
+
+  # 1: While start and end pointers have not finished traversing the array,
+  while start <= end: # EDGE: <= is used for when array has only 1 element.
+    mid = (start + end) // 2 # 2: Evaluate the midpoint pointer
+    # 3: If key is found in the first half, move start pointer after mid
+    if key < array[mid]:
+      start = mid + 1
+    # 4: If key is found in second half, move end pointer before mid
+    elif key > array[mid]:
+      end = mid - 1
+    else: # 5: Else, we found the nearest key so return its index
+      return mid
+  # 6: In the end of while loop, start == end + 1
+  # we are not able to find the element in the given array,
+  # so return the next big number which will be array[start]
+  return start
 ```
 
 ---
@@ -4536,6 +4740,7 @@ def binarySearch(array, key):
 - [x] Output: 'a'
 - [x] Explanation: As the array is assumed to be circular, the smallest letter greater than 'h' is 'a'.
 
+
 ### [**Binary Search**](./searching/next-letter.py)
 ```python
 
@@ -4554,6 +4759,7 @@ def binarySearch(array, key):
 ##### Example 3:
 - [x] Input: [1, 3, 8, 10, 15], key = 12
 - [x] Output: [-1, -1]
+
 
 ### [**Binary Search**](./searching/number-range.py)
 ```python
@@ -4584,6 +4790,7 @@ def binarySearch(array, key):
 - [x] Output: -1
 - [x] Explanation: The key is not present in the array.
 
+
 ### [**Binary Search**](./searching/search-in-a-sorted-infinite-array.py)
 ```python
 
@@ -4605,6 +4812,7 @@ def binarySearch(array, key):
 ##### Example 4:
 - [x] Input: [4, 6, 10], key = 17
 - [x] Output: 10
+
 
 ### [**Binary Search**](./searching/minimum-difference-element.py)
 ```python
@@ -4628,6 +4836,7 @@ def binarySearch(array, key):
 - [x] Input: [10, 9, 8]
 - [x] Output: 10
 
+
 ### [**Binary Search**](./searching/bitonic-array-maximum.py)
 ```python
 
@@ -4649,6 +4858,7 @@ def binarySearch(array, key):
 ##### Example 4:
 - [x] Input: [10, 9, 8], key=10
 - [x] Output: 0
+
 
 ### [**Binary Search**](./searching/search-bitonic-array.py)
 ```python
@@ -4672,6 +4882,7 @@ def binarySearch(array, key):
 - [x] Explanation: '10' is present in the array at index '4'.
 
 <img src="resources/search-in-a-rotated-array-2.png" width="500px"/>
+
 
 ### [**Binary Search**](./searching/search-in-a-rotated-array.py)
 ```python
@@ -4701,6 +4912,7 @@ def binarySearch(array, key):
 - [x] Output: 0
 - [x] Explanation: The array has not been rotated.
 
+
 ### [**Binary Search**](./searching/rotation-count.py)
 ```python
 
@@ -4728,17 +4940,18 @@ Given the head of a Singly LinkedList, reverse the LinkedList. Write a function 
 
 <img src="resources/reverse-a-linked-list.png" width="750px"/>
 
+
 ### [**Linked List**](./linked-lists/reverse-a-linked-list.py)
 ```python
 
 ```
-
 
 ---
 ## 🟨 [Reverse a Sub-list](https://www.educative.io/courses/grokking-the-coding-interview/qVANqMonoB2)
 Given the head of a LinkedList and two positions ‘p’ and ‘q’, reverse the LinkedList from position ‘p’ to ‘q’.
 
 <img src="resources/reverse-a-sub-list.png" width="750px"/>
+
 
 ### [**Linked List**](./linked-lists/reverse-a-sub-list.py)
 ```python
@@ -4752,6 +4965,7 @@ Given the head of a LinkedList and two positions ‘p’ and ‘q’, reverse th
 
 <img src="resources/reverse-every-k-element-sub-list.png" width="1000px"/>
 
+
 ### [**Linked List**](./linked-lists/reverse-every-k-element-sub-list.py)
 ```python
 
@@ -4764,6 +4978,7 @@ Given the head of a LinkedList and two positions ‘p’ and ‘q’, reverse th
 
 <img src="resources/reverse-alternating-k-element-sub-list.png" width="1000px"/>
 
+
 ### [**Linked List**](./linked-lists/reverse-alternating-k-element-sub-list.py)
 ```python
 
@@ -4775,6 +4990,7 @@ Given the head of a LinkedList and two positions ‘p’ and ‘q’, reverse th
 
 <img src="resources/rotate-a-linked-list-1.png" width="750px"/>
 <img src="resources/rotate-a-linked-list-2.png" width="750px"/>
+
 
 ### [**Linked List**](./linked-lists/rotate-a-linked-list.py)
 ```python
