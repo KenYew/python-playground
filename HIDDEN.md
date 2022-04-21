@@ -53,6 +53,8 @@ Blind 75 questions, coding patterns and in-depth solutions for FAANG coding inte
 1. ### [🌲 **Depth First Search**](#dfs)
 1. ### [🌳 **Breadth First Search**](#bfs)
 
+---
+### 🔑 [Keywords to Algorithms](https://algo.monster/problems/keyword_to_algo)
 #### 🎹 **If input array is sorted:**
 - `Binary search`
 - `Two pointers`
@@ -91,8 +93,6 @@ Blind 75 questions, coding patterns and in-depth solutions for FAANG coding inte
 #### 📱 **Else**
 - `Map/Set for O(1) time & O(n) space`
 - `Sort input for O(nlogn) time and O(1) space`
-
-### 🔑 [Keywords to Algorithms](https://algo.monster/problems/keyword_to_algo)
 
 ---
 
