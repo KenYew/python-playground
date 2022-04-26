@@ -1,6 +1,6 @@
-def searchCeilingOfANumber(array, key): 
+def searchFloorOfANumber(array, key): 
   start, end = 0, len(array) - 1
-  if key > array[end]:
+  if key < array[start]:
     return -1
   while start <= end: 
     mid = (start + end) // 2
@@ -10,12 +10,12 @@ def searchCeilingOfANumber(array, key):
       start = mid + 1
     else: # key == array[mid]
       return mid 
-  return start
+  return end
 
 def main(): 
-  print(searchCeilingOfANumber([4, 6, 10], 6))
-  print(searchCeilingOfANumber([1, 3, 8, 10, 15], 12))
-  print(searchCeilingOfANumber([4, 6, 10], 17))
-  print(searchCeilingOfANumber([4, 6, 10], -1))
+  print(searchFloorOfANumber([4, 6, 10], 6))
+  print(searchFloorOfANumber([1, 3, 8, 10, 15], 12))
+  print(searchFloorOfANumber([4, 6, 10], 17))
+  print(searchFloorOfANumber([4, 6, 10], -1))
 if __name__ == "__main__":
   main()

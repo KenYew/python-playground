@@ -4694,28 +4694,85 @@ def binarySearch(array, key):
 
 ### [**Binary Search**](./searching/ceiling-of-a-number.py)
 ```python
+# O(logn) Time - where n is the total elements in the array
+# We are reducing the search range by half at every iteration.
+# O(1) Space - no extra auxiliary memory is created
 def searchCeilingOfANumber(array, key): 
   start, end = 0, len(array) - 1
 
-  # EDGE: If the key is bigger than the biggest element, return -1
+  # EDGE: If the key is bigger than the biggest element, the key is not in this array, so return -1
   if key > array[end]: 
     return -1
 
   # 1: While start and end pointers have not finished traversing the array,
   while start <= end: # EDGE: <= is used for when array has only 1 element.
     mid = (start + end) // 2 # 2: Evaluate the midpoint pointer
-    # 3: If key is found in the first half, move start pointer after mid
+    # 3: If key is found in the first half, move end pointer before mid
     if key < array[mid]:
-      start = mid + 1
-    # 4: If key is found in second half, move end pointer before mid
-    elif key > array[mid]:
       end = mid - 1
-    else: # 5: Else, we found the nearest key so return its index
+    # 4: If key is found in second half, move start pointer after mid
+    elif key > array[mid]:
+      start = mid + 1
+    else: # 5: Else, we found the key so return its index
       return mid
-  # 6: In the end of while loop, start == end + 1
-  # we are not able to find the element in the given array,
-  # so return the next big number which will be array[start]
+
+  # 6: If we still can't find the index of the key, we return the next bigger number using array[start]
+  # In the end of the while start <= end loop, start* will be pointing at end + 1 after crossing end*
+  # Hence, start* will always point at the next bigger number after the key
   return start
+```
+
+---
+## 🟨 [Floor of a Number](https://www.educative.io/courses/grokking-the-coding-interview/qA5wW7R8ox7)
+>* Given an array of numbers sorted in ascending order, find the floor of a given number `key`. The floor of the `key` will be the biggest element in the given array smaller than or equal to the `key`
+>* Write a function to return the index of the floor of the `key`. If there isn’t a floor, return `-1`.
+
+##### **Example 1**
+- [x] Input: `[4, 6, 10]`, key = 6
+- [x] Output: 1
+- [x] Explanation: The biggest number smaller than or equal to '6' is '6' having index '1'.
+
+##### **Example 2:**
+- [x] Input: `[1, 3, 8, 10, 15]`, key = 12
+- [x] Output: 3
+- [x] Explanation: The biggest number smaller than or equal to '12' is '10' having index '3
+'.
+
+##### **Example 3:**
+- [x] Input: `[4, 6, 10]`, key = 17
+- [x] Output: 2
+- [x] Explanation: The biggest number smaller than or equal to '17' is '10' having index '2
+'.
+
+##### **Example 4:**
+- [x] Input: `[4, 6, 10]`, key = -1
+- [x] Output: -1
+- [x] Explanation: There is no number smaller than or equal to '-1' in the given array.
+
+
+### [**Binary Search**](./searching/floor-of-a-number.py)
+```python
+# O(logn) Time - where n is the total elements in the array
+# We are reducing the search range by half at every iteration.
+# O(1) Space - no extra auxiliary memory is created
+def searchFloorOfANumber(array, key):
+  start, end = 0, len(array) - 1
+  if key < array[0]:
+    return -1
+
+  while start <= end: 
+    mid = (start + end) // 2
+    if key < array[mid]: 
+      end = mid - 1
+    elif key > array[mid]: 
+      start = mid + 1
+    else: 
+      return mid
+
+  # If we still can't find the index of the key, we return the next smaller number using array[end]
+  # In the end of the while start <= end loop, end* will be pointing at start - 1 after crossing start*
+  # Hence, end* will always point at the next smaller number before the key
+  return end 
 ```
 
 ---
@@ -4743,7 +4800,22 @@ def searchCeilingOfANumber(array, key):
 
 ### [**Binary Search**](./searching/next-letter.py)
 ```python
+# O(logn) Time - where n is the total elements in the array
+# We are reducing the search range by half at every iteration.
+# O(1) Space - no extra auxiliary memory is created
+def searchNextLetter(array, key): 
+  start, end = 0, len(array) - 1
+  while start <= end: 
+    mid = (start + end) // 2
+    if key < array[mid]:
+      end = mid - 1
+    else: # key > array[mid] and key == array[mid]
+      start = mid + 1 # Since we need to find the next biggest letter, we update start = middle + 1 even if we have found our key == array[mid]
 
+  # In the end of the while start <= end loop, start* will be pointing at end + 1 after crossing end*
+  # Hence, start* will always point at the next bigger letter after the key
+  # But since the array is said to be circular, the next letter after the last letter will be wrapped back to the first letter
+  return array[start % len(array)] # % len(array) to wrap back to the beginning of array
 ```
 
 ---
@@ -4763,7 +4835,36 @@ def searchCeilingOfANumber(array, key):
 
 ### [**Binary Search**](./searching/number-range.py)
 ```python
+def findRange(array, key): 
+  # 1: Initialise output array with default [-1, -1] if key is not found
+  result = [-1, -1] # [startKeyIdx, endKeyIdx]
+  # 2: Determine the startKeyIdx of the result using binarySearch() with flag findMaxIdx=False 
+  result[0] = binarySearch(array, key, False)
+  # 3: If key is present in input array, keep searching for endKeyIdx of the result, otherwise return the default output [-1, -1]
+  if result[0] != -1: 
+    result[1] = binarySearch(array, key, True) # with flag findMaxIdx=True for modified binary search
+  return result
 
+# O(logn) Time - where n is the total elements in the array
+# We are reducing the search range by half at every iteration.
+# O(1) Space - no extra auxiliary memory is created
+def binarySearch(array, key, findMaxIdx):
+  keyIdx = -1
+  start, end = 0, len(array) - 1
+  while start <= end: 
+    mid = (start + end) // 2
+    if key < array[mid]: 
+      end = mid - 1
+    elif key > array[mid]: 
+      start = mid + 1
+    else: # key == array[mid]
+      # 5: In both cases, we keep tracking the last position of where we found the key (keyIdx)
+      keyIdx = mid
+      if findMaxIdx: # 1: If findMaxIdx flag is set to True to find the endKeyIdx,
+        start = mid + 1 # 2: Perform another binary search after mid to find endKeyIdx
+      else: # 3: If findMaxIdx flag is set to False to find the startKeyIdx,
+        end = mid - 1 # 4: Perform another binary search before mid to find startKeyIdx
+  return keyIdx
 ```
 
 ---
@@ -4793,7 +4894,46 @@ def searchCeilingOfANumber(array, key):
 
 ### [**Binary Search**](./searching/search-in-a-sorted-infinite-array.py)
 ```python
+import math
+class ArrayReader:
+  def __init__(self, array): 
+    self.array = array
+  
+  def get(self, index): 
+    if index >= len(self.array): 
+      return math.inf
+    return self.array[index]
 
+# Time Complexity - O(log n)
+# O(log n + log n) asymptotically converges to O(log n) time
+# There are two parts of the algorithm. 
+# The first involves increasing the bound's size exponentially (double every iteration) while searching for the proper bounds
+# Hence, this step takes O(logn) assuming array have at max n numbers.
+# The second is a binary search where we are reducing the search range by half at every iteration which takes O(log n) time.
+# Space Complexity - O(1)
+# No extra auxiliary memory is created
+def searchInInfiniteArray(reader, key): 
+  # 1: Initialise bounds to be [0, 1] in the 1st iteration
+  start, end = 0, 1
+  # 2: While the upper bound value is still less than the key,
+  while reader.get(end) < key: 
+    # 3: Store the value of the new lower bound with end + 1
+    newStart = end + 1
+    end += (end - start + 1) * 2 # 4: Double the size of the upper bound
+    start = newStart # 4: Update the value of the new lower bound
+  # 5: Pass the updated lower and upper bounds of the binary search
+  return binarySearch(reader, key, start, end)
+
+def binarySearch(reader, key, start, end): 
+  while start <= end: 
+    mid = (start + end) // 2
+    if key < reader.get(mid): 
+      end = mid - 1
+    elif key > reader.get(mid): 
+      start = mid + 1
+    else:  # key == reader.get(mid), we found the key!
+      return mid
+  return -1 # if we do not find the key
 ```
 
 ---
@@ -4816,7 +4956,41 @@ def searchCeilingOfANumber(array, key):
 
 ### [**Binary Search**](./searching/minimum-difference-element.py)
 ```python
+# O(logn) Time - where n is the total elements in the array
+# We are reducing the search range by half at every iteration.
+# O(1) Space - no extra auxiliary memory is created
+def searchMinDiffElement(array, key): 
+  # EDGE 1: If key is smaller than the smallest element of array,
+  if key < array[0]:
+    return array[0] # Return the smallest element by default
+  # EDGE 2: If key is bigger than the biggest element of array, 
+  if key > array[len(array) - 1]:
+    return array[len(array) - 1] # Return the biggest element by default
 
+  start, end = 0, len(array) - 1 
+  while start <= end: 
+    mid = (start + end) // 2
+    if key < array[mid]: 
+      end = mid - 1
+    elif key > array[mid]: 
+      start = mid + 1
+    else: # key == array[mid], 
+    # 1: If we find the key, immediately return array[mid] as this is the absolute minimum difference value of 0
+      return array[mid] 
+
+  # 2: If we can't find the key, we calculate the differences between the key and the numbers pointed out by start* and end* 
+  # These two numbers will be closest to the key but the number that gives the minimum difference will be our answer.
+  if (array[start] - key) < (key - array[end]):
+    return array[start]
+  else: # elif (array[start] - key) > (key - array[end])
+    return array[end]
+
+  # Note: In the end of the while start <= end loop, start* will be pointing at end + 1 after crossing end*
+  #       end <--a--> key <--b--> start   
+  # [ x    x                        x     x ] where x - elements of array
+  # a = key - array[end], b = array[start] - key
+  # if a is smaller than b, return array[end] as array[end] is the minimum difference
+  # if b is smaller than a, return array[start] as array[start] is the minimum difference
 ```
 
 ---
@@ -4839,7 +5013,25 @@ def searchCeilingOfANumber(array, key):
 
 ### [**Binary Search**](./searching/bitonic-array-maximum.py)
 ```python
+# O(logn) Time - where n is the total elements in the array
+# We are reducing the search range by half at every iteration.
+# O(1) Space - no extra auxiliary memory is created
+def findMaxInBitonicArray(array): 
+  start, end = 0, len(array) - 1
+  # EDGE: In the end, we break the while loop when start* == end* 
+  # as start* and end* would end up pointing at the max number of the bitonic array
+  while start < end: 
+    # 1: Whenever we calculate mid, we compare array[mid] and array[mid + 1] 
+    # to determine if we are ascending or descending,
+    mid = (start + end) // 2
 
+    # 2: If array[mid] > array[mid + 1], we are in the second descending part of the bitonic array
+    if array[mid] > array[mid + 1]: 
+      end = mid # 3: Hence, our answer could be at mid* or before mid* so set end = mid
+    # 4: If array[mid] < array[mid + 1], we are in the first ascending part of the bitonic array
+    else:
+      start = mid + 1 # 5: Hence, our answer will be after mid* so set start = mid + 1
+  return array[start]
 ```
 
 ---
