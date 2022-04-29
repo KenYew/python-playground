@@ -250,7 +250,6 @@ queue.append(node.right)
 ---
 # <div id='arrays'/> 🎹 **Arrays**
 
-#### Blind 75
 - ✅ Two Sum - https://leetcode.com/problems/two-sum/
 - ✅ Best Time to Buy and Sell Stock - https://leetcode.com/problems/best-time-to-buy-and-sell-stock/
 - ✅ Contains Duplicate - https://leetcode.com/problems/contains-duplicate/
@@ -261,21 +260,6 @@ queue.append(node.right)
 - Search in Rotated Sorted Array - https://leetcode.com/problems/search-in-rotated-sorted-array/
 - ✅ 3Sum - https://leetcode.com/problems/3sum/
 - Container With Most Water - https://leetcode.com/problems/container-with-most-water/
-
-#### LeetCode Patterns
-- `217` Contains Duplicate - https://leetcode.com/problems/contains-duplicate/
-- `268` Missing Number - https://leetcode.com/problems/missing-number/
-- `448` Find All Numbers Disappeared in an Array - https://leetcode.com/problems/find-all-numbers-disappeared-in-an-array/
-- `136` Single Number - https://leetcode.com/problems/single-number/
-- `2022` Convert 1D Array Into 2D Array - https://leetcode.com/problems/convert-1d-array-into-2d-array/
-- ✅ `238` Product of Array Except Self - https://leetcode.com/problems/product-of-array-except-self/
-- `287` Find the Duplicate Number - https://leetcode.com/problems/find-the-duplicate-number/
-- `442` Find All Duplicates in an Array - https://leetcode.com/problems/find-all-duplicates-in-an-array/
-- `73` Set Matrix Zeroes - https://leetcode.com/problems/set-matrix-zeroes/
-- `54` Spiral Matrix - https://leetcode.com/problems/spiral-matrix/
-- `48` Rotate Image - https://leetcode.com/problems/rotate-image/
-- `128` Longest Consecutive Sequence - https://leetcode.com/problems/longest-consecutive-sequence/
-- `41` First Missing Positive - https://leetcode.com/problems/first-missing-positive/
 #### [📋 **Back to Table of Contents**](#toc)
 
 ---
@@ -3572,10 +3556,10 @@ class BST:
 # <div id='sort'/> 📚 **Sorting Algorithms**
 
 - ✅ Bubble Sort - https://www.algoexpert.io/questions/Bubble%20Sort
-- Insertion Sort - https://www.algoexpert.io/questions/Insertion%20Sort
-- Selection Sort - https://www.algoexpert.io/questions/Selection%20Sort
+- ✅ Insertion Sort - https://www.algoexpert.io/questions/Insertion%20Sort
+- ✅ Selection Sort - https://www.algoexpert.io/questions/Selection%20Sort
 - Three Number Sort - https://www.algoexpert.io/questions/Three%20Number%20Sort
-- Quick Sort - https://www.algoexpert.io/questions/Quick%20Sort
+- ✅ Quick Sort - https://www.algoexpert.io/questions/Quick%20Sort
 - Heap Sort - https://www.algoexpert.io/questions/Heap%20Sort
 - Radix Sort - https://www.algoexpert.io/questions/Radix%20Sort
 - Merge Sort - https://www.algoexpert.io/questions/Merge%20Sort
@@ -5416,7 +5400,8 @@ def findMaxInBitonicArray(array):
 ---
 ## 🟨 [Search in a Rotated Array](https://www.educative.io/courses/grokking-the-coding-interview/RMPVM2Y4PW0)
 >* Given an array of numbers which is sorted in ascending order and also rotated by some arbitrary number, find if a given ‘key’ is present in it.
->* Write a function to return the index of the ‘key’ in the rotated array. If the ‘key’ is not present, return -1. You can assume that the given array does not have any duplicates.
+>* Write a function to return the index of the ‘key’ in the rotated array. If the ‘key’ is not present, return -1. 
+>* The function must be able to handle duplicates in the input array.
 ##### Example 1:
 - [x] Input: [10, 15, 1, 3, 8], key = 15
 - [x] Output: 1
@@ -5431,12 +5416,56 @@ def findMaxInBitonicArray(array):
 
 <img src="resources/search-in-a-rotated-array-2.png" width="500px"/>
 
+##### Example 3:
+- [x] Input: [3, 7, 3, 3, 3], key = 7
+- [x] Output: 1
+- [x] Explanation: '7' is present in the array at index '1'.
+
+<img src="resources/search-in-a-rotated-array-3.png" width="500px"/>
+
 <details><summary><b>Solution</b></summary>
 <p>
 
+<img src="resources/search-in-a-rotated-array-4.png" width="850px"/>
+
 ### [**Binary Search**](./searching/search-in-a-rotated-array.py)
 ```python
+# O(logn) Time - where n is the total elements in the array
+# However, since we only skip two numbers in case of duplicates instead of half of the numbers, 
+# the worst case time complexity will become O(n)
+# We are reducing the search range by half at every iteration.
+# O(1) Space - no extra auxiliary memory is created
+def searchRotatedArray(array, key): 
+  start, end = 0, len(array) - 1
+  while start <= end: 
+    mid = (start + end) // 2
+    if array[mid] == key: # If we found the key, return mid* immediately
+      return mid
 
+    # EDGE: If we have duplicate values in array where numbers at indexes start, mid, and end are same, we can't choose a side
+    # the best we can do, is to skip one number from both ends as key != arr[mid] at
+    # start = start + 1 and end = end - 1.
+    if array[start] == array[mid] and array[end] == array[mid]:
+      start += 1
+      end -= 1
+
+    # Compare if array[start] <= array[mid] to determine:
+    # 1: If numbers from start to middle are sorted in ascending order,
+    elif array[start] <= array[mid]: 
+      # 2: If key is located in between start and middle, 
+      if key >= array[start] and key < array[mid]: 
+        end = mid - 1 # we can skip the 2nd part by setting end = mid - 1
+      else: 
+        start = mid + 1 # else, we can skip the 1st part by setting start = mid + 1
+    # 3: Else if numbers from middle + 1 to end are sorted in ascending order,
+    else: 
+      # 4: If key is located in between mid and end,
+      if key > array[mid] and key <= array[end]: 
+        start = mid + 1 # we can skip the 1st part by setting start = mid + 1
+      else: 
+        end = mid - 1 # else, we can skip the 2nd part by setting end = mid - 1
+    
+  return -1
 ```
 </p>
 </details>
@@ -5501,7 +5530,23 @@ Given the head of a Singly LinkedList, reverse the LinkedList. Write a function 
 
 ### [**Linked List**](./linked-lists/reverse-a-linked-list.py)
 ```python
+class Node:
+  def __init__(self, value, next=None): 
+    self.value = value
+    self.next = next
 
+# O(n) Time since we need to traverse all n nodes at least once
+# O(1) Space since we perform the LinkedList reversal in-place
+def reverseLinkedList(head): 
+  # 1: Initialise current* pointing to head and previous* pointing to None
+  previous, current, next = None, head, None
+  # 2: While we have not reached the end of the LinkedList (tail == None),
+  while current is not None: 
+    next = current.next # 3: placeholder - store currentNode.next in next
+    current.next = previous # 4: reverse - set currentNode.next to point to previous
+    previous = current # 5: update new head - move previous by 1 step 
+    current = next # 6: update new node iteration - move current by 1 step
+  return previous # 7: Return new head of the reversed LinkedList
 ```
 </p>
 </details>
@@ -5517,10 +5562,83 @@ Given the head of a LinkedList and two positions ‘p’ and ‘q’, reverse th
 
 ### [**Linked List**](./linked-lists/reverse-a-sub-list.py)
 ```python
+class Node: 
+  def __init__(self, value, next=None): 
+    self.value = value 
+    self.next = next
 
+# O(n) Time since we need to traverse all n nodes at least once
+# O(1) Space since we perform the LinkedList reversal in-place
+def reverseSubList(head, p, q): 
+  # EDGE: If sublist is only a single node, return the head
+  if p == q: 
+    return head
+
+  # 1: Iterate pass the first p - 1 nodes so that currentNode points at p and previousNode points at p - 1
+  current, previous = head, None
+  idx = 0
+  while current is not None and idx < p - 1: 
+    previous = current
+    current = current.next
+    idx += 1
+
+  # head -> 1 -> 2 -> 3 -> 4 -> 5 -> None
+  #              p         q
+  #       prev  curr
+  # We are interested in 3 parts:
+  # 1 - the part before index p 
+  # 2 - the part between p and q (sublist)
+  # 3 - the part after index q
+  
+  # 2: Store the nodes that we will use to reconnect with the reversed sublist later
+  lastNodeOfFirstPart = previous # Store lastNode of first part
+  lastNodeOfSubList = current # Store lastNode of reversed sublist
+  # Note: After reversing the sublist, current will become the last node of sublist
+  next = None # Placeholder variable to store nextNode
+
+  # 3: Reverse the sublist between p and q (using in-place LinkedList reversal pattern)
+  idx = 0
+  while current is not None and idx < q - p + 1: 
+    next = current.next # placeholder
+    current.next = previous # reverse
+    previous = current # update new head
+    current = next # update new node iteration
+
+  # 4: Reconnect sublist with the first part of LinkedList at p - 1
+  if lastNodeOfFirstPart is not None: 
+    lastNodeOfFirstPart.next = previous
+  else: # else if p == 1, we are changing the first node (head) of the LinkedList
+    head = previous
+
+  # 5: Reconnect sublist with the last part of LinkedList at q + 1
+  lastNodeOfSubList.next = current
+  return head # 6: Return head of LinkedList (with the reconnected reversed sublist)
 ```
 </p>
 </details>
+
+---
+### Similar Questions
+**Problem 1:** Reverse the first ‘k’ elements of a given LinkedList.
+
+**Solution:** This problem can be easily converted to our parent problem; to reverse the first ‘k’ nodes of the list, we need to pass `p=1` and `q=k`.
+
+---
+**Problem 2:** Given a LinkedList with ‘n’ nodes, reverse it based on its size in the following way:
+
+1. If ‘n’ is even, reverse the list in a group of n/2 nodes.
+1. If n is odd, keep the middle node as it is, reverse the first ‘n/2’ nodes and reverse the last ‘n/2’ nodes.
+
+**Solution:** When ‘n’ is even we can perform the following steps:
+
+1. Reverse first ‘n/2’ nodes: `head = reverse(head, 1, n/2)`
+1. Reverse last ‘n/2’ nodes: `head = reverse(head, n/2 + 1, n)`
+
+When ‘n’ is odd, our algorithm will look like:
+1. `head = reverse(head, 1, n/2)`
+1. `head = reverse(head, n/2 + 2, n)`
+
+Please note the function call in the second step. We’re skipping two elements as we will be skipping the middle element.
 
 ---
 ## 🟨 [Reverse every K-element Sub-list](https://www.educative.io/courses/grokking-the-coding-interview/RMZylvkGznR)
@@ -5534,13 +5652,55 @@ Given the head of a LinkedList and two positions ‘p’ and ‘q’, reverse th
 
 ### [**Linked List**](./linked-lists/reverse-every-k-element-sub-list.py)
 ```python
+class Node: 
+  def __init__(self, value, next=None):
+    self.value = value
+    self.next = next 
 
+# O(n) Time since we need to traverse all n nodes at least once
+# O(1) Space since we perform the LinkedList reversal in-place
+def reverseEveryKElements(head, k): 
+  # EDGE: If input is an empty LinkedList or a single node, return head
+  if k <= 1 or head is None: 
+    return head
+
+  # 1: Store placeholder nodes for reconnection later
+  previous, current = None, head
+  while True: 
+    lastNodeOfPreviousPart = previous
+    lastNodeOfSubList = current
+    next = None
+
+    # 2: Reverse every k nodes
+    idx = 0
+    while current is not None and idx < k: 
+      next = current.next
+      current.next = previous
+      previous = current
+      current = next 
+      idx += 1
+
+    # 3: Reconnect sublist with previous part
+    if lastNodeOfPreviousPart is not None: 
+      lastNodeOfPreviousPart.next = previous # Connect to updated previous
+    else: # Else if we are at the end of LinkedList, set the new head to be previous
+      head = previous 
+
+    # 4: Reconnect sublist with next part
+    lastNodeOfSubList.next = current 
+
+    # 5: If we have reached the end of the LinkedList, break the while: True loop
+    if current is None: 
+      break
+    previous = lastNodeOfSubList # 6: Update previous with lastNodeOfSubListReversed
+  return head
+    
 ```
 </p>
 </details>
 
 ---
-## 🟨 [Reverse alternating K-element Sub-list](https://www.educative.io/courses/grokking-the-coding-interview/q2lZKgLm980)
+## 🟨 [Reverse Alternating K-element Sub-list](https://www.educative.io/courses/grokking-the-coding-interview/q2lZKgLm980)
 >* Given the head of a LinkedList and a number ‘k’, reverse every alternating ‘k’ sized sub-list starting from the head.
 >* If, in the end, you are left with a sub-list with less than ‘k’ elements, reverse it too.
 
@@ -5551,7 +5711,52 @@ Given the head of a LinkedList and two positions ‘p’ and ‘q’, reverse th
 
 ### [**Linked List**](./linked-lists/reverse-alternating-k-element-sub-list.py)
 ```python
+class Node:
+  def __init__(self, value, next=None): 
+    self.value = value 
+    self.next = next 
 
+# O(n) Time since we need to traverse all n nodes at least once
+# O(1) Space since we perform the LinkedList reversal in-place
+def reverseAlternateKNodes(head, k):
+  # EDGE: If k is invalid or input head is None, return head
+  if k <= 1 or head is None: 
+    return head 
+
+  # 1: While we have not fully traversed until the end of LinkedList, 
+  previous, current = None, head
+  while current is not None: 
+    # Store or update placeholder nodes for reconnection later
+    lastNodeOfPreviousPart = previous 
+    lastNodeOfSubList = current 
+    next = None 
+
+    # 2: Reverse k nodes
+    idx = 0
+    while current is not None and idx < k: 
+      next = current.next
+      current.next = previous 
+      previous = current
+      current = next 
+      idx += 1
+
+    # 3: Reconnect sublist with previous part  
+    if lastNodeOfPreviousPart is not None: 
+      lastNodeOfPreviousPart.next = previous # Connect to updated previous
+    else: # Else if we are at the end of LinkedList, set the new head to be previous
+      head = previous 
+      
+    # 4: Reconnect sublist with next part
+    lastNodeOfSubList.next = current # Connect to updated currentNode
+
+    # 5: Traverse without reversal for the next k nodes
+    idx = 0 
+    while current is not None: 
+      previous = current
+      current = current.next
+      idx += 1
+
+  return head # 6: Return head of the mutated LinkedList
 ```
 </p>
 </details>
@@ -5568,7 +5773,46 @@ Given the head of a LinkedList and two positions ‘p’ and ‘q’, reverse th
 
 ### [**Linked List**](./linked-lists/rotate-a-linked-list.py)
 ```python
+# head -> 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> None, rotations = 3
+# head -> 4 -> 5 -> 6 -> 1 -> 2 -> 3 -> None
+# 1. We connect the last node of the LinkedList (6) to the head, because the list will have a different tail after the rotation.
+# 2. The new head of the LinkedList will be the node at the beginning of the sublist (4).
+# 3. The node right before the start of sub-list (3) will be the new tail of the rotated LinkedList.
+class Node: 
+  def __init__(self, value, next=None): 
+    self.value = value
+    self.next = next 
 
+# O(n) Time since we need to traverse all n nodes at least once
+# O(1) Space since we perform the LinkedList reversal in-place
+def rotateLinkedList(head, rotations):
+  # EDGE: If empty input head, empty input LinkedList or invalid input rotations, return head
+  if head is None or head.next is None or rotations <= 0: 
+    return head
+  
+  # 1: Traverse to determine the length and lastNode of LinkedList
+  lastNode = head 
+  listLength = 1
+  while lastNode.next is not None: 
+    lastNode = lastNode.next
+    listLength += 1
+
+  # 2: Connect the lastNode of LinkedList to the head to create a circular list
+  lastNode.next = head
+  # Say LinkedList only has 5 nodes but we want to rotate at every 8 nodes,
+  # we perform rotations = rotations % listLength as we do not need to perform rotations more than listLength
+  rotations %= listLength 
+  skipLength = listLength - rotations # skipLength = 5 nodes - (8 nodes % 5 nodes) = 2 nodes
+  lastNodeOfRotatedList = head # Set lastNodeOfRotatedList to be the head of the LinkedList
+
+  # 3: Traverse lastNodeOfRotatedList by skipLength times
+  for idx in range(skipLength - 1): 
+    lastNodeOfRotatedList = lastNodeOfRotatedList.next
+
+  # Here, lastNodeOfRotatedList would be pointing to the sub-list of 'k' ending nodes
+  head = lastNodeOfRotatedList.next
+  lastNodeOfRotatedList.next = None 
+  return head
 ```
 </p>
 </details>
@@ -6332,19 +6576,6 @@ def findMaxValues(root):
     result.append(maxValue) 
     # 10: # If the queue is not empty, repeat from Step 5 to traverse the next level
   return result
-
-def main():
-  root = TreeNode(12)
-  root.left = TreeNode(7)
-  root.right = TreeNode(1)
-  root.left.left = TreeNode(9)
-  root.left.right = TreeNode(2)
-  root.right.left = TreeNode(10)
-  root.right.right = TreeNode(5)
-  print("Level maxes are: " + str(findMaxValues(root)))
-
-if __name__ == "__main__":
-  main()
 ```
 </p>
 </details>
