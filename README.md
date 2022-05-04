@@ -89,7 +89,7 @@ Blind 75 questions, coding patterns and in-depth solutions for FAANG coding inte
 ---
 ## 📱 Coding Pattern Templates
 #### 🪟 Sliding Window
-##### To perform beginning to end computations of an array in O(n) time complexity
+To perform beginning to end computations of an array in O(n) time complexity
 ```python
 windowSum, windowStart = 0, 0
 # 1: Increment the windowEnd pointer to start creating the sliding window
@@ -112,7 +112,7 @@ for windowEnd in range(len(array)):
 return result
 ```
 #### ✌️ Two Pointers
-##### To traverse and compute all elements of an array
+To traverse and compute all elements of an array
 ```python
 # 1: Initialise two pointers on each end of the array
 left, right = 0, len(array) - 1
@@ -135,7 +135,7 @@ while left < right:
 return result
 ```
 #### 📝 Linked List Traversal
-##### To perform head to tail computations
+To perform head to tail computations
 ```python
 # 1: While currentNode pointer has not fully traversed to the None end of the linked list
 while currentNode is not None:
@@ -157,7 +157,7 @@ currentNode = next
 ```
 
 #### ♽ Recursive DFS
-##### To perform root to leaf computations
+To perform root to leaf computations
 ```python
 # 1: Base edge case to break the depth first search when we have arrived None child nodes of the leaf node
 if node is None:
@@ -174,7 +174,7 @@ if node.left is None and node.right is None:
 recursiveFunction(node.left, informationToPassDown, answer)
 recursiveFunction(node.right, informationToPassDown, answer)
 ```
-##### To perform leaf to root computations
+To perform leaf to root computations
 ```python
 # 1: Base edge case to break the depth first search when we have arrived None child nodes of the leaf node
 if node is None:
@@ -191,7 +191,7 @@ doSomething()
 return (informationToPassDown, answer)
 ```
 #### 📚 Stack DFS
-##### To perform root to leaf computations
+To perform root to leaf computations
 ```python
 # 1: Initialise a stack with root node
 stack = [root]
@@ -214,7 +214,7 @@ stack.append(node.right)
 
 #### 🌲 Queue BFS
 
-##### To perform root to leaf computations
+To perform root to leaf computations
 ```python
 # 1: Initialise a queue with root node
 queue = [root]
@@ -392,6 +392,48 @@ def sortedSquaredArray(array):
 
 
 ✅ **TWO POINTERS:** _Initialise output array with 0's, and left and right pointers on each end of array. Traverse idx from end to beginning of the array, if abs(leftVal) > abs(rightVal), write the ans[idx] = leftVal ** 2 and increment left, else abs(rightVal) >= abs(leftVal), write the ans[idx] = rightVal **2 and decrement right._
+
+---
+## 🟩 [Missing Number](https://leetcode.com/problems/missing-number/)
+> Given an array nums containing `n` distinct numbers in the range `[0, n]`, return the only number in the range that is missing from the array.
+
+Example 1:
+- [x] Input: nums = `[3,0,1]`
+- [x] Output: 2
+- [x] Explanation: `n = 3` since there are 3 numbers, so all numbers are in the range `[0,3]`. 2 is the missing number in the range since it does not appear in nums.
+
+Example 2:
+- [x] Input: nums = `[0,1]`
+- [x] Output: 2
+- [x] Explanation: `n = 2` since there are 2 numbers, so all numbers are in the range `[0,2]`. 2 is the missing number in the range since it does not appear in nums.
+
+Example 3:
+- [x] Input: nums = `[9,6,4,2,3,5,7,0,1]`
+- [x] Output: 8
+- [x] Explanation: `n = 9` since there are 9 numbers, so all numbers are in the range `[0,9]`. 8 is the missing number in the range since it does not appear in nums.
+
+
+### [**Two Pointers**](./arrays/missing-number.py)
+```python
+# Say for input array = [9,6,4,2,3,5,7,0,1], we have a range of [0, 9]
+# sum(range(len(array))) = 0 + 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 = 45
+# sum(array) = 9 + 6 + 4 + 2 + 3 + 5 + 7 + 0 + 1 = 37
+# result = sum(range(len(array))) - sum(array) = 45 - 37 = 8
+
+# O(n) Time - we are iterating and maintaining two arrays of size n: sum(range(len(array))) and sum(array) 
+# so O(2n) asymptotically converges to O(n)
+# O(1) Space - no extra auxiliary memory is used
+def missingNumber(array): 
+  # Since in Python, `for idx in range(len(array))` will only add idx values from 0 to n - 1, 
+  # so we will initially include the final value n in the result to account for this
+  result = len(array)
+  # 1: idx* represents numbers that will be summed from range(len(array))
+  for idx in range(len(array)): 
+    # 2: Since result = sum(range(len(array))) - sum(array[idx]),
+    result += (idx - array[idx])
+  return result # alternatively, 1-liner solution: return sum(range(len(array) + 1)) - sum(array)
+```
+
 
 ---
 ## [🟨 Validate Subsequence](https://www.algoexpert.io/questions/Validate%20Subsequence)
@@ -722,6 +764,47 @@ def longestPeak(array):
 7. Return max(longestPeakLength, currentPeakLength)
 
 ---
+## 🟨 [Subarray Sum Equals K](https://leetcode.com/problems/subarray-sum-equals-k/discuss/190674/Python-O(n)-Based-on-%22running_sum%22-concept-of-%22Cracking-the-coding-interview%22-book)
+> Given an array of integers nums and an integer k, return the total number of subarrays whose sum equals to k.
+
+Example 1:
+- [x] Input: nums = `[1,1,1]`, k = 2
+- [x] Output: 2
+
+Example 2:
+- [x] Input: nums = `[1,2,3]`, k = 3
+- [x] Output: 2
+
+Constraints:
+- `1 <= nums.length <= 2 * 104`
+- `-1000 <= nums[i] <= 1000`
+- `-107 <= k <= 107`
+
+
+### [**Prefix Sum**](./arrays/subarray-sum-equals-k.py)
+```python
+# O(n) Time - we iterate each element in the input at most once and for each element we spend a constant amount of time.
+# O(n) Space - in the worst case, we could store at most n elements in the dictionary
+def subarraySum(array, targetSum):
+  runningSum, totalSum = 0, 0
+  # EDGE: Add initial prefixSum value of 0 with 1 occurrence
+  prefixSums = { 0:1 } # prefixSum : frequency
+  
+  #  <----------runningSum------------->
+  #  <-prefixSum-> <-----targetSum----->
+  # s             x                     y
+  for value in array: 
+    # 1: Keep summing up elements into the runningSum
+    runningSum += value
+    prefixSum = runningSum - targetSum # 2: Simultaneously, calculate the prefixSum in each iteration
+    # 3: Add prefixSum value (frequency) into totalSum if prefixSum key is found in dictionary, 
+    # otherwise create a new key-value pair prefixSum : 0 by default if not found
+    totalSum += prefixSums.get(prefixSum, 0) 
+    prefixSums[runningSum] = 1 + prefixSums.get(runningSum, 0) # 4: If runningSum key is found in dictionary, increment its value
+  return totalSum
+```
+
+---
 ## [🟨 3Sum](https://leetcode.com/problems/3sum/)
 > Given an integer array nums, return all the triplets `[nums[i], nums[j], nums[k]` such that `i != j`, `i != k`, and `j != k`, and `nums[i] + nums[j] + nums[k] == 0`.
 - [x] Input: `nums = [-1,0,1,2,-1,-4]`
@@ -840,6 +923,60 @@ def threeNumberSum(array, targetSum):
 ✅ **TWO POINTERS:** 
 - `ThreeSum: A + B + C = 0` 
 - _Sort input array, perform a FOR loop for A, then set Two Pointers (L & R) for B and C. Increment L if sum is too small and decrement R if sum is too big. When targetSum is found, find the next targetSum by traversing both L & R inwards._
+
+---
+## 🟨 [4Sum](https://www.educative.io/courses/grokking-the-coding-interview/B6XOq8KlkWo)
+> Given an array of unsorted numbers and a target number, find all unique quadruplets in it, whose sum is equal to the target number.
+
+Example 1
+- [x] Input: `[4, 1, 2, -1, 1, -3]`, target=`1`
+- [x] Output: `[-3, -1, 1, 4], [-3, 1, 1, 2]`
+- [x] Explanation: Both the quadruplets add up to the target.
+
+Example 2
+- [x] Input: `[2, 0, -1, 1, -2, 2]`, target=`2`
+- [x] Output: `[-2, 0, 2, 2], [-1, 0, 1, 2]`
+- [x] Explanation: Both the quadruplets add up to the target.
+
+
+### [**Two Pointers**](./arrays/four-sum.py)
+```python
+# O(n^3) Time - O(nlogn) to sort the array + O(n^2) from the nested for loops which is asymptotically equivalent to O(n^3) Time
+# O(n) Space
+def searchQuadruplets(array, targetSum): 
+    array.sort()
+    quadruplets = []
+    
+    # *idx to find A [X, X, X, X, B, C, D] where X are elements that *idx will iterate
+    for idx in range(len(array) - 3): 
+        if idx > 0 and array[idx] == array[idx - 1]: 
+            continue
+        # *jdx to find B [A, X, X, X, X, C, D] where X are elements that *jdx will iterate
+        for jdx in range(idx + 1, len(array) - 2): 
+            if jdx > idx + 1 and array[jdx] == array[jdx - 1]:
+                continue
+            searchPairs(array, targetSum, idx, jdx, quadruplets)
+    return quadruplets
+
+# *left and *right to find C and D [A, B, X, X, X, X, X] where X are elements that *left and *right will iterate
+def searchPairs(array, targetSum, first, second, quadruplets):
+    left = second + 1
+    right = len(array) - 1
+    while left < right: 
+        _sum = array[first] + array[second] + array[left] + array[right]
+        if _sum == targetSum:
+            quadruplets.append([array[first], array[second], array[left], array[right]])
+            left += 1
+            right -= 1
+            while left < right and array[left] == array[left - 1]:
+                left += 1
+            while left < right and array[right] == array[right + 1]:
+                right -= 1
+        elif _sum < targetSum: 
+            left += 1
+        else: 
+            right -= 1
+```
 
 ---
 # 🧠 Kadane's Algorithm Pattern
@@ -1227,7 +1364,7 @@ we can't naively run-length-encode long runs.
 >* Thus, long runs (runs of 10 or more characters) should be
 encoded in a split fashion; the aforementioned run should be encoded as "9A3A"
 
-##### Example 1
+Example 1
 - [x] Input: string = `"AAAAAAAAAAAAABBCCCCDD"`
 - [x] Output: `"9A4A2B4C2D"`
 
@@ -1267,6 +1404,268 @@ def runLengthEncoding(string):
 1. If two adjacent chars do not match, keep incrementing currentLength* to track length of repeating chars
 1. If two adjacent chars match, append str(currentLength) and previousChar into answer
 1. Handle the last running characters by appending str(currentLength) and lastChar
+
+---
+## 🟩 [Roman To Integer](https://leetcode.com/problems/roman-to-integer/)
+
+| Symbol | Value |
+|:--|:--|
+|I|1|
+|V|5|
+|X|10|
+|L|50|
+|C|100|
+|D|500|
+|M|1000|
+
+>* Roman numerals are represented by seven different symbols: `I, V, X, L, C, D and M.`
+>* For example, 2 is written as `II` in Roman numeral, just two one's added together. 12 is written as `XII`, which is simply `X + II`. The number 27 is written as `XXVII`, which is `XX + V + II`.
+>* Roman numerals are usually written largest to smallest from left to right. 
+>* However, the numeral for four is not `IIII`. Instead, the number four is written as `IV`. Because the one is before the five we subtract it making four. The same principle applies to the number nine, which is written as `IX`.
+
+There are six instances where subtraction is used:
+>* I can be placed before V (5) and X (10) to make 4 and 9. 
+>* X can be placed before L (50) and C (100) to make 40 and 90. 
+>* C can be placed before D (500) and M (1000) to make 400 and 900.
+
+>Given a roman numeral, convert it to an integer.
+
+Example 1:
+- [x] Input: s = `"III"`
+- [x] Output: 3
+- [x] Explanation: III = 3
+
+Example 2:
+- [x] Input: s = `"LVIII"`
+- [x] Output: 58
+- [x] Explanation: `L = 50, V= 5, III = 3`
+
+Example 3:
+- [x] Input: s = `"MCMXCIV"`
+- [x] Output: 1994
+- [x] Explanation: `M = 1000, CM = 900, XC = 90 and IV = 4`
+
+Constraints:
+- `1 <= s.length <= 15`
+- s contains only the characters `('I', 'V', 'X', 'L', 'C', 'D', 'M')`
+- It is guaranteed that s is a valid roman numeral in the range `[1, 3999]`
+
+
+### [**Hash Table**](./strings/roman-to-integer.py)
+```python
+# O(n) Time - we iterate each element in the input at most once and for each element we spend a constant amount of time.
+# O(1) Space - we have used only constant space to store the hash table and the result.
+# O(7) Hash Table and O(1) result array asymptotically converges to O(1) Space
+def romanToInteger(string): 
+  # 1: Initiate hash map that maps roman numerals to integers
+  table = { 
+      "I": 1, 
+      "V": 5,
+      "X": 10, 
+      "L": 50, 
+      "C": 100,
+      "D": 500,
+      "M": 1000
+  }
+  result = 0
+
+  # Explanation:
+  # IV - If string[idx] < string[idx + 1], 
+  # I will be a negative number and V will be a positive number so -= string[idx]
+  # VI - If string[idx] > string[idx + 1], 
+  # V will be a positive number and I will be a negative number so += string[idx]
+
+  # 2: Iterate through each character of string,
+  for idx in range(len(string)): 
+    # 3: if idx* is not out-of-bounds and roman at idx is smaller than roman at idx + 1,
+    if idx + 1 < len(string) and table[string[idx]] < table[string[idx + 1]]: 
+      result -= table[string[idx]] # 4: roman at idx is a negative number so subtract from result
+    else: # 5: if roman at idx is bigger than roman at idx + 1,
+      result += table[string[idx]] # 6: roman at idx is a positive number so add from result
+  return result
+```
+
+---
+## 🟨 [Integer to Roman](https://leetcode.com/problems/integer-to-roman/)
+
+|Symbol  |     Value
+|:--|:--
+|I      |       1
+|V     |        5
+|X    |         10
+|L   |          50
+|C  |           100
+|D |            500
+|M|             1000
+
+>* Roman numerals are represented by seven different symbols: `I, V, X, L, C, D and M.`
+>* For example, 2 is written as `II` in Roman numeral, just two one's added together. 12 is written as `XII`, which is simply `X + II`. The number 27 is written as `XXVII`, which is `XX + V + II`.
+>* Roman numerals are usually written largest to smallest from left to right. 
+>* However, the numeral for four is not `IIII`. Instead, the number four is written as `IV`. Because the one is before the five we subtract it making four. The same principle applies to the number nine, which is written as `IX`. 
+
+There are six instances where subtraction is used:
+>* I can be placed before V (5) and X (10) to make 4 (IV) and 9 (IX).
+>* X can be placed before L (50) and C (100) to make 40 (XL) and 90 (XC). 
+>* C can be placed before D (500) and M (1000) to make 400 (CD) and 900 (CM). 
+
+> Given an integer, convert it to a roman numeral.
+
+Example 1:
+- [x] Input: num = 3
+- [x] Output: `"III"`
+- [x] Explanation: 3 is represented as 3 ones.
+
+Example 2:
+- [x] Input: num = 58
+- [x] Output: `"LVIII"`
+- [x] Explanation: L = 50, V = 5, III = 3.
+
+Example 3:
+- [x] Input: num = 1994
+- [x] Output: `"MCMXCIV"`
+- [x] Explanation: M = 1000, CM = 900, XC = 90 and IV = 4.
+ 
+Constraints:
+
+`1 <= num <= 3999`
+
+
+### [**Hash Table**](./strings/integer-to-roman.py)
+```python
+# O(n) Time where n is the number of elements in the array
+# O(1) Space - No extra auxiliary memory is used
+def integerToRoman(num): 
+  table = {
+      1000: 'M', 
+      900: 'CM', 
+      500: 'D', 
+      400: 'CD', 
+      100: 'C', 
+      90: 'XC', 
+      50: 'L', 
+      40: 'XL', 
+      10: 'X', 
+      9: 'IX', 
+      5: 'V', 
+      4: 'IV', 
+      1: 'I'
+  }
+
+  # Explanation:
+  # Say our input is 2500. From the hash table, we start with the 1000:M k-v pair, 
+  # we compute num // key = 2500 // 1000 = 2, so need to insert roman M twice 
+  # Hence, result += 2 * M = MM 
+  # Then, we move on to the next bit so num = 2500 % 1000 = 500
+  # We then repeat the above steps using the next decreasing k-v pair which is 900:CM
+
+  result = ""
+  for key in table: 
+    # EDGE: If the input integer is 0 or negative, break the function
+    if num <= 0: 
+      break
+
+    # 1: Compute how many Roman characters will be appended to the result string using round down operation
+    result += (num // key) * table[key]
+    num %= key # 2: Eliminate left-most bit and move on to the next integer to compute 
+  return result
+```
+
+---
+## 🟨 [String to Integer](https://leetcode.com/problems/string-to-integer-atoi/)
+
+> Implement the myAtoi(string s) function, which converts a string to a 32-bit signed integer (similar to C/C++'s atoi function).
+
+> The algorithm for myAtoi(string s) is as follows:
+1. Read in and ignore any leading whitespace.
+1. Check if the next character (if not already at the end of the string) is '-' or '+'. Read this character in if it is either. 
+    * This determines if the final result is negative or positive respectively. Assume the result is positive if neither is present.
+1. Read in next the characters until the next non-digit character or the end of the input is reached. 
+    * The rest of the string is ignored.
+1. Convert these digits into an integer (i.e. `"123" -> 123`, `"0032" -> 32`). 
+    * If no digits were read, then the integer is 0. Change the sign as necessary (from step 2).
+    * If the integer is out of the 32-bit signed integer range [-231, 231 - 1], then clamp the integer so that it remains in the range. 
+    * Specifically, integers less than -231 should be clamped to -231, and integers greater than 231 - 1 should be clamped to 231 - 1.
+1. Return the integer as the final result.
+
+> Note: Only the space character `' '` is considered a whitespace character. Do not ignore any characters other than the leading whitespace or the rest of the string after the digits.
+
+Example 1:
+- [X] Input: s = `"42"`
+- [X] Output: 42
+- [X] Explanation: The underlined characters are what is read in, the caret is the current reader position.
+    * Step 1: "42" (no characters read because there is no leading whitespace)
+    * Step 2: "42" (no characters read because there is neither a '-' nor '+')
+    * Step 3: "42" ("42" is read in)
+    * The parsed integer is 42. Since 42 is in the range `[-231, 231 - 1]`, the final result is 42.
+
+Example 2:
+- [X] Input: s = `"   -42"`
+- [X] Output: -42
+- [X] Explanation:
+    * Step 1: "   -42" (leading whitespace is read and ignored)
+    * Step 2: "   -42" ('-' is read, so the result should be negative)
+    * Step 3: "   -42" ("42" is read in)
+    * The parsed integer is -42. Since -42 is in the range `[-231, 231 - 1]`, the final result is -42.
+
+Example 3:
+- [X] Input: s = `"4193 with words"`
+- [X] Output: 4193
+- [X] Explanation:
+    * Step 1: "4193 with words" (no characters read because there is no leading whitespace)
+    * Step 2: "4193 with words" (no characters read because there is neither a '-' nor '+')
+    * Step 3: "4193 with words" ("4193" is read in; reading stops because the next character is a non-digit)
+    * The parsed integer is 4193. Since 4193 is in the range `[-231, 231 - 1]`, the final result is 4193.
+ 
+Constraints:
+
+- `0 <= s.length <= 200`
+- s consists of English letters (lower-case and upper-case), digits `(0-9)`, `' '`, `'+'`, `'-'`, and `'.'`.
+
+
+### [**Arrays and Arithmetics**](./strings/string-to-integer.py)
+```python
+# O(n) Time - we visit each character in the input at most once and for each character we spend a constant amount of time.
+# O(1) Space - we have used only constant space to store the sign and the result.
+def stringToInteger(string: str) -> int:
+    sign, idx, result = 1, 0, 0
+    
+    # 1: Set the min/max values for a 32-bit system.
+    MAX_INT = 2 ** 31 - 1 
+    MIN_INT = -2 ** 31
+    
+    # Note: while idx < len(string): idx += 1 means while we're not in the end of string, keep iterating
+
+    # 2: Skip all whitespaces from the beginning of the input string.
+    while idx < len(string) and string[idx] == ' ':
+        idx += 1
+    
+    # 3: Set sign = +1, if it's positive number, otherwise sign = -1. 
+    if idx < len(string) and string[idx] == '+':
+        sign = 1
+        idx += 1
+    elif idx < len(string) and string[idx] == '-':
+        sign = -1
+        idx += 1
+    
+    # 4: Keep traversing digits of input and stop if it is not a digit. 
+    # The end of the string also counts as a non-digit character.
+    while idx < len(string) and string[idx].isdigit():
+        digit = int(string[idx]) # Convert current string[idx] to integer
+        
+        # 5: Append current digit to the result.
+        result = 10 * result + digit 
+        idx += 1
+        # Say for input string 123,
+        # Iteration 1: result = 0, digit = 1 so result = 10 * 0 + 1 = 1
+        # Iteration 2: result = 1, digit = 2 so result = 10 * 1 + 2 = 12
+        # Iteration 3: result = 12, digit = 3 so result = 10 * 12 + 3 = 123
+
+    # 6: Multiply result with its sign.
+    result = sign * result 
+    if result < 0: # 7: If result is negative, 
+      return max(result, MIN_INT) # default to return MIN_INT if result < MIN_INT
+    return min(result, MAX_INT) # 8: Elif result is positive, default to return MAX_INT if result > MAX_INT
+```
 
 ---
 ## 🟨 [Reverse Words in String](https://www.algoexpert.io/questions/Reverse%20Words%20In%20String)
@@ -3767,7 +4166,7 @@ def longestCommonSubsequence(s1: str, s2: str) -> int:
 - Sum of Two Integers - https://leetcode.com/problems/sum-of-two-integers/
 - Number of 1 Bits - https://leetcode.com/problems/number-of-1-bits/
 - Counting Bits - https://leetcode.com/problems/counting-bits/
-- Missing Number - https://leetcode.com/problems/missing-number/
+- ✅ Missing Number - https://leetcode.com/problems/missing-number/
 - Reverse Bits - https://leetcode.com/problems/reverse-bits/
 #### [📋 **Back to Table of Contents**](#toc)
 ---
@@ -3845,12 +4244,12 @@ def findAverageOfSubarrays(k, array):
 ---
 ## [🟩 Maximum Sum Subarrays of Size k](https://www.educative.io/courses/grokking-the-coding-interview/JPKr0kqLGNP)
 > Given an array of positive numbers and a positive number ‘k,’ find the `maximum sum of any contiguous subarray of size ‘k’.`
-##### Example 1:
+Example 1:
 - [x] Input: `array = [2, 1, 5, 1, 3, 2], k = 3`
 - [x] Output: `9`
 - [x] Explanation: Subarray with maximum sum is `[5, 1, 3]`.
 
-##### Example 2:
+Example 2:
 - [x] Input: `[2, 3, 4, 1, 5], k = 2`
 - [x] Output: `7`
 - [x] Explanation: Subarray with maximum sum is `[3, 4]`.
@@ -3887,17 +4286,17 @@ def maxSumSubarraysOfSizeK(k, array):
 ---
 ## [🟩 Smallest Subarray With a Greater Sum](https://www.educative.io/courses/grokking-the-coding-interview/7XMlMEQPnnQ)
 > Given an array of positive numbers and a positive number ‘S,’ find the length of the `smallest` contiguous subarray whose sum is `greater than or equal to ‘S’`. Return 0 if no such subarray exists.
-##### Example 1: 
+Example 1: 
 - [x] Input: `array = [2, 1, 5, 2, 3, 2], S = 7`
 - [x] Output: `2`
 - [x] Explanation: The smallest subarray with a sum greater than or equal to '7' is `[5, 2]`.
 
-##### Example 2: 
+Example 2: 
 - [x] Input: `array = [2, 1, 5, 2, 8], S = 7`
 - [x] Output: `1`
 - [x] Explanation: The smallest subarray with a sum greater than or equal to '7' is `[8]`.
 
-##### Example 3: 
+Example 3: 
 - [x] Input: `array = [3, 4, 1, 1, 6], S = 8`
 - [x] Output: `3`
 - [x] Explanation: The smallest subarray with a sum greater than or equal to '8' is `[3, 4, 1]`.
@@ -3938,17 +4337,17 @@ def smallestSubarraySum(s, array):
 ---
 ## [🟨 Longest Substring with Maximum K Distinct Characters](https://www.educative.io/courses/grokking-the-coding-interview/YQQwQMWLx80)
 > Given a string, find the length of the `longest substring` in it `with no more than K distinct characters.`
-##### Example 1: 
+Example 1: 
 - [x] Input: `String="araaci", K=2`
 - [x] Output: `4`
 - [x] Explanation: The longest substring with no more than '2' distinct characters is "araa".
 
-##### Example 2: 
+Example 2: 
 - [x] Input: `String="araaci", K=1`
 - [x] Output: `2`
 - [x] Explanation: The longest substring with no more than '1' distinct characters is "aa".
 
-##### Example 3: 
+Example 3: 
 - [x] Input: `String="cbbebi", K=3`
 - [x] Output: `5`
 - [x] Explanation: The longest substrings with no more than '3' distinct characters are "cbbeb" & "bbebi".
@@ -4000,17 +4399,17 @@ def longestSubstrinWithKDistinct(k, string):
 ---
 ## [🟥 Longest Substring with Distinct Characters](https://www.educative.io/courses/grokking-the-coding-interview/YMzBx1gE5EO)
 > Given a string, find the `length of the longest substring`, which has `all distinct characters`.
-##### Example 1: 
+Example 1: 
 - [x] Input: `String="aabccbb"`
 - [x] Output: `3`
 - [x] Explanation: The longest substring with distinct characters is "abc".
 
-##### Example 2: 
+Example 2: 
 - [x] Input: `String="abbbb"`
 - [x] Output: `2`
 - [x] Explanation: The longest substring with distinct characters is "ab".
 
-##### Example 3: 
+Example 3: 
 - [x] Input: `String="abccde"`
 - [x] Output: `3`
 - [x] Explanation: The longest substrings with distinct characters are "abc" & "cde".
@@ -4049,17 +4448,17 @@ def nonRepeatSubstring(string):
 ---
 ## [🟥 Longest Substring with Same Letters after Replacement](https://www.educative.io/courses/grokking-the-coding-interview/R8DVgjq78yR)
 > Given a string with lowercase letters only, if you are allowed to `replace no more than k letters` with any letter, find the `length of the longest substring having the same letters` after replacement.
-##### Example 1: 
+Example 1: 
 - [x] Input: `String="aabccbb", k=2`
 - [x] Output: `5`
 - [x] Explanation: Replace the two 'c' with 'b' to have the longest repeating substring "bbbbb".
 
-##### Example 2: 
+Example 2: 
 - [x] Input: `String="abbcb", k=1`
 - [x] Output: `4`
 - [x] Explanation: Replace the 'c' with 'b' to have the longest repeating substring "bbbb".
 
-##### Example 3: 
+Example 3: 
 - [x] Input: `String="abccde", k=1`
 - [x] Output: `3`
 - [x] Explanation: Replace the 'b' or 'd' with 'c' to have the longest repeating substring "ccc".
@@ -4106,12 +4505,12 @@ def lengthOfLongestSubstring(string, k):
 ---
 ## [🟥 Longest Subarray with Ones after Replacement](https://www.educative.io/courses/grokking-the-coding-interview/B6VypRxPolJ)
 > Given an array containing 0s and 1s, if you are allowed to `replace no more than ‘k’ 0s with 1s`, find the length of the `longest contiguous subarray having all 1s.`
-##### Example 1: 
+Example 1: 
 - [x] Input: `Array=[0, 1, 1, 0, 0, 0, 1, 1, 0, 1, 1], k=2`
 - [x] Output: `6`
 - [x] Explanation: Replace the '0' at index 5 and 8 to have the longest contiguous subarray of 1s having length 6.
 
-##### Example 2: 
+Example 2: 
 - [x] Input: `Array=[0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 0, 1, 1], k=3`
 - [x] Output: `9`
 - [x] Explanation: Replace the '0' at index 6, 9, and 10 to have the longest contiguous subarray of 1s having length 9.
@@ -4156,21 +4555,21 @@ Permutation is defined as the re-arranging of the characters of the string. For 
 If a string has ‘n’ distinct characters, it will have n!
 n!
  permutations.
-##### Example 1: 
+Example 1: 
 - [x] Input: String=`"oidbcaf"`, Pattern=`"abc"`
 - [x] Output: `true`
 - [x] Explanation: The string contains `"bca"` which is a permutation of the given pattern.
 
-##### Example 2: 
+Example 2: 
 - [x] Input: String=`"odicf"`, Pattern=`"dc"`
 - [x] Output: `false`
 - [x] Explanation: No permutation of the pattern is present in the given string as a substring.
 
-##### Example 3:
+Example 3:
 - [x] Input: String=`"bcdxabcdy"`, Pattern=`"bcdyabcdx"`
 - [x] Output: `true`
 - [x] Explanation: Both the string and the pattern are a permutation of each other.
-##### Example 4:
+Example 4:
 - [x] Input: String=`"aaacb"`, Pattern=`"abc"`
 - [x] Output: `true`
 - [x] Explanation: The string contains `"acb"` which is a permutation of the given pattern.
@@ -4223,19 +4622,19 @@ def findPermutation(string, pattern):
 
 > Given a string and a pattern, find the smallest substring in the given string which has all the character occurrences of the given pattern.
 
-##### Example 1:
+Example 1:
 - [x] Input: String="aabdec", Pattern="abc"
 - [x] Output: "abdec"
 - [x] Explanation: The smallest substring having all characters of the pattern is "abdec"
-##### Example 2:
+Example 2:
 - [x] Input: String="aabdec", Pattern="abac"
 - [x] Output: "aabdec"
 - [x] Explanation: The smallest substring having all character occurrences of the pattern is "aabdec"
-##### Example 3:
+Example 3:
 - [x] Input: String="abdbca", Pattern="abc"
 - [x] Output: "bca"
 - [x] Explanation: The smallest substring having all characters of the pattern is "bca".
-##### Example 4:
+Example 4:
 - [x] Input: String="adcad", Pattern="abc"
 - [x] Output: ""
 - [x] Explanation: No substring in the given string has all characters of the pattern.
@@ -4322,12 +4721,12 @@ return result
 ---
 ## [🟩 Remove Duplicates](https://www.educative.io/courses/grokking-the-coding-interview/mEEA22L5mNA)
 >* Given an array of sorted numbers, remove all duplicates from it. You should not use any extra space; after removing the duplicates in-place return the length of the subarray that has no duplicate in it.
-##### Example 1: 
+Example 1: 
 - [x] Input: `array = [2, 3, 3, 3, 6, 9, 9]`
 - [x] Output: `4`
 - [x] Explanation: The first four elements after removing the duplicates will be [2, 3, 6, 9].
 
-##### Example 2: 
+Example 2: 
 - [x] Input: `array = [2, 2, 2, 11]`
 - [x] Output: `2`
 - [x] Explanation: The first two elements after removing the duplicates will be [2, 11].
@@ -4359,11 +4758,11 @@ def removeDuplicates(array):
 
 ## [🟩 Squaring a Sorted Array](https://www.educative.io/courses/grokking-the-coding-interview/R1ppNG3nV9R)
 >* Given a sorted array, create a new array containing squares of all the numbers of the input array in the sorted order.
-##### Example 1: 
+Example 1: 
 - [x] Input: `array = [-2, -1, 0, 2, 3]`
 - [x] Output: `[0, 1, 4, 4, 9]`
 
-##### Example 2: 
+Example 2: 
 - [x] Input: `array = [-3, -1, 0, 1, 2]`
 - [x] Output: `[0, 1, 1, 4, 9]`
 
@@ -4394,15 +4793,63 @@ def sortedSquaredArray(array):
 ✅ **Two Pointers:** `*left` iterates the array from beginning to end. `*right` iterates the array from end to beginning. Compute `leftSquare` and `rightSquare`. Increment `*left` or `*right` depending `leftSquare` > `rightSquare` and save results in `squares` array.
 
 ---
+## 🟨 [Triplet Sum Close to Target ](https://www.educative.io/courses/grokking-the-coding-interview/3YlQz7PE7OA)
+> Given an array of unsorted numbers and a target number, find a triplet in the array whose sum is as close to the target number as possible, return the sum of the triplet. If there are more than one such triplet, return the sum of the triplet with the smallest sum.
 
-## [🟩 Triplets with Smaller Sum](https://www.educative.io/courses/grokking-the-coding-interview/mElknO5OKBO)
+Example 1:
+- [x] Input: `[-2, 0, 1, 2]`, target=`2`
+- [x] Output: 1
+- [x] Explanation: The triplet `[-2, 1, 2]` has the closest sum to the target.
+
+Example 2:
+- [x] Input: `[-3, -1, 1, 2]`, target=`1`
+- [x] Output: 0
+- [x] Explanation: The triplet `[-3, 1, 2]` has the closest sum to the target.
+
+Example 3:
+- [x] Input: `[1, 0, 1, 1]`, target=100
+- [x] Output: 3
+- [x] Explanation: The triplet `[1, 1, 1]` has the closest sum to the target.
+
+
+### [**Two Pointers**](./arrays/two-pointers/triplet-sum-close-to-target.py)
+```python
+# O(n^2) Time - O(nlogn) + O(n^2) asymptotically equivalent to O(n^2)
+# O(n) Space
+def threeSumClosest(array, targetSum): 
+  array.sort()
+  smallestDifference = float("inf")
+  for idx in range(len(array) - 2): 
+    if idx > 0 and array[idx - 1] == array[idx]: 
+      continue
+    left, right = idx + 1, len(array) - 1
+    while left < right: 
+      targetDifference = targetSum - array[idx] - array[left] - array[right]
+      if targetDifference == 0: 
+        return targetSum
+
+      # Handle the smallest sum when we have more than one solution
+      if abs(targetDifference) < abs(smallestDifference) or (abs(targetDifference) == abs(smallestDifference) and targetDifference > smallestDifference):
+        smallestDifference = targetDifference # Save the closest and the biggest difference
+      
+      if targetDifference > 0: 
+        left += 1
+      else: 
+        right -= 1
+
+  return targetSum - smallestDifference
+```
+
+---
+
+## [🟨 Triplets with Smaller Sum](https://www.educative.io/courses/grokking-the-coding-interview/mElknO5OKBO)
 >* Given an array `arr` of unsorted numbers and a target sum, `count all triplets` in it such that `arr[i] + arr[j] + arr[k] < target` where `i`, `j`, and `k` are three different indices. Write a function to return the count of such triplets.
-##### Example 1: 
+Example 1: 
 - [x] Input: `array = [-1, 0, 2, 3], target = 3`
 - [x] Output: `2`
 - [x] Explanation: There are two triplets whose sum is less than the target: `[-1, 0, 3], [-1, 0, 2]`
 
-##### Example 2: 
+Example 2: 
 - [x] Input: `array = [-1, 4, 2, 1, 3], target = 5`
 - [x] Output: `4`
 - [x] Explanation: There are two triplets whose sum is less than the target: `[-1, 1, 4], [-1, 1, 3], [-1, 1, 2], [-1, 2, 3]`
@@ -4479,11 +4926,11 @@ def searchPair(array, targetSum, idx, triplets):
 
 ## [🟨 Subarrays with Product Less than a Target](https://www.educative.io/courses/grokking-the-coding-interview/RMV1GV1yPYz)
 >* Given an array with positive numbers and a positive target number, find all of its contiguous subarrays whose `product is less than the target number.`
-##### Example 1: 
+Example 1: 
 - [x] Input: `array = [2, 5, 3, 10], target=30`
 - [x] Output: `[2], [5], [2, 5], [3], [5, 3], [10]`
 - [x] Explanation: There are six contiguous subarrays whose product is less than the target.
-##### Example 2: 
+Example 2: 
 - [x] Input: `array = [[8, 2, 6, 5], target=50`
 - [x] Output: `[8], [2], [8, 2], [6], [2, 6], [5], [6, 5]`
 - [x] Explanation: There are seven contiguous subarrays whose product is less than the target.
@@ -4531,10 +4978,10 @@ def findSubarrays(array, target):
 ## [🟨 Dutch National Flag Problem](https://www.educative.io/courses/grokking-the-coding-interview/RMBxV6jz6Q0)
 >* Given an array containing `0s, 1s and 2s`, sort the array in-place. You should treat numbers of the array as objects, hence, we can’t count 0s, 1s, and 2s to recreate the array.
 >* The flag of the Netherlands consists of three colors: red, white and blue; and since our input array also consists of three different numbers that is why it is called Dutch National Flag problem.
-##### Example 1: 
+Example 1: 
 - [x] Input: [1, 0, 2, 1, 0]
 - [x] Output: [0, 0, 1, 1, 2]
-##### Example 2: 
+Example 2: 
 - [x] Input: [2, 2, 0, 1, 2, 0]
 - [x] Output: [0, 0, 1, 2, 2, 2,]
 
@@ -4610,17 +5057,17 @@ def binarySearch(array, target):
 
 <img src="resources/order-agnostic-binary-search.png" width="500px"/>
 
-##### Example 1: 
+Example 1: 
 - [x] Input: [4, 6, 10], key = 10
 - [x] Output: 2
-##### Example 2: 
+Example 2: 
 - [x] Input: [1, 2, 3, 4, 5, 6, 7], key = 5
 - [x] Output: 4
-##### Example 3: 
+Example 3: 
 - [x] Input: [10, 6, 4], key = 10
 - [x] Output: 0
 
-##### Example 4: 
+Example 4: 
 - [x] Input: [10, 6, 4], key = 4
 - [x] Output: 2
 
@@ -4658,19 +5105,19 @@ def binarySearch(array, key):
 
 <img src="resources/ceiling-of-a-number.png" width="500px"/>
 
-##### Example 1:
+Example 1:
 - [x] Input: [4, 6, 10], key = 6
 - [x] Output: 1
 - [x] Explanation: The smallest number greater than or equal to '6' is '6' having index '1'.
-##### Example 2:
+Example 2:
 - [x] Input: [1, 3, 8, 10, 15], key = 12
 - [x] Output: 4
 - [x] Explanation: The smallest number greater than or equal to '12' is '15' having index '4'.
-##### Example 3:
+Example 3:
 - [x] Input: [4, 6, 10], key = 17
 - [x] Output: -1
 - [x] Explanation: There is no number greater than or equal to '17' in the given array.
-##### Example 4:
+Example 4:
 - [x] Input: [4, 6, 10], key = -1
 - [x] Output: 0
 - [x] Explanation: The smallest number greater than or equal to '-1' is '4' having index '0'.
@@ -4711,24 +5158,24 @@ def searchCeilingOfANumber(array, key):
 >* Given an array of numbers sorted in ascending order, find the floor of a given number `key`. The floor of the `key` will be the biggest element in the given array smaller than or equal to the `key`
 >* Write a function to return the index of the floor of the `key`. If there isn’t a floor, return `-1`.
 
-##### **Example 1**
+**Example 1**
 - [x] Input: `[4, 6, 10]`, key = 6
 - [x] Output: 1
 - [x] Explanation: The biggest number smaller than or equal to '6' is '6' having index '1'.
 
-##### **Example 2:**
+**Example 2:**
 - [x] Input: `[1, 3, 8, 10, 15]`, key = 12
 - [x] Output: 3
 - [x] Explanation: The biggest number smaller than or equal to '12' is '10' having index '3
 '.
 
-##### **Example 3:**
+**Example 3:**
 - [x] Input: `[4, 6, 10]`, key = 17
 - [x] Output: 2
 - [x] Explanation: The biggest number smaller than or equal to '17' is '10' having index '2
 '.
 
-##### **Example 4:**
+**Example 4:**
 - [x] Input: `[4, 6, 10]`, key = -1
 - [x] Output: -1
 - [x] Explanation: There is no number smaller than or equal to '-1' in the given array.
@@ -4764,19 +5211,19 @@ def searchFloorOfANumber(array, key):
 >* Given an array of lowercase letters sorted in ascending order, find the smallest letter in the given array greater than a given ‘key’.
 >* Assume the given array is a circular list, which means that the last letter is assumed to be connected with the first letter. This also means that the smallest letter in the given array is greater than the last letter of the array and is also the first letter of the array.
 >* Write a function to return the next letter of the given ‘key’.
-##### Example 1:
+Example 1:
 - [x] Input: ['a', 'c', 'f', 'h'], key = 'f'
 - [x] Output: 'h'
 - [x] Explanation: The smallest letter greater than 'f' is 'h' in the given array.
-##### Example 2:
+Example 2:
 - [x] Input: ['a', 'c', 'f', 'h'], key = 'b'
 - [x] Output: 'c'
 - [x] Explanation: The smallest letter greater than 'b' is 'c'.
-##### Example 3:
+Example 3:
 - [x] Input: ['a', 'c', 'f', 'h'], key = 'm'
 - [x] Output: 'a'
 - [x] Explanation: As the array is assumed to be circular, the smallest letter greater than 'm' is 'a'.
-##### Example 4:
+Example 4:
 - [x] Input: ['a', 'c', 'f', 'h'], key = 'h'
 - [x] Output: 'a'
 - [x] Explanation: As the array is assumed to be circular, the smallest letter greater than 'h' is 'a'.
@@ -4806,13 +5253,13 @@ def searchNextLetter(array, key):
 ## 🟨 [Number Range](https://www.educative.io/courses/grokking-the-coding-interview/R1B78K9oBEz)
 >* Given an array of numbers sorted in ascending order, find the range of a given number ‘key’. The range of the ‘key’ will be the first and last position of the ‘key’ in the array.
 >* Write a function to return the range of the ‘key’. If the ‘key’ is not present return [-1, -1].iling of the ‘key’. If there isn’t any ceiling return -1.
-##### Example 1:
+Example 1:
 - [x] Input: [4, 6, 6, 6, 9], key = 6
 - [x] Output: [1, 3]
-##### Example 2:
+Example 2:
 - [x] Input: [1, 3, 8, 10, 15], key = 10
 - [x] Output: [3, 3]
-##### Example 3:
+Example 3:
 - [x] Input: [1, 3, 8, 10, 15], key = 12
 - [x] Output: [-1, -1]
 
@@ -4858,19 +5305,19 @@ def binarySearch(array, key, findMaxIdx):
 
 <img src="resources/search-in-a-sorted-infinite-array.png" width="500px"/>
 
-##### Example 1:
+Example 1:
 - [x] Input: [4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30], key = 16
 - [x] Output: 6
 - [x] Explanation: The key is present at index '6' in the array.
-##### Example 2:
+Example 2:
 - [x] Input: [4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30], key = 11
 - [x] Output: -1
 - [x] Explanation: The key is not present in the array.
-##### Example 3:
+Example 3:
 - [x] Input: [1, 3, 8, 10, 15], key = 15
 - [x] Output: 4
 - [x] Explanation: The key is present at index '4' in the array.
-##### Example 4:
+Example 4:
 - [x] Input: [1, 3, 8, 10, 15], key = 200
 - [x] Output: -1
 - [x] Explanation: The key is not present in the array.
@@ -4923,17 +5370,17 @@ def binarySearch(reader, key, start, end):
 ---
 ## 🟨 [Minimum Difference Element](https://www.educative.io/courses/grokking-the-coding-interview/mymvP915LY9)
 >* Given an array of numbers sorted in ascending order, find the element in the array that has the minimum difference with the given ‘key’.
-##### Example 1:
+Example 1:
 - [x] Input: [4, 6, 10], key = 7
 - [x] Output: 6
 - [x] Explanation: The difference between the key '7' and '6' is minimum than any other number in the array 
-##### Example 2:
+Example 2:
 - [x] Input: [4, 6, 10], key = 4
 - [x] Output: 4
-##### Example 3:
+Example 3:
 - [x] Input: [1, 3, 8, 10, 15], key = 12
 - [x] Output: 10
-##### Example 4:
+Example 4:
 - [x] Input: [4, 6, 10], key = 17
 - [x] Output: 10
 
@@ -4980,17 +5427,17 @@ def searchMinDiffElement(array, key):
 ---
 ## 🟨 [Bitonic Array Maximum](https://www.educative.io/courses/grokking-the-coding-interview/RMyRR6wZoYK)
 >* Find the maximum value in a given Bitonic array. An array is considered bitonic if it is monotonically increasing and then monotonically decreasing. Monotonically increasing or decreasing means that for any index `i` in the `array arr[i] != arr[i+1].`
-##### Example 1:
+Example 1:
 - [x] Input: [1, 3, 8, 12, 4, 2]
 - [x] Output: 12
 - [x] Explanation: The maximum number in the input bitonic array is '12'.
-##### Example 2:
+Example 2:
 - [x] Input: [3, 8, 3, 1]
 - [x] Output: 8
-##### Example 3:
+Example 3:
 - [x] Input: [1, 3, 8, 12]
 - [x] Output: 12
-##### Example 4:
+Example 4:
 - [x] Input: [10, 9, 8]
 - [x] Output: 10
 
@@ -5022,16 +5469,16 @@ def findMaxInBitonicArray(array):
 ## 🟨 [Search Bitonic Array](https://www.educative.io/courses/grokking-the-coding-interview/7n3BlOvqW0r)
 >* Given a Bitonic array, find if a given ‘key’ is present in it. An array is considered bitonic if it is monotonically increasing and then monotonically decreasing. Monotonically increasing or decreasing means that for any index `i` in the array `arr[i] != arr[i+1]`.
 >* Write a function to return the index of the ‘key’. If the ‘key’ appears more than once, return the smaller index. If the ‘key’ is not present, return -1.
-##### Example 1:
+Example 1:
 - [x] Input: [1, 3, 8, 4, 3], key=4
 - [x] Output: 3
-##### Example 2:
+Example 2:
 - [x] Input: [3, 8, 3, 1], key=8
 - [x] Output: 1
-##### Example 3:
+Example 3:
 - [x] Input: [1, 3, 8, 12], key=12
 - [x] Output: 3
-##### Example 4:
+Example 4:
 - [x] Input: [10, 9, 8], key=10
 - [x] Output: 0
 
@@ -5046,21 +5493,21 @@ def findMaxInBitonicArray(array):
 >* Given an array of numbers which is sorted in ascending order and also rotated by some arbitrary number, find if a given ‘key’ is present in it.
 >* Write a function to return the index of the ‘key’ in the rotated array. If the ‘key’ is not present, return -1. 
 >* The function must be able to handle duplicates in the input array.
-##### Example 1:
+Example 1:
 - [x] Input: [10, 15, 1, 3, 8], key = 15
 - [x] Output: 1
 - [x] Explanation: '15' is present in the array at index '1'.
 
 <img src="resources/search-in-a-rotated-array-1.png" width="500px"/>
 
-##### Example 2:
+Example 2:
 - [x] Input: [4, 5, 7, 9, 10, -1, 2], key = 10
 - [x] Output: 4
 - [x] Explanation: '10' is present in the array at index '4'.
 
 <img src="resources/search-in-a-rotated-array-2.png" width="500px"/>
 
-##### Example 3:
+Example 3:
 - [x] Input: [3, 7, 3, 3, 3], key = 7
 - [x] Output: 1
 - [x] Explanation: '7' is present in the array at index '1'.
@@ -5114,21 +5561,21 @@ def searchRotatedArray(array, key):
 ## 🟨 [Rotation Count](https://www.educative.io/courses/grokking-the-coding-interview/R1v4P0R7VZw)
 >* Given an array of numbers which is sorted in ascending order and is rotated ‘k’ times around a pivot, find ‘k’.
 >* You can assume that the array does not have any duplicates.
-##### Example 1:
+Example 1:
 - [x] Input: [10, 15, 1, 3, 8]
 - [x] Output: 2
 - [x] Explanation: The array has been rotated 2 times.
 
 <img src="resources/rotation-count-1.png" width="500px"/>
 
-##### Example 2:
+Example 2:
 - [x] Input: [4, 5, 7, 9, 10, -1, 2]
 - [x] Output: 5
 - [x] Explanation: The array has been rotated 5 times.
 
 <img src="resources/rotation-count-2.png" width="500px"/>
 
-##### Example 3:
+Example 3:
 - [x] Input: [1, 3, 8, 10]
 - [x] Output: 0
 - [x] Explanation: The array has not been rotated.
