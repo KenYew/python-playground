@@ -1834,6 +1834,50 @@ def balancedBrackets(string):
 ✅ **DICTIONARIES AND STACKS:** _Initialise dictionary of matching brackets. Loop through each character of input string. If char is openingBrackets, append to stack. If char is closingBrackets, do a series of checks. If stack is empty, return False. If opening bracket at the final element of stack matches with the closing bracket of currentChar, pop the stack, else return False. Else finally, return len(stack) == 0_
 
 ---
+## 🟨 [Generate Parentheses](https://leetcode.com/problems/generate-parentheses/)
+> Given n pairs of parentheses, write a function to generate all combinations of well-formed parentheses.
+
+Example 1:
+- [x] Input: `n = 3`
+- [x] Output: `["((()))","(()())","(())()","()(())","()()()"]`
+
+Example 2:
+- [x] Input: `n = 1`
+- [x] Output: `["()"]`
+
+Constraints:
+`1 <= n <= 8`
+
+
+### [**Backtracking**](./strings/generate-parentheses.py)
+```python
+# O(4n/sqrt(2n)) Time - Each valid sequence has at most n steps during the backtracking procedure.
+# O(4n/sqrt(2n)) Space - Each valid sequence has at most n steps during the backtracking procedure and using O(n) space to store the sequence.
+def generateParentheses(n): # n - the number of matching bracket pairs
+  result = []
+  stack = []
+  def backtrack(numberOfOpen, numberOfClosed):
+    # 2: Base case if we have reached n number of open and close brackets,
+    # append generated brackets to result
+    if numberOfOpen == numberOfClosed == n: 
+      result.append("".join(stack))
+    # 3: If numberOfOpenBrackets < n, append an open bracket and increment numberOfOpen in recursive function
+    if numberOfOpen < n: # Note: We can always append open brackets up to n-times
+      stack.append("(")
+      backtrack(numberOfOpen + 1, numberOfClosed)
+      stack.pop() # stack is a global variable, clean up the stack for next usage
+    # 4: If numberOfClosedBrackets < numberOfOpenBrackets, append a closed bracket and increment numberOfClosed in recursive function
+    if numberOfClosed < numberOfOpen: # Note: We can only append closed brackets if its equivalent open bracket is already present first
+      stack.append(")")
+      backtrack(numberOfOpen, numberOfClosed + 1)
+      stack.pop() # stack is a global variable, clean up the stack for next usage
+  # 1: Recursively call the backtrack function with initial values of 0 open and close brackets
+  backtrack(0, 0)
+  return result
+```
+
+
+---
 ## [🟨 Valid IP Addresses](https://www.algoexpert.io/questions/Valid%20IP%20Addresses)
 >* You're given a string of length 12 or smaller, containing only digits. Write a function that returns all the possible IP addresses that can be created by inserting three `.`s in the string.
 >* An IP address is a sequence of four positive integers that are separated by `.`s, where each individual integer is within the range `0 - 255`, inclusive.
@@ -1970,6 +2014,189 @@ def getLongestPalindromeFrom(string, left, right): # O(n) Time
 ```
 
 ✅ **STRING INDEX MANIPULATION:** _For each index of string, obtain the startIdx and endIdx of both odd-length and even-length palindromic substrings using `getLongestPalindromeFrom` helper function, keep updating longestPalindromicSubstring using max functions._
+
+---
+## 🟥 [Integer to English Words](https://leetcode.com/problems/integer-to-english-words/)
+> Convert a non-negative integer num to its English words representation.
+
+Example 1:
+- [x] Input: `num = 123`
+- [x] Output: `"One Hundred Twenty Three"`
+
+Example 2:
+- [x] Input: `num = 12345`
+- [x] Output: `"Twelve Thousand Three Hundred Forty Five"`
+
+Example 3:
+- [x] Input: `num = 1234567`
+- [x] Output: `"One Million Two Hundred Thirty Four Thousand Five Hundred Sixty Seven"`
+ 
+Constraints:
+`0 <= num <= 231 - 1`
+
+
+### [**Hash Tables and Arithmetics - Range 1-999**](./strings/integer-to-words.py)
+```python
+# O(1) Time | O(1) Space 
+# Create a dictionary for all the unique words (one … ten, eleven … nineteen, twenty, thirty, forty, … ninty)
+wordDictionary = {
+  0: "",
+  1: "One",
+  2: "Two",
+  3: "Three",
+  4: "Four",
+  5: "Five",
+  6: "Six",
+  7: "Seven",
+  8: "Eight",
+  9: "Nine",
+  10: "Ten",
+  11: "Eleven",
+  12: "Twelve",
+  13: "Thirteen",
+  14: "Fourteen",
+  15: "Fifteen",
+  16: "Sixteen",
+  17: "Seventeen",
+  18: "Eighteen",
+  19: "Nineteen",
+  20: "Twenty",
+  30: "Thirty",
+  40: "Forty",
+  50: "Fifty",
+  60: "Sixty",
+  70: "Seventy",
+  80: "Eighty",
+  90: "Ninety",
+  100: "Hundred",
+}
+
+def integerToWords(inputNumber):
+  result = [] 
+  # EDGE: Check if inputNumber is valid and within the range constraints
+  if not inputNumber or inputNumber < 1 or inputNumber > 999:
+    return "Invalid Input!"
+
+  if inputNumber < 20: # 1: If inputNumber < 20, immediately return mapped word from Dictionary 
+    return wordDictionary[inputNumber]
+
+  # Round Down Division (//) - extracts the digit of interest (e.g.: 123 // 100 = 1)
+  # Modulo (%) - removes the most significant bit (e.g.: 123 % 100 = 23)
+  # 2: Extract the hundreds, tens and ones digits
+  # Say for inputNumber = 123,
+  hundredsPosition = inputNumber // 100 # hundredsPosition = 1
+  tensPosition = (inputNumber % 100) // 10 # tensPosition = 2
+  onesPosition = inputNumber % 10 # onesPosition = 3
+
+  # 3: If hundreds digit exists, look up word in dictionary and append " Hundred"
+  if hundredsPosition > 0: 
+    result.append(f'{wordDictionary[hundredsPosition]} {wordDictionary[100]}')
+
+  # 4: If tens digit exists and >= 2, look up the word in dictionary
+  if tensPosition >= 2: 
+    result.append(wordDictionary[10 * tensPosition])
+    # 5: If ones digit exists, look up the word in dictionary
+    if onesPosition > 0: 
+      result.append(wordDictionary[onesPosition])
+  else: # 6: Else if tens digit < 2, tens digits are in between 0-19
+  # Hence, remove the hundreds digit and look up word for 0-19 in dictionary
+    result.append(wordDictionary[inputNumber - hundredsPosition * 100])
+
+  return " ".join(result) # 7: Join all elements of result array delimited by a single whitespace
+```
+### [**Hash Tables and Arithmetics - Range 1-2^31-1**](./strings/integer-to-words.py)
+```python
+def integerToWords(inputNumber): 
+  # Create global dictionaries for all unique words
+  oneDigit = {
+    1: 'One',
+    2: 'Two',
+    3: 'Three',
+    4: 'Four',
+    5: 'Five',
+    6: 'Six',
+    7: 'Seven',
+    8: 'Eight',
+    9: 'Nine'
+  }
+
+  twoDigits = {
+    10: 'Ten',
+    11: 'Eleven',
+    12: 'Twelve',
+    13: 'Thirteen',
+    14: 'Fourteen',
+    15: 'Fifteen',
+    16: 'Sixteen',
+    17: 'Seventeen',
+    18: 'Eighteen',
+    19: 'Nineteen'
+  }
+
+  tens = {
+    2: 'Twenty',
+    3: 'Thirty',
+    4: 'Forty',
+    5: 'Fifty',
+    6: 'Sixty',
+    7: 'Seventy',
+    8: 'Eighty',
+    9: 'Ninety'
+  }
+
+  def getTwoDigitNumber(inputNumber): 
+    if not inputNumber: # EDGE: Immediately return empty string if invalid inputNumber
+      return ""
+    elif inputNumber < 10: # 1: If inputNumber < 10, immediately return oneDigitWord from dictionary
+      return oneDigit[inputNumber]
+    elif inputNumber < 20: # 2: If inputNumber < 20, immediately return twoDigitWord from dictionary
+      return twoDigits[inputNumber]
+
+    # 3: If ones digit exist and is non-zero (inputNumber % 10 > 0), 
+    # retrieve oneDigitWord from dictionary else return empty string for zero
+    oneDigitWord = f' {oneDigit[inputNumber % 10]}' if inputNumber % 10 else ""
+    return f'{tens[inputNumber // 10]}{oneDigitWord}' # 4: Extract tensWords from dictionary and append with oneDigitWord as result
+
+  def getThreeDigitNumber(inputNumber):
+    if not inputNumber: # EDGE: Immediately return empty string if invalid inputNumber
+      return ""
+    if not inputNumber // 100: # 1: If inputNumber // 100 is zero (hundreds digit does not exist), call getTwoDigitNumber function instead
+      return getTwoDigitNumber(inputNumber)
+
+    # 2: If tens digits exist and are non-zero (inputNumber % 100 > 0), 
+    # call the getTwoDigitNumber function to retrieve twoDigitWord from dictionary else return empty string for zero
+    twoDigitWord = f' {getTwoDigitNumber(inputNumber % 100)}' if inputNumber % 100 else ""
+    return f'{oneDigit[inputNumber // 100]} Hundred{twoDigitWord}' # 3: Extract oneDigitWord from dictionary and append with twoDigitWord as result
+
+  # EDGE: Check if inputNumber are within the range constraints between 0 and 2^31 - 1 for a 32-bit system
+  if not inputNumber or inputNumber < 0 or inputNumber > 2 ** 31 - 1:
+    return "Invalid Input!"
+
+  # EDGE: Immediately return "Zero" if inputNumber == 0
+  if inputNumber == 0:
+    return "Zero"
+
+  # Round Down Division (//) - extracts the digit of interest (e.g.: 123 // 100 = 1)
+  # Modulo (%) - removes the most significant bit (e.g.: 123 % 100 = 23)
+  # Say inputNumber = 2 ** 32 - 1 = 2,147,483,647,
+  billions = inputNumber // 1000000000 # 1: Calculate the billions digit (e.g.: 2)
+  millions = (inputNumber % 1000000000) // 1000000 # 2: Calculate the millions digits (e.g.: 147)
+  thousands = (inputNumber % 1000000) // 1000 # 3: Calculate the thousands digits (e.g.: 483)
+  lastThreeDigits = inputNumber % 1000 # 4: Calculate the last three digits (e.g.: 647)
+
+  result = []
+  if billions: # 5: If billions digit exist, append digit + Billion in result
+    result.append(f'{getThreeDigitNumber(billions)} Billion ')
+  if millions: # 6: If millions digits exist, append digit + Million in result
+    result.append(f'{getThreeDigitNumber(millions)} Million ')
+  if thousands: # 7: If thousands digits exist, append digit + Thousand in result
+    result.append(f'{getThreeDigitNumber(thousands)} Thousand ')
+  if lastThreeDigits: # 8: If last three digits exist, append lastThreeDigits in result
+    result.append(getThreeDigitNumber(lastThreeDigits))
+  return "".join(result).rstrip() # 9: Return final result string and strip off any ending whitespaces with rstrip()
+```
+
+
 
 ---
 ## [🟥 Longest Substring Without Duplication](https://www.algoexpert.io/questions/Longest%20Substring%20Without%20Duplication)
