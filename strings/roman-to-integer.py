@@ -11,7 +11,7 @@ def romanToInteger(string):
   result = 0
 
   for idx in range(len(string)): 
-    if idx + 1 < len(string) and table[string[idx]] < table[string[idx + 1]]:
+    if idx < len(string) - 1 and table[string[idx]] < table[string[idx + 1]]:
       result -= table[string[idx]]
     else:
       result += table[string[idx]]

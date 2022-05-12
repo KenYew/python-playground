@@ -1588,7 +1588,7 @@ def romanToInteger(string):
   # 2: Iterate through each character of string,
   for idx in range(len(string)): 
     # 3: if idx* is not out-of-bounds and roman at idx is smaller than roman at idx + 1,
-    if idx + 1 < len(string) and table[string[idx]] < table[string[idx + 1]]: 
+    if idx < len(string) - 1 and table[string[idx]] < table[string[idx + 1]]: 
       result -= table[string[idx]] # 4: roman at idx is a negative number so subtract from result
     else: # 5: if roman at idx is bigger than roman at idx + 1,
       result += table[string[idx]] # 6: roman at idx is a positive number so add from result
@@ -2012,7 +2012,6 @@ def generateParentheses(n): # n - the number of matching bracket pairs
 </p>
 </details>
 
-
 ---
 ## [🟨 Valid IP Addresses](https://www.algoexpert.io/questions/Valid%20IP%20Addresses)
 >* You're given a string of length 12 or smaller, containing only digits. Write a function that returns all the possible IP addresses that can be created by inserting three `.`s in the string.
@@ -2071,6 +2070,153 @@ def isValidPart(string):
 </details>
 
 ✅ **THREE POINTERS**: _Set 3 pointers i, j, k for each IP dots, create 3 FOR loops for each pointer to slice string into 4 possible IP octets and check if the octets are valid (0-255) using a helper function. If all 4 octets are valid, then join the valid octets with '.' and append to answers array._
+
+---
+## 🟨 [Validate IP Address](https://leetcode.com/problems/validate-ip-address/)
+>* Given a string `queryIP`, return `"IPv4"` if IP is a valid IPv4 address, `"IPv6"` if IP is a valid IPv6 address or `"Neither"` if IP is not a correct IP of any type.
+
+**Valid IPv4 Rules**
+>* A valid IPv4 address is an IP in the form `"x1.x2.x3.x4"` where `0 <= xi <= 255` and `xi` cannot contain leading zeros. 
+>* For example, `"192.168.1.1"` and `"192.168.1.0"` are valid IPv4 addresses but `"192.168.01.1"`, while `"192.168.1.00"` and `"192.168@1.1"` are invalid IPv4 addresses.
+
+**Valid IPv6 Rules**
+>* A valid IPv6 address is an IP in the form `"x1:x2:x3:x4:x5:x6:x7:x8"` where: `1 <= xi.length <= 4`
+>* `xi` is a hexadecimal string which may contain digits, lower-case English letter ('a' to 'f') and upper-case English letters ('A' to 'F').
+>* Leading zeros are allowed in `xi`
+>* For example, `"2001:0db8:85a3:0000:0000:8a2e:0370:7334"` and `"2001:db8:85a3:0:0:8A2E:0370:7334"` are valid IPv6 addresses, while `"2001:0db8:85a3::8A2E:037j:7334"` and `"02001:0db8:85a3:0000:0000:8a2e:0370:7334"` are invalid IPv6 addresses.
+
+Example 1:
+- [x] Input: queryIP = `"172.16.254.1"`
+- [x] Output: `"IPv4"`
+- [x] Explanation: This is a valid IPv4 address, return `"IPv4".`
+
+Example 2:
+- [x] Input: queryIP = `"2001:0db8:85a3:0:0:8A2E:0370:7334"`
+- [x] Output: `"IPv6"`
+- [x] Explanation: This is a valid IPv6 address, return `"IPv6".`
+
+Example 3:
+- [x] Input: queryIP = `"256.256.256.256"`
+- [x] Output: `"Neither"`
+- [x] Explanation: This is neither a IPv4 address nor a IPv6 address.
+
+Constraints:
+- queryIP consists only of English letters, digits and the characters `'.'` and `':'`.
+
+
+<details><summary><b>Solution</b></summary>
+<p>
+
+---
+### [**Regular Expressions**](./strings/validate-ip-address.py)
+```python
+# O(1) Time because the patterns to match have constant length
+# O(1) Space
+import re
+def validateIPAddress(IP): 
+  chunkIPv4 = r'([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])'
+  patternIPv4 = re.compile(r'^(' + chunkIPv4 + r'\.){3}' + chunkIPv4 + r'$')
+  
+  chunkIPv6 = r'([0-9a-fA-F]{1,4})'
+  patternIPv6 = re.compile(r'^(' + chunkIPv6 + r'\:){7}' + chunkIPv6 + r'$')
+    
+  if patternIPv4.match(IP):
+      return "IPv4"
+  return "IPv6" if patternIPv6.match(IP) else "Neither"
+
+def main(): 
+  IP = "172.16.254.1" # IPv4
+  IP = "2001:0db8:85a3:0:0:8A2E:0370:7334" # IPv6
+  IP = "256.256.256.256" # Neither
+  print(validateIPAddress(IP))
+
+if __name__ == "__main__":
+  main()
+```
+
+### **IPv4 Regex Table**
+| Number Range | Regex Set | Explanation |
+|:--|:--|:--|
+|0 - 9| [0-9] | Chunk contains only one digit, from 0 to 9
+|10 - 99| [1-9][0-9] | Chunk contains two digits. The first one could be from 1 to 9, and the second one from 0 to 9
+|100 - 199| 1[0-9][0-9] | Chunk contains three digits, and the first one is 1. The second and the third ones could be from 0 to 9
+|200 - 249| 2[0-4][0-9] | Chunk contains three digits, the first one is 2 and the second one is from 0 to 4. Then the third one could be from 0 to 9
+|250 - 255| 25[0-5] | Chunk contains three digits, the first one is 2, and the second one is 5. Then the third one could be from 0 to 5
+
+---
+### **Regex IPv4 Pattern**
+patternIPv4 = `^(` **([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5]) \\.**`){3}` **([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])** `$`
+- `^`: Matches the beginning of the string
+- `\.`: Escaped dot character
+- `^(chunkIPv4\.){3}`: Match 3 exact regex patterns
+- `$`:  Matches the ending of the string
+- `[0-9]`: Set of characters to match
+- `|`: Or operator 
+
+---
+### **Regex IPv6 Pattern**
+patternIPv6 = `^(` **([0-9a-fA-F]{1,4}) \\:** `){7}` **([0-9a-fA-F]{1,4})** `$`
+- `^`: Matches the beginning of the string
+- `\:`: Escaped colon character
+- `^(chunkIPv6\:){7}`: Match 7 exact regex patterns
+- `$`:  Matches the ending of the string
+- `[[0-9a-fA-F]`: Set of characters to match
+
+</p>
+</details>
+
+---
+## 🟨 [Reorder Data in Log Files](https://leetcode.com/problems/reorder-data-in-log-files/)
+>* You are given an array of logs. Each log is a space-delimited string of words, where the first word is the identifier.
+>* There are two types of logs:
+    * **Letter-logs:** All words (except the identifier) consist of lowercase English letters.
+    * **Digit-logs:** All words (except the identifier) consist of digits.
+>* Reorder these logs so that:
+    1. The letter-logs come before all digit-logs.
+    1. The letter-logs are sorted lexicographically by their contents. If their contents are the same, then sort them lexicographically by their identifiers.
+    1. The digit-logs maintain their relative ordering.
+Return the final order of the logs.
+
+Example 1:
+- [x] Input: logs = `["dig1 8 1 5 1","let1 art can","dig2 3 6","let2 own kit dig","let3 art zero"]`
+- [x] Output: `["let1 art can","let3 art zero","let2 own kit dig","dig1 8 1 5 1","dig2 3 6"]`
+- [x] Explanation: The letter-log contents are all different, so their ordering is `"art can"`, `"art zero"`, `"own kit dig"`.
+The digit-logs have a relative order of `"dig1 8 1 5 1"`, `"dig2 3 6"`.
+
+Example 2:
+- [x] Input: logs = `["a1 9 2 3 1","g1 act car","zo4 4 7","ab1 off key dog","a8 act zoo"]`
+- [x] Output: `["g1 act car","a8 act zoo","ab1 off key dog","a1 9 2 3 1","zo4 4 7"]`
+ 
+
+Constraints:
+- `1 <= logs.length <= 100`
+- `3 <= logs[i].length <= 100`
+- All the tokens of `logs[i]` are separated by a single space.
+- `logs[i]` is guaranteed to have an identifier and at least one word after the identifier.
+
+<details><summary><b>Solution</b></summary>
+<p>
+
+### [**String Manipulation**](./strings/reorder-data-in-log-files.py)
+```python
+def reorderLogFiles(logs):
+  digits = []
+  letters = []
+  # 1: Divide logs into two parts, one for digit logs, the other for letter logs
+  for log in logs:
+    if log.split()[1].isdigit():
+        digits.append(log)
+    else:
+        letters.append(log)
+          
+  # 2: Sort letter logs
+  letters.sort(key = lambda x: x.split()[0]) # when suffix is tie, sort by identifier
+  letters.sort(key = lambda x: x.split()[1:]) # sort by suffix
+  result = letters + digits # 3: Combine digit logs and letter logs
+  return result
+```
+</p>
+</details>
 
 ---
 ## [🟨 Longest Palindromic Substring](https://www.algoexpert.io/questions/Longest%20Palindromic%20Substring)
@@ -2301,25 +2447,24 @@ def integerToWords(inputNumber):
       return oneDigit[inputNumber]
     elif inputNumber < 20: # 2: If inputNumber < 20, immediately return twoDigitWord from dictionary
       return twoDigits[inputNumber]
-
-    # 3: If ones digit exist and is non-zero (inputNumber % 10 > 0), 
-    # retrieve oneDigitWord from dictionary else return empty string for zero
-    oneDigitWord = f' {oneDigit[inputNumber % 10]}' if inputNumber % 10 else ""
-    return f'{tens[inputNumber // 10]}{oneDigitWord}' # 4: Extract tensWords from dictionary and append with oneDigitWord as result
+    else: # 3: If 20 <= inputNumber < 99, 
+      # Retrieve oneDigitWord from dictionary if ones digit exist and is non-zero else return empty string for zero
+      oneDigitWord = f' {oneDigit[inputNumber % 10]}' if inputNumber % 10 else ""
+      return f'{tens[inputNumber // 10]}{oneDigitWord}' # 4: Extract tensWords from dictionary and append with oneDigitWord as result
 
   def getThreeDigitNumber(inputNumber):
     if not inputNumber: # EDGE: Immediately return empty string if invalid inputNumber
       return ""
-    if not inputNumber // 100: # 1: If inputNumber // 100 is zero (hundreds digit does not exist), call getTwoDigitNumber function instead
+    # 1: If inputNumber < 100 (where inputNumber // 100 is zero, hundreds digit does not exist), call getTwoDigitNumber function instead
+    elif not inputNumber // 100:
       return getTwoDigitNumber(inputNumber)
-
-    # 2: If tens digits exist and are non-zero (inputNumber % 100 > 0), 
-    # call the getTwoDigitNumber function to retrieve twoDigitWord from dictionary else return empty string for zero
-    twoDigitWord = f' {getTwoDigitNumber(inputNumber % 100)}' if inputNumber % 100 else ""
-    return f'{oneDigit[inputNumber // 100]} Hundred{twoDigitWord}' # 3: Extract oneDigitWord from dictionary and append with twoDigitWord as result
+    else: # 2: If inputNumber > 100,
+      # Call the getTwoDigitNumber function to retrieve twoDigitWord from dictionary if tens digits exist and are non-zero else return empty string for zero
+      twoDigitWord = f' {getTwoDigitNumber(inputNumber % 100)}' if inputNumber % 100 else ""
+      return f'{oneDigit[inputNumber // 100]} Hundred{twoDigitWord}' # 3: Extract oneDigitWord from dictionary and append with twoDigitWord as result
 
   # EDGE: Check if inputNumber are within the range constraints between 0 and 2^31 - 1 for a 32-bit system
-  if not inputNumber or inputNumber < 0 or inputNumber > 2 ** 31 - 1:
+  if inputNumber < 0 or inputNumber > 2 ** 31 - 1:
     return "Invalid Input!"
 
   # EDGE: Immediately return "Zero" if inputNumber == 0
@@ -2336,16 +2481,15 @@ def integerToWords(inputNumber):
 
   result = []
   if billions: # 5: If billions digit exist, append digit + Billion in result
-    result.append(f'{getThreeDigitNumber(billions)} Billion ')
+    result.append(f'{getThreeDigitNumber(billions)} Billion')
   if millions: # 6: If millions digits exist, append digit + Million in result
-    result.append(f'{getThreeDigitNumber(millions)} Million ')
+    result.append(f'{getThreeDigitNumber(millions)} Million')
   if thousands: # 7: If thousands digits exist, append digit + Thousand in result
-    result.append(f'{getThreeDigitNumber(thousands)} Thousand ')
+    result.append(f'{getThreeDigitNumber(thousands)} Thousand')
   if lastThreeDigits: # 8: If last three digits exist, append lastThreeDigits in result
     result.append(getThreeDigitNumber(lastThreeDigits))
-  return "".join(result).rstrip() # 9: Return final result string and strip off any ending whitespaces with rstrip()
+  return " ".join(result).rstrip() # 9: Return final result string and strip off any ending whitespaces with rstrip()
 ```
-
 
 </p>
 </details>
