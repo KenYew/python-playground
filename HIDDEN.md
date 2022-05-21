@@ -725,21 +725,12 @@ def moveElementToEnd(array, toMove):
 ```python
 # O(n) Time | O(1) Space - where n is the length of the input array
 def moveElementToEnd(array, toMove):
-    readIdx, writeIdx = 0, 0
-    while readIdx < len(array): 
-        if array[readIdx] != toMove: 
-            array[readIdx], array[writeIdx] = array[writeIdx], array[readIdx]
-            writeIdx += 1
-        readIdx += 1
-    return array
-
-def moveElementToEnd(array, toMove):
-    writeIdx = 0
-    for readIdx in range(len(array)): 
-        if array[readIdx] != toMove: 
-            array[readIdx], array[writeIdx] = array[writeIdx], array[readIdx]
-            writeIdx += 1
-    return array
+  writeIdx = 0
+  for readIdx in range(len(array)): 
+    if array[readIdx] != toMove: 
+      array[readIdx], array[writeIdx] = array[writeIdx], array[readIdx]
+      writeIdx += 1
+  return array
 
 Working through an example, say we have an array [1, 0, 2, 0, 3] and toMove = 0.
 When read = 0, write = 0 and write += 1.
@@ -747,6 +738,14 @@ When read = 1, then array[read] == 0 and write = 1.
 When read = 2, then we swap array[2] (read) and array[1] (write). The array is now [1, 2, 0, 0, 3] and write = 2.
 When read = 3, array[read] == 0 and we skip.
 When read = 4, then we swap array[4] (read) and array[2] (write). The final array is [1, 2, 3, 0, 0].
+
+def moveElementToBeginning(array, toMove): 
+  writeIdx = len(array) - 1
+  for readIdx in reversed(range(len(array))):
+    if array[readIdx] != toMove: 
+      array[readIdx], array[writeIdx] = array[writeIdx], array[readIdx]
+      writeIdx -= 1
+  return array
 ```
 </p>
 </details>
@@ -1315,6 +1314,49 @@ def mergeOverlappingIntervals(intervals):
 - ✅ Palindromic Substrings - https://leetcode.com/problems/palindromic-substrings/
 - Encode and Decode Strings (Leetcode Premium) - https://leetcode.com/problems/encode-and-decode-strings/
 #### [📋 **Back to Table of Contents**](#toc)
+
+---
+## [🟩 Fizz Buzz](https://leetcode.com/problems/fizz-buzz/)
+> Given an integer n, return a string array answer (1-indexed) where:
+>* `answer[i] == "FizzBuzz"` if i is divisible by 3 and 5.
+>* `answer[i] == "Fizz"` if i is divisible by 3.
+>* `answer[i] == "Buzz"` if i is divisible by 5.
+>* `answer[i] == i` (as a string) if none of the above conditions are true.
+
+Example 1:
+- [x] Input: `n = 3`
+- [x] Output: `["1","2","Fizz"]`
+
+Example 2:
+- [x] Input: `n = 5`
+- [x] Output: `["1","2","Fizz","4","Buzz"]`
+
+Example 3:
+- [x] Input: `n = 15`
+- [x] Output: `["1","2","Fizz","4","Buzz","Fizz","7","8","Fizz","Buzz","11","Fizz","13","14","FizzBuzz"]`
+
+<details><summary><b>Solution</b></summary>
+<p>
+
+### [**String Concatenation**](./strings/fizzbuzz.py)
+```python
+# O(n) Time | O(1) Space
+def fizzBuzz(n):
+  result = []
+  for idx in range(1, n + 1): 
+      currentString = ""
+      if idx % 3 == 0: 
+          currentString += "Fizz"
+      if idx % 5 == 0:
+          currentString += "Buzz"
+      if not currentString:
+          result.append(str(idx))
+      else:
+          result.append(currentString)
+  return result
+```
+</p>
+</details>
 
 ---
 ## [🟩 Caesar Cipher Encryptor](https://www.algoexpert.io/questions/Caesar%20Cipher%20Encryptor)
@@ -2402,93 +2444,108 @@ def integerToWords(inputNumber):
 ```
 ### [**Hash Tables and Arithmetics - Range 1-2^31-1**](./strings/integer-to-words.py)
 ```python
+# O(1) Time | O(1) Space
 def integerToWords(inputNumber): 
   # Create global dictionaries for all unique words
-  oneDigit = {
-    1: 'One',
-    2: 'Two',
-    3: 'Three',
-    4: 'Four',
-    5: 'Five',
-    6: 'Six',
-    7: 'Seven',
-    8: 'Eight',
-    9: 'Nine'
+  oneDigit = { 
+      1: 'One', 
+      2: 'Two',
+      3: 'Three',
+      4: 'Four',
+      5: 'Five',
+      6: 'Six',
+      7: 'Seven',
+      8: 'Eight',
+      9: 'Nine' 
   }
 
   twoDigits = {
-    10: 'Ten',
-    11: 'Eleven',
-    12: 'Twelve',
-    13: 'Thirteen',
-    14: 'Fourteen',
-    15: 'Fifteen',
-    16: 'Sixteen',
-    17: 'Seventeen',
-    18: 'Eighteen',
-    19: 'Nineteen'
+      10: 'Ten',
+      11: 'Eleven',
+      12: 'Twelve',
+      13: 'Thirteen',
+      14: 'Fourteen',
+      15: 'Fifteen',
+      16: 'Sixteen',
+      17: 'Seventeen',
+      18: 'Eighteen',
+      19: 'Nineteen'
   }
 
   tens = {
-    2: 'Twenty',
-    3: 'Thirty',
-    4: 'Forty',
-    5: 'Fifty',
-    6: 'Sixty',
-    7: 'Seventy',
-    8: 'Eighty',
-    9: 'Ninety'
+      2: 'Twenty',
+      3: 'Thirty',
+      4: 'Forty',
+      5: 'Fifty',
+      6: 'Sixty',
+      7: 'Seventy',
+      8: 'Eighty',
+      9: 'Ninety'
   }
 
-  def getTwoDigitNumber(inputNumber): 
-    if not inputNumber: # EDGE: Immediately return empty string if invalid inputNumber
+  def getTwoDigits(inputNumber): 
+    if not inputNumber:  # EDGE: Immediately return empty string if invalid inputNumber
       return ""
-    elif inputNumber < 10: # 1: If inputNumber < 10, immediately return oneDigitWord from dictionary
+    elif inputNumber < 10:  # 1: If inputNumber < 10, immediately return oneDigitWord from dictionary
       return oneDigit[inputNumber]
-    elif inputNumber < 20: # 2: If inputNumber < 20, immediately return twoDigitWord from dictionary
+    elif inputNumber < 20:  # 2: If inputNumber < 20, immediately return twoDigitWord from dictionary
       return twoDigits[inputNumber]
     else: # 3: If 20 <= inputNumber < 99, 
-      # Retrieve oneDigitWord from dictionary if ones digit exist and is non-zero else return empty string for zero
-      oneDigitWord = f' {oneDigit[inputNumber % 10]}' if inputNumber % 10 else ""
-      return f'{tens[inputNumber // 10]}{oneDigitWord}' # 4: Extract tensWords from dictionary and append with oneDigitWord as result
+      tensDigit = inputNumber // 10 # Extract the tensDigit MSB
+      onesDigit = inputNumber % 10  # Filter the onesDigit
+      if onesDigit: # 4: If onesDigit is non-zero, include the onesDigitWord with the tensDigitWord
+        return f'{tens[tensDigit]} {oneDigit[onesDigit]}' 
+      else: # 5: Else, only include the tensDigitWord
+        return f'{tens[tensDigit]}'
 
-  def getThreeDigitNumber(inputNumber):
+  def getThreeDigits(inputNumber): # Function used if 100 < inputNumber < 999
     if not inputNumber: # EDGE: Immediately return empty string if invalid inputNumber
       return ""
-    # 1: If inputNumber < 100 (where inputNumber // 100 is zero, hundreds digit does not exist), call getTwoDigitNumber function instead
-    elif not inputNumber // 100:
-      return getTwoDigitNumber(inputNumber)
+     # 1: If inputNumber < 100 (where inputNumber // 100 is zero, hundreds digit does not exist), call getTwoDigits function instead
+    elif not inputNumber // 100: 
+      return getTwoDigits(inputNumber)
     else: # 2: If inputNumber > 100,
-      # Call the getTwoDigitNumber function to retrieve twoDigitWord from dictionary if tens digits exist and are non-zero else return empty string for zero
-      twoDigitWord = f' {getTwoDigitNumber(inputNumber % 100)}' if inputNumber % 100 else ""
-      return f'{oneDigit[inputNumber // 100]} Hundred{twoDigitWord}' # 3: Extract oneDigitWord from dictionary and append with twoDigitWord as result
+      hundredsDigit = inputNumber // 100 # Extract the hundredsDigit MSB
+      lastTwoDigits = inputNumber % 100 # Filter the lastTwoDigits
+      # 4: If lastTwoDigits is non-zero, include the lastTwoDigitsWord (obtained via getTwoDigits function call) with hundredsDigitWord
+      if lastTwoDigits:
+        return f'{oneDigit[hundredsDigit]} Hundred {getTwoDigits(lastTwoDigits)}'
+      else: # 5: Else, only include the hundredsDigitWord
+        return f'{oneDigit[hundredsDigit]} Hundred'
 
   # EDGE: Check if inputNumber are within the range constraints between 0 and 2^31 - 1 for a 32-bit system
-  if inputNumber < 0 or inputNumber > 2 ** 31 - 1:
+  MAX_INT = 2 ** 31 - 1
+  if inputNumber < 0 or inputNumber > MAX_INT: 
     return "Invalid Input!"
 
   # EDGE: Immediately return "Zero" if inputNumber == 0
-  if inputNumber == 0:
+  if inputNumber == 0: 
     return "Zero"
-
-  # Round Down Division (//) - extracts the digit of interest (e.g.: 123 // 100 = 1)
-  # Modulo (%) - removes the most significant bit (e.g.: 123 % 100 = 23)
+  
+  # Round Down Division (//) - extracts the most significant digit (e.g.: 123 // 100 = 1)
+  # Modulo (%) - filters the number to exclude the most significant digit (e.g.: 123 % 100 = 23)
   # Say inputNumber = 2 ** 32 - 1 = 2,147,483,647,
-  billions = inputNumber // 1000000000 # 1: Calculate the billions digit (e.g.: 2)
-  millions = (inputNumber % 1000000000) // 1000000 # 2: Calculate the millions digits (e.g.: 147)
-  thousands = (inputNumber % 1000000) // 1000 # 3: Calculate the thousands digits (e.g.: 483)
-  lastThreeDigits = inputNumber % 1000 # 4: Calculate the last three digits (e.g.: 647)
-
+  billions = inputNumber // 1000000000 # 1: Extract billions digit (e.g.: 2)
+  millions = (inputNumber % 1000000000) // 1000000 # 2: Filter off billions digit and extract millions digits (e.g.: 147)
+  thousands = (inputNumber % 1000000)  // 1000 # 3: Filter off millions digits and extract thousands digits (e.g.: 483)
+  lastThreeDigits = inputNumber % 1000 # 4: Extract lastThreeDigits (e.g.: 647)
+  
   result = []
-  if billions: # 5: If billions digit exist, append digit + Billion in result
-    result.append(f'{getThreeDigitNumber(billions)} Billion')
-  if millions: # 6: If millions digits exist, append digit + Million in result
-    result.append(f'{getThreeDigitNumber(millions)} Million')
-  if thousands: # 7: If thousands digits exist, append digit + Thousand in result
-    result.append(f'{getThreeDigitNumber(thousands)} Thousand')
+  if billions: # 5: If billions digit exist, append oneDigitWord + "Billion" in result
+    result.append(f'{oneDigit[billions]} Billion')
+  if millions: # 6: If millions digits exist, append threeDigitsWord + "Million" in result
+    result.append(f'{getThreeDigits(millions)} Million')
+  if thousands: # 7: If thousands digits exist, append threeDigitsWord + "Thousand" in result
+    result.append(f'{getThreeDigits(thousands)} Thousand')
   if lastThreeDigits: # 8: If last three digits exist, append lastThreeDigits in result
-    result.append(getThreeDigitNumber(lastThreeDigits))
+    result.append(f'{getThreeDigits(lastThreeDigits)}')
   return " ".join(result).rstrip() # 9: Return final result string and strip off any ending whitespaces with rstrip()
+
+  ## If we only need to handle 0 < inputNumber < 999, use the below code instead:
+  # if inputNumber < 100:
+  #   return getTwoDigits(inputNumber)
+  # else:
+  #   return getThreeDigits(inputNumber)
 ```
 
 </p>
@@ -3918,6 +3975,70 @@ def nodeDepths(root):
 </details>
 
 ✅ **DFS STACK:** _Use stack of nodeDicts to keep track each node object and their depth (stored as key-value pairs). Pop the stack and aggregate sumOfDepths value. To traverse down the BT, push in new nodeDicts (left and right) into Stack and increment depth value. Return sumOfDepths when all nodes are popped from stack._
+
+---
+## 🟩 [Same Tree](https://leetcode.com/problems/same-tree/)
+>* Given the roots of two binary trees p and q, write a function to check if they are the same or not.
+>* Two binary trees are considered the same if they are structurally identical, and the nodes have the same value.
+
+Example 1:
+- [x] Input: p = `[1,2,3]`, q = `[1,2,3]`
+- [x] Output: `true`
+```python
+      1        1      
+     /  \     /  \   
+   2     3   2    3
+```
+
+Example 2:
+- [x] Input: p = `[1,2]`, q = `[1,null,2]`
+- [x] Output: `true`
+```python
+      1        1      
+     /           \   
+   2               2
+```
+
+Example 3:
+- [x] Input: p = `[1,2,1]`, q = `[1,1,2]`
+- [x] Output: `false`
+```python
+      1        1      
+     /  \     /  \   
+   2     1   1    2
+```
+
+<details><summary><b>Solution</b></summary>
+<p>
+
+### [**DFS Recursion**](./trees/is-same-tree.py)
+```python
+class TreeNode:
+  def __init__(self, value, left=None, right=None): 
+    self.value = value
+    self.left = left
+    self.right = right
+
+# O(n) Time - where n is a number of nodes in the tree, since one visits each node exactly once.
+# O(log(n)) Space Best Case - if completely balanced tree and 
+# O(n) Space Worst Case - if completely unbalanced tree, to keep a recursion stack. 
+def isSameTree(node1, node2): 
+  # BASE CASE: If we have reached the leaf nodes, check if node1 == node2
+  if node1 is None or node2 is None: 
+    return node1 == node2
+
+  # 1: While backtracking from leaf to root, if at any point node1.value != node2.value, return False
+  if node1.value != node2.value: 
+    return False
+
+  # 2: Recursively call isSameTree passing in new node.left and node.right information
+  # This performs DFS traversal until leaf and then backtracks with Boolean outputs for each tree
+  return isSameTree(node1.left, node2.left) and isSameTree(node1.right, node2.right)
+  # 3: If isSameTree outputs are always True for both trees during backtracking, the trees are same!
+```
+</p>
+</details>
+
 
 ---
 ## [🟨 Invert Binary Tree](https://www.algoexpert.io/questions/Invert%20Binary%20Tree)
@@ -6761,7 +6882,7 @@ def findPaths(root, requiredSum):
   findPathsRecursive(root, requiredSum, currentPath, allPaths)
   return allPaths
 
-def findPathsRecursive(currentNode, requiredSum, currentPath, allPaths):
+def findPathsRecursive(currentNode, runningSum, currentPath, allPaths):
   # 1: Base case for when we reach the branch end with None child nodes and leaf.value != sum
   if currentNode is None: 
     return
@@ -6769,21 +6890,21 @@ def findPathsRecursive(currentNode, requiredSum, currentPath, allPaths):
   # 2: Update currentPath array with currentNode.value for every node traversal
   currentPath.append(currentNode.value)
 
-  # 3: If currentNode is a leaf node and leaf.value == requiredSum,  
+  # 3: If currentNode is a leaf node and leaf.value == runningSum,  
   # save the resulting currentPath list into our allPaths array!
-  if currentNode.value == requiredSum and currentNode.left is None and currentNode.right is None: 
+  if currentNode.value == runningSum and currentNode.left is None and currentNode.right is None: 
     allPaths.append(list(currentPath))
 
-  # 4: Calculate the currentSum remaining after trimming requiredSum with currentNode.value
-  # This is so that when we reach the leaf, if leaf.value == requiredSum, we found a path!
-  currentSum = requiredSum - currentNode.value
+  # 4: Calculate the currentSum remaining after trimming runningSum with currentNode.value
+  # This is so that when we reach the leaf, if leaf.value == runningSum, we found a path!
+  currentSum = runningSum - currentNode.value
 
   # 5: If currentNode is NOT a leaf node, perform DFS recursion on child nodes and pass down all current information
   findPathsRecursive(currentNode.left, currentSum, currentPath, allPaths)
   findPathsRecursive(currentNode.right, currentSum, currentPath, allPaths)
 
-  # 6: Remove the currentNode from the path to backtrack!
-  # We remove the currentNode as we are going back up the recusrive call stack!
+  # 6: Remove the currentNode.value from the path to backtrack!
+  # We remove the currentNode.value as we are going back up the recusrive call stack!
   del currentPath[-1]
 ```
 </p>
@@ -6937,8 +7058,8 @@ def countPathsRecursive(currentNode, targetSum, currentPath):
   pathCount += countPathsRecursive(currentNode.left, targetSum, currentPath)
   pathCount += countPathsRecursive(currentNode.right, targetSum, currentPath)
 
-  # 6: Remove currentNode from currentPath[] to backtrack
-  # We need to remove currentNode while we are going up the recursive call stack
+  # 6: Remove currentNode.value from currentPath[] to backtrack
+  # We need to remove currentNode.value while we are going up the recursive call stack
   del currentPath[-1]
 
   return pathCount

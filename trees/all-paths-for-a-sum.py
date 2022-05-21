@@ -11,16 +11,16 @@ def findPaths(root, requiredSum):
   findPathsRecursive(root, requiredSum, currentPath, allPaths)
   return allPaths
 
-def findPathsRecursive(currentNode, requiredSum, currentPath, allPaths): 
+def findPathsRecursive(currentNode, runningSum, currentPath, allPaths): 
   if currentNode is None: 
     return
   
   currentPath.append(currentNode.value)
 
-  if currentNode.value == requiredSum and currentNode.left is None and currentNode.right is None: 
+  if currentNode.value == runningSum and currentNode.left is None and currentNode.right is None: 
     allPaths.append(list(currentPath))
 
-  currentSum = requiredSum - currentNode.value
+  currentSum = runningSum - currentNode.value
   findPathsRecursive(currentNode.left, currentSum, currentPath, allPaths)
   findPathsRecursive(currentNode.right, currentSum, currentPath, allPaths)
 
