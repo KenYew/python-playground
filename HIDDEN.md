@@ -146,105 +146,215 @@ while left < right:
     baseCase()
 return result
 ```
-#### 📝 Linked List Traversal
+#### 🔗 Linked List Traversal
 To perform head to tail computations
 ```python
-# 1: While currentNode pointer has not fully traversed to the None end of the linked list
-while currentNode is not None:
+def traverseLinkedList(head): 
+  # 0: Initialise previous*, current* and next* pointers
+  previous, current, next = None, head, None
+# 1: While current pointer has not fully traversed to the None end of the linked list,
+while current is not None:
 
-# 2: Perform forwardtracking computations
-doSomething()
+  # 2: Perform forwardtracking computations
+  doSomething()
 
-# 3: Traverse to the next node of the linked list
-currentNode = currentNode.next
+  # 3: Traverse to the next node of the linked list
+  current = current.next
 
-# OR: Perform manipulation of node connections
-currentNode.next = nextDistinctNode # Skipping a node
-currentNode = nextDistinctNode
+  # 4: Perform manipulation of node connections
+  current.next = nextDistinctNode # Skip a node
+  current = nextDistinctNode
 
-next = currentNode.next
-currentNode.next = previousNode # Reversing a node
-previousNode = currentNode
-currentNode = next
+# O(n) Time since we need to traverse all n nodes at least once
+# O(1) Space since we perform the LinkedList traversal in-place
+```
+
+To perform head to tail reversal 
+```python
+def reverseLinkedList(head): 
+  # 0: Initialise previous*, current* and next* pointers
+  previous, current, next = None, head, None
+
+  # 1: While we have not reached the end of the LinkedList (tail == None),
+  while current is not None: 
+    next = current.next # 2: PLACEHOLDER - store currentNode.next in next
+    current.next = previous # 3: REVERSE - set currentNode.next to point to previous
+    previous = current # 4: UPDATE new head - move previous by 1 step 
+    current = next # 5: UPDATE new node iteration - move current by 1 step
+  return previous # 6: Return new head of the reversed LinkedList
+
+# O(n) Time since we need to traverse all n nodes at least once
+# O(1) Space since we perform the LinkedList reversal in-place
 ```
 
 #### ♽ Recursive DFS
 To perform root to leaf computations
 ```python
-# 1: Base edge case to break the depth first search when we have arrived None child nodes of the leaf node
-if node is None:
-    return
+def recursiveFunction(currentNode): 
+  # 0: Define your input and return types!
+  # :currentNodetype: TreeNode object
+  # :rtype: int
 
-# 2: Perform forwardtracking computations
-doSomething()
+  # 1: Base case for NULL child nodes before backtracking in the recursive stack
+  if currentNode is None:
+    return  # return 0, (0,0), False
 
-# 3: When reaching a leaf node
-if node.left is None and node.right is None:
-    returnLeafNodeAnswer
+  # 2: Perform forwardtracking computations
+  informationToPassDown = doSomething()
 
-# 4: Recursive function call to traverse down the tree and passing computed values down
-recursiveFunction(node.left, informationToPassDown, answer)
-recursiveFunction(node.right, informationToPassDown, answer)
+  # 3: Perform leaf node computations
+  if currentNode.left is None and currentNode.right is None: 
+    answer = doSomething() # return answer
+
+  # 4: Recursive function calls to perform DFS on tree while passing down new forwardtracking computations
+  recursiveFunction(currentNode.left, informationToPassDown, answer)
+  recursiveFunction(currentNode.right, informationToPassDown, answer)
+
+  # 5: You may need to cleanup recent currentNode.value if backtacking is needed to find the answer elsewhere
+  del currentPath[-1]
+
+# O(n) Time - where n is the number of nodes in the tree. We traverse each and every node once. 
+# O(n) Space worst case - where n is the total number of nodes in the tree that will be stored in the recursion stack
+# Worst case is when the given tree is a linked list where every node has only one child
 ```
+
 To perform leaf to root computations
 ```python
-# 1: Base edge case to break the depth first search when we have arrived None child nodes of the leaf node
-if node is None:
-    return
+def recursiveFunction(currentNode): 
+  # 0: Define your input and return types!
+  # :currentNodetype: TreeNode object
+  # :rtype: int
 
-# 2: Recursive function call to traverse down the tree
-informationToPassDown, answer = recursiveFunction(node.left)
-informationToPassDown, answer = recursiveFunction(node.right)
+  # 1: Base case for NULL child nodes before backtracking in the recursive stack
+  if currentNode is None:
+      return
 
-# 3: Perform backtracking computations
-doSomething()
+  # 2: Recursive function calls to perform DFS on tree while passing down new backtracking computations
+  informationToPassDown, answer = recursiveFunction(currentNode.left)
+  informationToPassDown, answer = recursiveFunction(currentNode.right)
 
-# 4: Return information to pass down during recursion
-return (informationToPassDown, answer)
+  # 3: Perform backtracking computations
+  informationToPassDown = doSomething()
+
+  # 4: Return information to pass down during recursion
+  return (informationToPassDown, answer)
+
+# O(n) Time - where n is the number of nodes in the tree. We traverse each and every node once. 
+# O(n) Space worst case - where n is the total number of nodes in the tree that will be stored in the recursion stack
+# Worst case is when the given tree is a linked list where every node has only one child
 ```
+
 #### 📚 Stack DFS
 To perform root to leaf computations
 ```python
-# 1: Initialise a stack with root node
-stack = [root]
+def iterativeFunction(root): 
+  # 0: Define your input and return types!
+  # :roottype: TreeNode object
+  # :rtype: TreeNode object
 
-# 2: Iterate all elements of the stack in LIFO order
-while len(stack) > 0: 
-    node = stack.pop() # Pop the top-most element 
+  # 1: Initialise a stack with root node
+  stack = [root]
 
-# 3: Base edge case to break the depth first search when we have arrived None child nodes of the leaf node
-if node is None:
-    return
+  # 2: Iterate all elements of the stack in LIFO order for DFS
+  while len(stack) > 0: 
+      currentNode = stack.pop() # Pop the top-most element 
 
-# 4: Perform forwardtracking computations
-doSomething()
+  # 3: Base case for NULL child nodes to skip iteration 
+  if currentNode is None:
+    continue
 
-# 5: Push child nodes to stack to traverse down the tree
-stack.append(node.left)
-stack.append(node.right)
+  # 4: Perform forwardtracking computations
+  doSomething()
+
+  # 5: Push child nodes to stack to traverse down the tree
+  stack.append(currentNode.left)
+  stack.append(currentNode.right)
+
+  # 6: You may need to return the computed answer
+  return answer # return root 
+
+# O(n) Time - where n is the number of nodes in the tree. We traverse each and every node once. 
+# O(n) Space worst case - where n is the total number of nodes in the tree. We also need O(n) for the stack.
 ```
 
 #### 🌲 Queue BFS
-
 To perform root to leaf computations
 ```python
-# 1: Initialise a queue with root node
-queue = [root]
+# 0: Import double ended queue class from collections library
+from collections import deque
 
-# 2: Iterate all elements of the queue in FIFO order
-while len(queue) > 0: 
-    node = queue.pop(0) # Pop the bottom-most element 
+def iterativeFunction(root): 
+  # 1: Define your input and return types!
+  # :roottype: TreeNode object
+  # :rtype: list
 
-# 3: Base edge case to break the depth first search when we have arrived None child nodes of the leaf node
-if node is None:
-    return
+  # 2: Base case for NULL child nodes to skip iteration 
+  if node is None:
+    continue
 
-# 4: Perform forwardtracking computations
-doSomething()
+  # 3: Instantiate deque() object and append root node
+  queue = deque()
+  queue.append(root)
 
-# 5: Push child nodes to queue to traverse down the tree
-queue.append(node.left)
-queue.append(node.right)
+  # 4: Iterate all elements of the queue in FIFO order for BFS
+  while len(queue) > 0: 
+    currentLevelSize = len(queue)
+    for _ in range(currentLevelSize):
+        # 5: Pop the bottom-most element 
+        currentNode = queue.popleft() 
+        currentLevel.append(currentNode.value) 
+
+        # 6: Perform forwardtracking computations
+        doSomething()
+
+        # 7: Push child nodes to queue to traverse down the tree
+        queue.append(currentNode.left)
+        queue.append(currentNode.right)
+
+  # 8: You may need to return the computed answer
+  return answer # return root 
+
+# O(n) Time - where n is the number of nodes in the tree. We traverse each and every node once.  
+# O(n) Space worst case - where n is the total number of nodes in the tree
+# We also need O(n) for the queue. We can have a max of n/2 nodes at any level (at the lowest level of BT)
+```
+
+#### ♻ Regular Expressions
+To extract information patterns and rank them
+```python
+# 0: Import regular expressions library
+import re
+
+def extractInformation(log): 
+  # 1: Define your input and return types
+  # :logtype: string
+  # :rtype: string
+
+  # 2: Initialise hashmap and result array
+  hashMap = {}
+  result = []
+
+  # 3: Define your regular expression
+  regex = r'(?P<number>\d+),(?P<name>\w+),/(?P<directory>\w+),(?P<latency>\d+)ms\s'
+
+  # 4: Extract pattern information into a list of tuples
+  tuples = re.findall(regex, log)
+
+  # 5: Iterate through list of tuples and extract information from each tuple
+  for tuple in tuples:
+      (number, name, directory, latency) = tuple
+      # 6: Store desired information into hashmap (e.g.: latency:name key-value pair)
+      if name not in hashMap: 
+          hashMap[latency] = name
+
+  # 7: Sort desired information by hashMap.keys() (e.g.: latency)
+  sortedLatencies = sorted(hashMap.keys())
+
+  # 8: Append sorted information into result
+  for latency in sortedLatencies:
+      result.append(f'{hashMap[latency]} {latency}')
+  # 9: Print out result separated by newline
+  print('\n'.join(result))
 ```
 
 ---
