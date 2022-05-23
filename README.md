@@ -134,6 +134,32 @@ while left < right:
     baseCase()
 return result
 ```
+
+#### 🔎 Binary Search
+To search for an element of an array in `O(log(n))`
+```python
+def binarySearch(array, target):
+  # 1: Initialise two pointers for each side of the array
+  left, right = 0, len(array) - 1
+
+  # 2: While both pointers have not cross each other,
+  while (left <= right): # EDGE: <= is used for the edge case where array has only 1 element.  
+    # 3: Evaluate the midpoint pointer by calculating (left + right) // 2
+    mid = (left + right) // 2
+    # 4: Return the midpoint index if array[mid] == target
+    if array[mid] == target:
+      return mid
+    else:
+      # 5: Else, if array[mid] is already smaller than the target, then we should discard everything on the left and update the new lower boundary: left = mid + 1 
+      if (array[mid] < target):
+        left = mid + 1
+      # 6: Otherwise, we discard everything on the right and update the new upper boundary: right = mid - 1
+      else: 
+        right = mid - 1
+  # 7: Return -1 by default if we cannot find our target number in the array
+  return -1
+```
+
 #### 🔗 Linked List Traversal
 To perform head to tail computations
 ```python
@@ -6471,17 +6497,18 @@ def rotateLinkedList(head, rotations):
 <img src="resources/dfs-demo.gif" width="750px"/><br/>
 
 ```python
-def recursiveFunction(currentNode, currentPath=[]): 
-  if currentNode is None:
-    return  # return 0, return False
+def recursiveFunction(currentNode): 
+  if currentNode is None: 
+    return # Return base case for NULL child nodes
 
-  currentPath.append(currentNode.value)
+  informationToPassDown = doSomething() # Forwardtracking computation
+  if currentNode.left is None and currentNode.right is None: 
+    answer = doSomething() # Leaf node computation
+  # Perform DFS passing down new information
+  recursiveFunction(currentNode.left, informationToPassDown) 
+  recursiveFunction(currentNode.right, informationToPassDown)
 
-  # return
-  recursiveFunction(currentNode.left, informationToPassDown, currentPath)
-  recursiveFunction(currentNode.right, informationToPassDown, currentPath)
-
-  del currentPath[-1]
+  del currentPath[-1] # Clean up when backtracking
 ```
 #### [📋 **Back to Table of Contents**](#toc)
 ---
