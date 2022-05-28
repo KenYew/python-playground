@@ -42,6 +42,7 @@ Blind 75 questions, coding patterns and in-depth solutions for FAANG coding inte
 1. ### [📱 **Dynamic Programming**](#dp)
 1. ### [♽ **Recursion**](#recursion)
 1. ### [⚡️ **Binaries**](#binaries)
+1. ### [⚙️ **Data Structures Implementation**](#ds)
 
 ---
 ## 📱 [Coding Patterns](https://seanprashad.com/leetcode-patterns/)
@@ -381,6 +382,24 @@ def extractInformation(log):
       result.append(f'{hashMap[latency]} {latency}')
   # 9: Print out result separated by newline
   print('\n'.join(result))
+```
+#### 🧪 Unit Tests
+To run unit tests using the built-in unittest Python library
+
+```python
+import unittest
+
+class UnitTest(unittest.TestCase): 
+  def testCase(self):
+    input1 = [1, 2, 3]
+    input2 = 2
+    actual = myFunction(input1, input2)
+    expected = [1, 3, 2]
+    self.assertEqual(actual, expected)
+
+if __name__ == '__main__':
+  unittest.main()
+  unittest.main(argv=[''], exit=False, verbosity=2) # For Jupyter
 ```
 
 ---
@@ -4175,6 +4194,90 @@ def isSameTree(node1, node2):
 </p>
 </details>
 
+---
+## [🟩 Symmetric Tree](https://leetcode.com/problems/symmetric-tree/)
+> Given the root of a binary tree, check whether it is a mirror of itself (i.e., symmetric around its center).
+
+Example 1:
+- [x] Input: root = `[1,2,2,3,4,4,3]`
+- [x] Output: `true`
+```python
+           1
+        /     \
+      2        2      
+     /  \     /  \   
+   3     4   4    3
+```
+
+Example 2:
+- [x] Input: root = `[1,2,2,null,3,null,3]`
+- [x] Output: `false`
+```python
+           1
+        /     \
+      2        2      
+        \        \   
+         3        3
+```
+
+Constraints:
+* The number of nodes in the tree is in the range `[1, 1000]`
+* `-100 <= Node.val <= 100`
+<details><summary><b>Solution</b></summary>
+<p>
+
+### [**DFS Recursion**](./trees/is-symmetric-tree.py)
+```python
+class TreeNode: 
+  def __init__(self, value, left=None, right=None):
+    self.value = value
+    self.left = left
+    self.right = right 
+
+# O(n) Time - where n is a number of nodes in the tree, since we visit each node exactly once.
+# O(log(n)) Space Best Case - if completely balanced tree and 
+# O(n) Space Worst Case - if completely unbalanced tree, to keep a recursion stack. 
+def isSymmetric(root):
+  # EDGE: Return True immediately if input root is None
+  if root is None:
+    return True
+  return isSymmetricRecursion(root.left, root.right)
+
+def isSymmetricRecursion(leftNode, rightNode):
+  # BASE CASE: Return True in this recursion call if both leftNode and rightNode are identically None
+  if leftNode is None and rightNode is None:
+    return True
+  # BASE CASE: Return False in this recursion call if only either leftNode or rightNode is None
+  if leftNode is None or rightNode is None:
+    return False
+
+  # 1: If both nodes.value are equal, perform symmetric check on their child nodes
+  if leftNode.value == rightNode.value:
+    # 2: Recursively check for symmetry on outer pair children nodes
+    outerPair = isSymmetricRecursion(leftNode.left, rightNode.right) 
+    # 3: Recursively check for symmetry on inner pair children nodes
+    innerPair = isSymmetricRecursion(leftNode.right, rightNode.left)
+    return outerPair and innerPair # 4: The tree is symmetric if both children pairs are symmetric
+  else:
+    return False # 5: Else return False if both children pairs are not symmetric
+
+"""
+outerPair = isSymmetricRecursion(leftNode.left, rightNode.right) 
+           1
+        /     \
+      2        2  if leftNode.value == rightNode.value, check outerPair symmetry
+     /  \     /  \   
+   (3)   4   4   (3) 
+innerPair = isSymmetricRecursion(leftNode.right, rightNode.left)
+           1
+        /     \
+      2        2  if leftNode.value == rightNode.value, check innerPair symmetry    
+     /  \     /  \   
+    3   (4) (4)   3
+"""
+```
+</p>
+</details>
 
 ---
 ## [🟨 Invert Binary Tree](https://www.algoexpert.io/questions/Invert%20Binary%20Tree)
@@ -5093,6 +5196,340 @@ def longestCommonSubsequence(s1: str, s2: str) -> int:
 - ✅ Missing Number - https://leetcode.com/problems/missing-number/
 - Reverse Bits - https://leetcode.com/problems/reverse-bits/
 #### [📋 **Back to Table of Contents**](#toc)
+
+---
+# <div id='ds'/> ⚙️ **Data Structures Implementation**
+#### [📋 **Back to Table of Contents**](#toc)
+
+---
+## [🟨 Implement Stack](https://www.algoexpert.io/questions/min-max-stack-construction)
+> Write a `MinMaxStack` class for a Min Max Stack. The class should support: 
+>* Pushing and popping values on and off the stack. 
+>* Peeking at the value at the top of the stack. 
+>* Getting both the miniuum and the maximum values in the stack at any given point in time. 
+>* Note: All class methods, when considered independently, should run in constant time and with constant space.
+
+Example:
+```python
+# All operations below are performed sequentially.
+MinMaxStack(): # Instantiate MinMaxStack object
+push(5): 
+getMin(): 5
+getMax(): 5
+peek(): 5
+push(7): 
+getMin(): 5
+getMax(): 7
+peek(): 7
+push(2):
+getMin(): 2
+getMax(): 7
+peek(): 2
+pop(): 2
+pop(): 7
+getMin(): 5
+getMax(): 5
+peek(): 5
+```
+
+<details><summary><b>Solution</b></summary>
+<p>
+
+### [**Classes and Dictionaries**](./data-structures/implement-stack.py)
+```python
+class MinMaxStack:
+  def __init__(self):
+    self.minMaxStack = [] # list that holds dictionaries of min and max values at any given value
+    self.stack = [] # initiate an array for our stack
+	
+  # O(1) Time | O(1) Space
+  def peek(self):
+    return self.stack[len(self.stack) - 1] # just return the n-th element of the self.stack array
+
+  # O(1) Time | O(1) Space
+  def pop(self):
+    self.minMaxStack.pop() # synchronize the popping for the minMaxStack as well to correctly keep track of actual minmax
+    return self.stack.pop()
+
+  # O(1) Time | O(1) Space
+  def push(self, number):
+    newMinMax = {"min": number, "max": number}
+    if len(self.minMaxStack): # if not empty, check the previous value in the stack and compute which is the new minmax
+      lastMinMax = self.minMaxStack[len(self.minMaxStack) - 1] # peeking the final value of the minMaxStack
+      newMinMax["min"] = min(lastMinMax["min"], number)
+      newMinMax["max"] = max(lastMinMax["max"], number)
+    self.minMaxStack.append(newMinMax)
+    self.stack.append(number)
+
+  # O(1) Time | O(1) Space	
+  def getMin(self):
+      return self.minMaxStack[len(self.minMaxStack) - 1]["min"] # return the n-th dictionary in the array and access the min key
+
+  # O(1) Time | O(1) Space
+  def getMax(self):
+      return self.minMaxStack[len(self.minMaxStack) - 1]["max"] # return the n-th dictionary in the array and access the max key
+      
+  # O(1) Time | O(1) Space
+  def view(self): 
+    return self.stack
+```
+</p>
+</details>
+
+---
+## [🟨 Implement Queue](https://www.algoexpert.io/questions/min-max-stack-construction)
+> Write a `MinMaxQueue` class for a Min Max Queue. The class should support: 
+>* Pushing and popping values on and off the queue. 
+>* Peeking at the value at the top of the queue. 
+>* Getting both the miniuum and the maximum values in the queue at any given point in time. 
+>* Note: All class methods, when considered independently, should run in constant time and with constant space.
+
+Example:
+```python
+# All operations below are performed sequentially.
+MinMaxQueue(): # Instantiate MinMaxQueue object
+push(5): 
+getMin(): 5
+getMax(): 5
+peek(): 5
+push(7): 
+getMin(): 5
+getMax(): 7
+peek(): 5
+push(2):
+getMin(): 2
+getMax(): 7
+peek(): 5
+pop(): 5
+pop(): 7
+getMin(): 2
+getMax(): 2
+peek(): 2
+```
+
+<details><summary><b>Solution</b></summary>
+<p>
+
+### [**Classes and Dictionaries**](./data-structures/implement-queue.py)
+```python
+from collections import deque
+class MinMaxQueue: 
+  def __init__(self): 
+    self.minMaxQueue = deque()
+    self.queue = deque()
+
+  # O(1) Time | O(1) Space
+  def peek(self):
+    return self.queue[len(self.queue) - 1]
+
+  # O(1) Time | O(1) Space
+  def pop(self):
+    self.minMaxQueue.pop()
+    return self.queue.pop()
+
+  # O(1) Time | O(1) Space
+  def popleft(self):
+    self.minMaxQueue.popleft()
+    return self.queue.popleft()
+
+  # O(1) Time | O(1) Space
+  def push(self, number): 
+    newMinMax = {
+        "min": number, 
+        "max": number
+    }
+    if len(self.minMaxQueue): 
+      lastMinMax = self.minMaxQueue[len(self.minMaxQueue) - 1]
+      newMinMax["min"] = min(lastMinMax["min"], number)
+      newMinMax["max"] = max(lastMinMax["max"], number)
+    self.minMaxQueue.append(newMinMax)
+    self.queue.append(number)
+
+  # O(1) Time | O(1) Space
+  def pushleft(self, number): 
+    newMinMax = {
+        "min": number, 
+        "max": number
+    }
+    if len(self.minMaxQueue): 
+      lastMinMax = self.minMaxQueue[len(self.minMaxQueue) - 1]
+      newMinMax["min"] = min(lastMinMax["min"], number)
+      newMinMax["max"] = max(lastMinMax["max"], number)
+    self.minMaxQueue.append(newMinMax)
+    self.queue.append(number)
+  
+  # O(1) Time | O(1) Space
+  def getMin(self):
+    return self.minMaxQueue[len(self.minMaxQueue) - 1]["min"]
+
+  # O(1) Time | O(1) Space
+  def getMax(self):
+    return self.minMaxQueue[len(self.minMaxQueue) - 1]["max"]
+
+  # O(1) Time | O(1) Space
+  def view(self): 
+    return list(self.queue)
+```
+</p>
+</details>
+
+---
+## [🟨 Implement Stack using Queues](https://leetcode.com/problems/implement-stack-using-queues/)
+> Implement a last-in-first-out (LIFO) stack using only two queues. The implemented stack should support all the functions of a normal stack (push, top, pop, and empty).
+> Implement the MyStack class:
+    >* void push(int x) Pushes element x to the top of the stack.
+    >* int pop() Removes the element on the top of the stack and returns it.
+    >* int top() Returns the element on the top of the stack.
+    >* boolean empty() Returns true if the stack is empty, false otherwise.
+> Notes: You must use only standard operations of a queue, which means that only push to back, peek/pop from front, size and is empty operations are valid.
+> Depending on your language, the queue may not be supported natively. You may simulate a queue using a list or deque (double-ended queue) as long as you use only a queue's standard operations.
+ 
+
+Example 1:
+- [x] Input: ["MyStack", "push", "push", "top", "pop", "empty"]
+[[], [1], [2], [], [], []]
+- [x] Output: [null, null, null, 2, 2, false]
+- [x] Explanation:
+
+```python
+MyStack myStack = new MyStack();
+myStack.push(1);
+myStack.push(2);
+myStack.top(); // return 2
+myStack.pop(); // return 2
+myStack.empty(); // return False
+```
+
+Constraints:
+* `1 <= x <= 9`
+* At most `100` calls will be made to push, pop, top, and empty.
+* All the calls to pop and top are valid.
+
+<details><summary><b>Solution</b></summary>
+<p>
+
+### [**Classes**](./data-structures/implement-stack-using-queues.py)
+```python
+from collections import deque
+class MyStack: 
+  def __init__(self): 
+    self.queue = deque()
+  
+  # O(1) Time | O(1) Space
+  def peek(self): 
+    return self.queue[len(self.queue) - 1]
+  
+  # O(n) Time | O(1) Space
+  def pop(self): 
+    for idx in range(len(self.queue) - 1): 
+      self.queue.append(self.queue.popleft())
+    return self.queue.popleft()
+  
+  # O(1) Time | O(1) Space
+  def push(self, number): 
+    self.queue.append(number)
+  
+  # O(1) Time | O(1) Space
+  def empty(self): 
+    return len(self.queue) == 0
+```
+</p>
+</details>
+
+---
+## [🟨 Implement Queue using Stacks](https://leetcode.com/problems/implement-queue-using-stacks/)
+> Implement a first in first out (FIFO) queue using only two stacks. The implemented queue should support all the functions of a normal queue (push, peek, pop, and empty).
+> Implement the MyQueue class:
+    >* void `push(int x)` Pushes element x to the back of the queue.
+    >* int `pop()` Removes the element from the front of the queue and returns it.
+    >* int `peek()` Returns the element at the front of the queue.
+    >* boolean `empty()` Returns true if the queue is empty, false otherwise.
+> Notes: You must use only standard operations of a stack, which means only push to top, peek/pop from top, size, and is empty operations are valid.
+> Depending on your language, the stack may not be supported natively. You may simulate a stack using a list or deque (double-ended queue) as long as you use only a stack's standard operations.
+
+Example 1:
+- [x] Input: 
+```python
+["MyQueue", "push", "push", "peek", "pop", "empty"] 
+[[], [1], [2], [], [], []]
+```
+- [x] Output: `[null, null, null, 1, 1, false]`
+- [x] Explanation
+
+```python
+MyQueue myQueue = new MyQueue();
+myQueue.push(1); // queue is: [1]
+myQueue.push(2); // queue is: [1, 2] (leftmost is front of the queue)
+myQueue.peek(); // return 1
+myQueue.pop(); // return 1, queue is [2]
+myQueue.empty(); // return false
+```
+
+Constraints:
+* `1 <= x <= 9`
+* At most `100` calls will be made to push, pop, peek, and empty.
+* All the calls to pop and peek are valid.
+
+<details><summary><b>Solution</b></summary>
+<p>
+
+### [**Classes**](./data-structures/implement-queue-using-stacks.py)
+```python
+## Method 1: O(1) Time for push() and O(1) Amortized Time for pop()
+class MyQueue:
+  def __init__(self):
+    self.stack1 = []
+    self.stack2 = []
+
+  # O(1) Time | O(1) Space
+  def push(self, number):
+    self.stack1.append(number)
+
+  # O(1) Amortized Time | O(1) Space
+  def pop(self):
+    self.peek()
+    return self.stack2.pop()
+
+  # O(1) Time | O(1) Space
+  def peek(self):
+    if not self.stack2:
+      while self.stack1:
+        self.stack2.append(self.stack1.pop())
+    return self.stack2[-1]        
+  
+  # O(1) Time | O(1) Space
+  def empty(self):
+    return not self.stack1 and not self.stack2
+
+## Method 2: O(n) Time for push()
+class MyQueue:
+  def __init__(self):
+    self.stack1 = []
+    self.stack2 = []
+
+  # O(n) Time | O(1) Space
+  def push(self, number):
+    while self.stack1:
+      self.stack2.append(self.stack1.pop())
+    self.stack1.append(number)
+    while self.stack2:
+        self.stack1.append(self.stack2.pop())
+
+  # O(1) Time | O(1) Space
+  def pop(self):
+    return self.stack1.pop()
+
+  # O(1) Time | O(1) Space
+  def peek(self):
+    return self.stack1[-1]
+
+  # O(1) Time | O(1) Space
+  def empty(self):
+    return not self.stack1
+```
+</p>
+</details>
+
 ---
 # <div id='window'/> 🪟 **Sliding Window Pattern**
 #### To perform beginning to end computations of an array in O(n) time complexity
@@ -6044,9 +6481,11 @@ def binarySearch(array, target):
 Example 1: 
 - [x] Input: [4, 6, 10], key = 10
 - [x] Output: 2
+  
 Example 2: 
 - [x] Input: [1, 2, 3, 4, 5, 6, 7], key = 5
 - [x] Output: 4
+
 Example 3: 
 - [x] Input: [10, 6, 4], key = 10
 - [x] Output: 0
@@ -6097,14 +6536,17 @@ Example 1:
 - [x] Input: [4, 6, 10], key = 6
 - [x] Output: 1
 - [x] Explanation: The smallest number greater than or equal to '6' is '6' having index '1'.
+
 Example 2:
 - [x] Input: [1, 3, 8, 10, 15], key = 12
 - [x] Output: 4
 - [x] Explanation: The smallest number greater than or equal to '12' is '15' having index '4'.
+
 Example 3:
 - [x] Input: [4, 6, 10], key = 17
 - [x] Output: -1
 - [x] Explanation: There is no number greater than or equal to '17' in the given array.
+
 Example 4:
 - [x] Input: [4, 6, 10], key = -1
 - [x] Output: 0
@@ -6211,14 +6653,17 @@ Example 1:
 - [x] Input: ['a', 'c', 'f', 'h'], key = 'f'
 - [x] Output: 'h'
 - [x] Explanation: The smallest letter greater than 'f' is 'h' in the given array.
+
 Example 2:
 - [x] Input: ['a', 'c', 'f', 'h'], key = 'b'
 - [x] Output: 'c'
 - [x] Explanation: The smallest letter greater than 'b' is 'c'.
+
 Example 3:
 - [x] Input: ['a', 'c', 'f', 'h'], key = 'm'
 - [x] Output: 'a'
 - [x] Explanation: As the array is assumed to be circular, the smallest letter greater than 'm' is 'a'.
+
 Example 4:
 - [x] Input: ['a', 'c', 'f', 'h'], key = 'h'
 - [x] Output: 'a'
@@ -6256,9 +6701,11 @@ def searchNextLetter(array, key):
 Example 1:
 - [x] Input: [4, 6, 6, 6, 9], key = 6
 - [x] Output: [1, 3]
+
 Example 2:
 - [x] Input: [1, 3, 8, 10, 15], key = 10
 - [x] Output: [3, 3]
+
 Example 3:
 - [x] Input: [1, 3, 8, 10, 15], key = 12
 - [x] Output: [-1, -1]
@@ -6313,14 +6760,17 @@ Example 1:
 - [x] Input: [4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30], key = 16
 - [x] Output: 6
 - [x] Explanation: The key is present at index '6' in the array.
+
 Example 2:
 - [x] Input: [4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30], key = 11
 - [x] Output: -1
 - [x] Explanation: The key is not present in the array.
+
 Example 3:
 - [x] Input: [1, 3, 8, 10, 15], key = 15
 - [x] Output: 4
 - [x] Explanation: The key is present at index '4' in the array.
+
 Example 4:
 - [x] Input: [1, 3, 8, 10, 15], key = 200
 - [x] Output: -1
@@ -6382,12 +6832,15 @@ Example 1:
 - [x] Input: [4, 6, 10], key = 7
 - [x] Output: 6
 - [x] Explanation: The difference between the key '7' and '6' is minimum than any other number in the array 
+
 Example 2:
 - [x] Input: [4, 6, 10], key = 4
 - [x] Output: 4
+
 Example 3:
 - [x] Input: [1, 3, 8, 10, 15], key = 12
 - [x] Output: 10
+
 Example 4:
 - [x] Input: [4, 6, 10], key = 17
 - [x] Output: 10
@@ -6443,12 +6896,15 @@ Example 1:
 - [x] Input: [1, 3, 8, 12, 4, 2]
 - [x] Output: 12
 - [x] Explanation: The maximum number in the input bitonic array is '12'.
+
 Example 2:
 - [x] Input: [3, 8, 3, 1]
 - [x] Output: 8
+
 Example 3:
 - [x] Input: [1, 3, 8, 12]
 - [x] Output: 12
+
 Example 4:
 - [x] Input: [10, 9, 8]
 - [x] Output: 10
@@ -6488,12 +6944,15 @@ def findMaxInBitonicArray(array):
 Example 1:
 - [x] Input: [1, 3, 8, 4, 3], key=4
 - [x] Output: 3
+
 Example 2:
 - [x] Input: [3, 8, 3, 1], key=8
 - [x] Output: 1
+
 Example 3:
 - [x] Input: [1, 3, 8, 12], key=12
 - [x] Output: 3
+
 Example 4:
 - [x] Input: [10, 9, 8], key=10
 - [x] Output: 0
@@ -7417,7 +7876,7 @@ def traverse(root):
   
   # 2: Instantiate the deque() for O(1) insertion on both sides of array
   queue = deque()
-  # 3: Start by pushing the root node to the queu
+  # 3: Start by pushing the root node to the queue
   queue.append(root) 
   
   # 4: Keep iterating until the queue is empty
@@ -7478,7 +7937,7 @@ def traverse(root):
   
   # 2: Instantiate the deque() for O(1) insertion on both sides of array
   queue = deque()
-  # 3: Start by pushing the root node to the queu
+  # 3: Start by pushing the root node to the queue
   queue.append(root) 
   
   # 4: Keep iterating until the queue is empty
@@ -7539,7 +7998,7 @@ def traverse(root):
   
   # 2: Instantiate the deque() for O(1) insertion on both sides of array
   queue = deque()
-  # 3: Start by pushing the root node to the queu
+  # 3: Start by pushing the root node to the queue
   queue.append(root) 
 
   leftToRight = True
@@ -7606,7 +8065,7 @@ def findLevelAverages(root):
   
   # 2: Instantiate the deque() for O(1) insertion on both sides of array
   queue = deque()
-  # 3: Start by pushing the root node to the queu
+  # 3: Start by pushing the root node to the queue
   queue.append(root) 
   
   # 4: Keep iterating until the queue is empty
@@ -7664,7 +8123,7 @@ def findMaxValues(root):
   
   # 2: Instantiate the deque() for O(1) insertion on both sides of array
   queue = deque()
-  # 3: Start by pushing the root node to the queu
+  # 3: Start by pushing the root node to the queue
   queue.append(root) 
   
   # 4: Keep iterating until the queue is empty
@@ -7723,7 +8182,7 @@ def findMinimumDepth(root):
   
   # 2: Instantiate the deque() for O(1) insertion on both sides of array
   queue = deque()
-  # 3: Start by pushing the root node to the queu
+  # 3: Start by pushing the root node to the queue
   queue.append(root) 
   minimumDepth = 0
   # 4: Keep iterating until the queue is empty
@@ -7778,7 +8237,7 @@ def findMaximumDepth(root):
   
   # 2: Instantiate the deque() for O(1) insertion on both sides of array
   queue = deque()
-  # 3: Start by pushing the root node to the queu
+  # 3: Start by pushing the root node to the queue
   queue.append(root) 
   maximumDepth = 0
   # 4: Keep iterating until the queue is empty
