@@ -5053,10 +5053,11 @@ class MinMaxQueue:
 ## [🟨 Implement Stack using Queues](https://leetcode.com/problems/implement-stack-using-queues/)
 > Implement a last-in-first-out (LIFO) stack using only two queues. The implemented stack should support all the functions of a normal stack (push, top, pop, and empty).
 > Implement the MyStack class:
-    >* void push(int x) Pushes element x to the top of the stack.
-    >* int pop() Removes the element on the top of the stack and returns it.
-    >* int top() Returns the element on the top of the stack.
-    >* boolean empty() Returns true if the stack is empty, false otherwise.
+>* void push(int x) Pushes element x to the top of the stack.
+>* int pop() Removes the element on the top of the stack and returns it.
+>* int top() Returns the element on the top of the stack.
+>* boolean empty() Returns true if the stack is empty, false otherwise.
+
 > Notes: You must use only standard operations of a queue, which means that only push to back, peek/pop from front, size and is empty operations are valid.
 > Depending on your language, the queue may not be supported natively. You may simulate a queue using a list or deque (double-ended queue) as long as you use only a queue's standard operations.
  
@@ -5112,10 +5113,11 @@ class MyStack:
 ## [🟨 Implement Queue using Stacks](https://leetcode.com/problems/implement-queue-using-stacks/)
 > Implement a first in first out (FIFO) queue using only two stacks. The implemented queue should support all the functions of a normal queue (push, peek, pop, and empty).
 > Implement the MyQueue class:
-    >* void `push(int x)` Pushes element x to the back of the queue.
-    >* int `pop()` Removes the element from the front of the queue and returns it.
-    >* int `peek()` Returns the element at the front of the queue.
-    >* boolean `empty()` Returns true if the queue is empty, false otherwise.
+>* void `push(int x)` Pushes element x to the back of the queue.
+>* int `pop()` Removes the element from the front of the queue and returns it.
+>* int `peek()` Returns the element at the front of the queue.
+>* boolean `empty()` Returns true if the queue is empty, false otherwise.
+
 > Notes: You must use only standard operations of a stack, which means only push to top, peek/pop from top, size, and is empty operations are valid.
 > Depending on your language, the stack may not be supported natively. You may simulate a stack using a list or deque (double-ended queue) as long as you use only a stack's standard operations.
 
@@ -6192,24 +6194,24 @@ def searchCeilingOfANumber(array, key):
 >* Given an array of numbers sorted in ascending order, find the floor of a given number `key`. The floor of the `key` will be the biggest element in the given array smaller than or equal to the `key`
 >* Write a function to return the index of the floor of the `key`. If there isn’t a floor, return `-1`.
 
-**Example 1**
+Example 1
 - [x] Input: `[4, 6, 10]`, key = 6
 - [x] Output: 1
 - [x] Explanation: The biggest number smaller than or equal to '6' is '6' having index '1'.
 
-**Example 2:**
+Example 2
 - [x] Input: `[1, 3, 8, 10, 15]`, key = 12
 - [x] Output: 3
 - [x] Explanation: The biggest number smaller than or equal to '12' is '10' having index '3
 '.
 
-**Example 3:**
+Example 3
 - [x] Input: `[4, 6, 10]`, key = 17
 - [x] Output: 2
 - [x] Explanation: The biggest number smaller than or equal to '17' is '10' having index '2
 '.
 
-**Example 4:**
+Example 4
 - [x] Input: `[4, 6, 10]`, key = -1
 - [x] Output: -1
 - [x] Explanation: There is no number smaller than or equal to '-1' in the given array.
@@ -6245,6 +6247,7 @@ def searchFloorOfANumber(array, key):
 >* Given an array of lowercase letters sorted in ascending order, find the smallest letter in the given array greater than a given ‘key’.
 >* Assume the given array is a circular list, which means that the last letter is assumed to be connected with the first letter. This also means that the smallest letter in the given array is greater than the last letter of the array and is also the first letter of the array.
 >* Write a function to return the next letter of the given ‘key’.
+
 Example 1:
 - [x] Input: ['a', 'c', 'f', 'h'], key = 'f'
 - [x] Output: 'h'
@@ -6290,6 +6293,7 @@ def searchNextLetter(array, key):
 ## 🟨 [Number Range](https://www.educative.io/courses/grokking-the-coding-interview/R1B78K9oBEz)
 >* Given an array of numbers sorted in ascending order, find the range of a given number ‘key’. The range of the ‘key’ will be the first and last position of the ‘key’ in the array.
 >* Write a function to return the range of the ‘key’. If the ‘key’ is not present return [-1, -1].iling of the ‘key’. If there isn’t any ceiling return -1.
+
 Example 1:
 - [x] Input: [4, 6, 6, 6, 9], key = 6
 - [x] Output: [1, 3]
@@ -6412,6 +6416,7 @@ def binarySearch(reader, key, start, end):
 ---
 ## 🟨 [Minimum Difference Element](https://www.educative.io/courses/grokking-the-coding-interview/mymvP915LY9)
 >* Given an array of numbers sorted in ascending order, find the element in the array that has the minimum difference with the given ‘key’.
+
 Example 1:
 - [x] Input: [4, 6, 10], key = 7
 - [x] Output: 6
@@ -6472,6 +6477,7 @@ def searchMinDiffElement(array, key):
 ---
 ## 🟨 [Bitonic Array Maximum](https://www.educative.io/courses/grokking-the-coding-interview/RMyRR6wZoYK)
 >* Find the maximum value in a given Bitonic array. An array is considered bitonic if it is monotonically increasing and then monotonically decreasing. Monotonically increasing or decreasing means that for any index `i` in the `array arr[i] != arr[i+1].`
+
 Example 1:
 - [x] Input: [1, 3, 8, 12, 4, 2]
 - [x] Output: 12
@@ -6517,6 +6523,7 @@ def findMaxInBitonicArray(array):
 ## 🟨 [Search Bitonic Array](https://www.educative.io/courses/grokking-the-coding-interview/7n3BlOvqW0r)
 >* Given a Bitonic array, find if a given ‘key’ is present in it. An array is considered bitonic if it is monotonically increasing and then monotonically decreasing. Monotonically increasing or decreasing means that for any index `i` in the array `arr[i] != arr[i+1]`.
 >* Write a function to return the index of the ‘key’. If the ‘key’ appears more than once, return the smaller index. If the ‘key’ is not present, return -1.
+
 Example 1:
 - [x] Input: [1, 3, 8, 4, 3], key=4
 - [x] Output: 3
@@ -6544,6 +6551,7 @@ Example 4:
 >* Given an array of numbers which is sorted in ascending order and also rotated by some arbitrary number, find if a given ‘key’ is present in it.
 >* Write a function to return the index of the ‘key’ in the rotated array. If the ‘key’ is not present, return -1. 
 >* The function must be able to handle duplicates in the input array.
+
 Example 1:
 - [x] Input: [10, 15, 1, 3, 8], key = 15
 - [x] Output: 1
@@ -6612,6 +6620,7 @@ def searchRotatedArray(array, key):
 ## 🟨 [Rotation Count](https://www.educative.io/courses/grokking-the-coding-interview/R1v4P0R7VZw)
 >* Given an array of numbers which is sorted in ascending order and is rotated ‘k’ times around a pivot, find ‘k’.
 >* You can assume that the array does not have any duplicates.
+
 Example 1:
 - [x] Input: [10, 15, 1, 3, 8]
 - [x] Output: 2
