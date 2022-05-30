@@ -1597,6 +1597,59 @@ def firstNonRepeatingCharacter(string):
 ✅ **DICTIONARIES:** _Loop through each char and store the frequencies of each char using `charFrequencies[char] = charFrequencies.get(char, 0) + 1`. Then, loop through each char again and `if charFrequencies[char] == 1`, return `idx` else return `-1`_
 
 ---
+## 🟩 [Most Common Word](https://leetcode.com/problems/most-common-word/)
+>* Given a string paragraph and a string array of the banned words banned, return the most frequent word that is not banned. 
+>* It is guaranteed there is at least one word that is not banned, and that the answer is unique.
+>* The words in paragraph are case-insensitive and the answer should be returned in lowercase.
+
+Example 1:
+- [x] Input: paragraph = `"Bob hit a ball, the hit BALL flew far after it was hit."`, banned = `["hit"]`
+- [x] Output: `"ball"`
+- [x] Explanation: 
+    * `"hit"` occurs 3 times, but it is a banned word.
+    * `"ball"` occurs twice (and no other word does), so it is the most frequent non-banned word in the paragraph. 
+    * Note that words in the paragraph are not case sensitive, that punctuation is ignored (even if adjacent to words, such as `"ball,"`), and that `"hit"` isn't the answer even though it occurs more because it is banned.
+
+Example 2:
+- [x] Input: paragraph = `"a."`, banned = `[]`
+- [x] Output: `"a"`
+ 
+Constraints:
+* `1 <= paragraph.length <= 1000`
+* paragraph consists of English letters, `space ' '`, or one of the symbols: `"!?',;.".`
+* `0 <= banned.length <= 100`
+* `1 <= banned[i].length <= 10`
+* `banned[i]` consists of only lowercase English letters.
+
+<details><summary><b>Solution</b></summary>
+<p>
+
+### [**Regular Expressions and Dictionaries**](./strings/most-common-word.py)
+```python
+# O(n) Time | O(1) Space - where n is the length of the input string
+# O(1) Space because input string only has lowercase English-alphabet letters hence the hash table will never have more than 26 character frequencies.
+import re 
+def mostCommonWord(string, banned): 
+  # 1: Convert string into list of lowercase words
+  words = re.findall(r'\w+', string.lower())
+  legalWords = []
+  # 2: Append only allowed words into legalWords[]
+  for word in words: 
+    if word not in set(banned): 
+      legalWords.append(word)
+  # 3: Create a hashmap of word:frequency
+  wordFrequency = {}
+  for word in legalWords:
+    if word not in wordFrequency: 
+      wordFrequency[word] = 0
+    wordFrequency[word] += 1
+  # 4: Return the word with the highest frequency
+  return max(wordFrequency, key=wordFrequency.get)
+```
+</p>
+</details>
+
+---
 ## 🟩 [Generate Document](https://www.algoexpert.io/questions/Generate%20Document)
 >* You're given a string of available characters and a string representing a document that you
 need to generate. 
@@ -2359,6 +2412,72 @@ patternIPv6 = `^(` **([0-9a-fA-F]{1,4}) \\:** `){7}` **([0-9a-fA-F]{1,4})** `$`
 - `$`:  Matches the ending of the string
 - `[[0-9a-fA-F]`: Set of characters to match
 
+</p>
+</details>
+
+---
+## [🟨 Compare Version Numbers](https://leetcode.com/problems/compare-version-numbers/)
+> Given two version numbers, `version1` and `version2`, compare them.
+>* Version numbers consist of one or more revisions joined by a dot `'.'`. 
+>* Each revision consists of digits and may contain leading zeros. 
+>* Every revision contains at least one character. 
+>* Revisions are 0-indexed from left to right, with the leftmost revision being revision 0, the next revision being revision 1, and so on. 
+>* For example `2.5.33` and `0.1` are valid version numbers.
+
+> To compare version numbers, compare their revisions in left-to-right order. 
+>* Revisions are compared using their integer value ignoring any leading zeros. 
+>* This means that revisions `1` and `001` are considered equal. 
+>* If a version number does not specify a revision at an index, then treat the revision as 0. 
+>* For example, version `1.0` is less than version `1.1` because their revision 0s are the same, but their revision 1s are 0 and 1 respectively, and `0 < 1`.
+
+> Return the following:
+>* If `version1 < version2`, return `-1`.
+>* If `version1 > version2`, return `1`.
+>* Otherwise, return `0`.
+ 
+Example 1:
+- [x] Input: version1 = `"1.01"`, version2 = `"1.001"`
+- [x] Output: `0`
+- [x] Explanation: Ignoring leading zeroes, both `"01"` and `"001"` represent the same integer `"1"`.
+
+Example 2:
+- [x] Input: version1 = `"1.0"`, version2 = `"1.0.0"`
+- [x] Output: `0`
+- [x] Explanation: version1 does not specify revision `2`, which means it is treated as `"0"`.
+
+Example 3:
+- [x] Input: version1 = `"0.1"`, version2 = `"1.1"`
+- [x] Output: `-1`
+- [x] Explanation: version1's revision `0` is `"0"`, while version2's revision `0` is `"1"`. `0 < 1`, so `version1 < version2`.
+ 
+Constraints:
+* `1 <= version1.length`, `version2.length <= 500`
+* `version1` and `version2` only contain digits and `'.'`.
+* `version1` and `version2` are valid version numbers.
+* All the given revisions in `version1` and `version2` can be stored in a 32-bit integer.
+
+<details><summary><b>Solution</b></summary>
+<p>
+
+### [**String Manipulation**](./strings/compare-version-numbers.py)
+```python
+def compareVersion(version1, version2): 
+  v1 = version1.split('.') # e.g.: "1.01" -> ["1", "0", "1"] len = 3
+  v2 = version2.split('.') # e.g.: "1.001" -> ["1", "0", "0", "1"] len = 4
+
+  # 1: Iterate idx* based on the larger version length
+  for idx in range(max(len(v1), len(v2))): # max(3, 4) = 4
+    # 2: Use zeros instead for versions that are too short in length
+    n1 = 0 if idx >= len(v1) else int(v1[idx]) # e.g.: since len = 3 < idx = 4, use n1 = 0 at 4th iteration
+    n2 = 0 if idx >= len(v2) else int(v2[idx])
+
+    # 3: If at any point the revision digit n1 < n2, return -1
+    if n1 < n2: 
+      return -1 
+    elif n1 > n2: # 4: Else if revision digit n1 > n2, return 1
+      return 1
+  return 0 # 5: Otherwise, return 0
+```
 </p>
 </details>
 
