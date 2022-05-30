@@ -40,7 +40,6 @@ Blind 75 questions, coding patterns and in-depth solutions for FAANG coding inte
 1. ### [🥞 **Stacks**](#stacks)
 1. ### [🏔 **Heaps**](#heaps)
 1. ### [📱 **Dynamic Programming**](#dp)
-1. ### [♽ **Recursion**](#recursion)
 1. ### [⚡️ **Binaries**](#binaries)
 1. ### [⚙️ **Data Structures Implementation**](#ds)
 
