@@ -41,7 +41,15 @@ Blind 75 questions, coding patterns and in-depth solutions for FAANG coding inte
 1. ### [🌳 **Breadth First Search**](#bfs)
 
 ---
-### 🔑 [Keywords to Algorithms](https://algo.monster/problems/keyword_to_algo)
+# <div id='quicknotes'/> ⚡️ **Quick Notes**
+#### [📋 **Back to Table of Contents**](#toc)
+
+---
+### 📓 [Data Structures and Algorithms Cheat Sheet](https://seanprashad.com/leetcode-patterns/)
+<img src="./resources/data-structures-complexity.png" width="1000"/>
+<img src="./resources/sorting-algorithms-complexity.png" width="1000"/>
+<img src="./resources/big-o-notation-graph.png" width="1000"/><br/>
+
 #### 🎹 **If input array is sorted:**
 - `Binary search`
 - `Two pointers`
@@ -82,11 +90,32 @@ Blind 75 questions, coding patterns and in-depth solutions for FAANG coding inte
 - `Sort input for O(nlogn) time and O(1) space`
 
 ---
+### 🔑 [Keywords to Algorithms](https://algo.monster/problems/keyword_to_algo)
 
-# <div id='quicknotes'/> ⚡️ **Quick Notes**
-#### [📋 **Back to Table of Contents**](#toc)
+| No. | Keywords | Data Structures and Algorithms | 
+|:--|:--|:--|
+| 1. | "Top k"| Heap: K closest points |
+| 2. | "How many ways.." | <li> DFS: Decode ways <li> DP: Robot paths
+| 3. | "Substring" | Sliding window: Longest substring without repeating characters
+| 4. | "Palindrome" | <li> Two pointers: Valid Palindrome <li> DFS: Palindrome Partitioning <li> DP: Palindrome Partitioning 2
+| 5. | "Tree" | <li> shortest, level-order - BFS: Binary tree level-order traversal <li> else: DFS: Max Depth
+| 6. | "Parentheses" | Stack: Valid Parentheses
+| 7. | "Subarray" | <li> Prefix sum: Subarray sum <li> Hashmap: Continuous subarray sum
+| 8. | "X Sum" |Two pointer: Two sum
+| 9. | "Max/longest sequence" | <li> Dynamic programming, DFS: Longest increasing subsequence <li> mono deque: Sliding window maximum
+| 10. | "Minimum/Shortest" | <li> Dynamic programming, DFS: Minimal path sum <li> BFS: Shortest path
+| 11. | "Partition/split ... array/string" | DFS: Decode ways
+| 12. | "Subsequence" | <li> Dynamic programming, DFS: Longest increasing subsequence <li> Sliding window: Longest increasing subsequence
+| 13. | "Matrix" | <li> BFS, DFS: Flood fill, Islands <li> Dynamic programming: Maximal square
+| 14. | "Jump" | Greedy/DP: Jump game
+| 15. | "Game" | Dynamic programming: Divisor game, Stone game
+| 16. | "Connected component", "Cut/remove" "Regions/groups/connections" | Union Find: Number of connected components, Redundant connections
+| 17. | "Transitive relationship" | If the items are related to one another and the relationship is transitive, then chances are we can build a graph and use BFS or Union Find. <li> string converting to another, BFS: Word Ladder <li> string converting to another, BFS, Union Find: Sentence Similarity <li> numbers having divisional relationship, BFS, Union Find: Evaluate Division
+| 18. | "Interval" | Greedy: sort by start/end time and then go through sorted intervals Interval Pattern
+
+
 ---
-## 📱 Coding Pattern Templates
+### 📱 Coding Pattern Templates
 #### 🪟 Sliding Window
 To perform beginning to end computations of an array in O(n) time complexity
 ```python
@@ -1208,7 +1237,7 @@ def maxProduct(nums):
   - `Buy on day 2 (price = 1) and sell on day 5 (price = 6), profit = 6-1 = 5.`
   - `Note that buying on day 2 and selling on day 1 is not allowed because you must buy before you sell.`
 
-<img src="https://leetcode.com/media/original_images/121_profit_graph.png" width="500"  /><br/>
+<img src="./resources/profit_graph.png" width="500"/><br/>
 The points of interest are the peaks and valleys in the given graph. We need to find the largest peak following the smallest valley. We can maintain two variables - minprice and maxprofit corresponding to the smallest valley and maximum profit (maximum difference between selling price and minprice) obtained so far respectively.
 
 ### **Kadane's Algorithm**
