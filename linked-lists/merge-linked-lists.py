@@ -1,42 +1,44 @@
-class LinkedList: 
-    def __init__(self, value):
-        self.value = value
-        self.next = None
-        
-def mergeLinkedLists(headOne, headTwo):
-    p1 = headOne
-    p1Prev = None
-    p2 = headTwo
-    
-    while p1 is not None and p2 is not None: 
-        if p1.value < p2.value:
-            p1Prev = p1
-            p1 = p1.next
-        else: 
-            if p1Prev is not None: 
-                p1Prev.next = p2
-            p1Prev = p2
-            p2 = p2.next
-            p1Prev.next = p1
-    
-    if p1 is None: 
-        p1Prev.next = p2
-    return headOne if headOne.value < headTwo.value else headTwo
+class ListNode: 
+  def __init__(self, value=0, next=None): 
+    self.value = value
+    self.next = next
 
-def mergeTwoLists(self, l1, l2):
-    if None in (l1, l2):
-        return l1 or l2
-    dummy = cur = ListNode(0)
-    dummy.next = l1
-    while l1 and l2:
-        if l1.val < l2.val:
-            l1 = l1.next
-        else:
-            nxt = cur.next
-            cur.next = l2
-            tmp = l2.next
-            l2.next = nxt
-            l2 = tmp
-        cur = cur.next
-    cur.next = l1 or l2
-    return dummy.next
+def mergeTwoLists(list1, list2): 
+  head = current = ListNode()
+  while list1 is not None and list2 is not None: 
+    if list1.value < list2.value: 
+      current.next = list1
+      list1 = list1.next
+    else: 
+      current.next = list2
+      list2 = list2.next
+    current = current.next
+  if list1 is not None: 
+    current.next = list1
+  elif list2 is not None: 
+    current.next = list2
+  return head.next
+
+import unittest
+class UnitTest(unittest.TestCase): 
+  def getList(self, node): 
+    result = []
+    currentNode = node
+    while currentNode is not None: 
+      result.append(currentNode.value)
+      currentNode = currentNode.next
+    return result 
+
+  def testCase(self): 
+    list1 = ListNode(1)
+    list1.next = ListNode(2)
+    list1.next.next = ListNode(4)
+    list2 = ListNode(1)
+    list2.next = ListNode(3)
+    list2.next.next = ListNode(4)
+    actual = self.getList(mergeTwoLists(list1, list2))
+    expected = [1, 1, 2, 3, 4, 4]
+    self.assertEqual(actual, expected)
+
+if __name__ == '__main__':
+  unittest.main(argv=[''], verbosity=2, exit=False)

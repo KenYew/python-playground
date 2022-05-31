@@ -411,7 +411,7 @@ if __name__ == '__main__':
 - ✅ Maximum Subarray - https://leetcode.com/problems/maximum-subarray/
 - ✅ Maximum Product Subarray - https://leetcode.com/problems/maximum-product-subarray/
 - Find Minimum in Rotated Sorted Array - https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/
-- Search in Rotated Sorted Array - https://leetcode.com/problems/search-in-rotated-sorted-array/
+- ✅ Search in Rotated Sorted Array - https://leetcode.com/problems/search-in-rotated-sorted-array/
 - ✅ 3Sum - https://leetcode.com/problems/3sum/
 - Container With Most Water - https://leetcode.com/problems/container-with-most-water/
 #### [📋 **Back to Table of Contents**](#toc)
@@ -1459,7 +1459,7 @@ def mergeOverlappingIntervals(intervals):
 
 - ✅ Longest Substring Without Repeating Characters - https://leetcode.com/problems/longest-substring-without-repeating-characters/
 - Longest Repeating Character Replacement - https://leetcode.com/problems/longest-repeating-character-replacement/
-- Minimum Window Substring - https://leetcode.com/problems/minimum-window-substring/
+- ✅ Minimum Window Substring - https://leetcode.com/problems/minimum-window-substring/
 - Valid Anagram - https://leetcode.com/problems/valid-anagram/
 - ✅ Group Anagrams - https://leetcode.com/problems/group-anagrams/
 - ✅ Valid Parentheses - https://leetcode.com/problems/valid-parentheses/
@@ -2872,7 +2872,7 @@ def longestSubstringWithoutDuplication(string):
 - ✅ Reverse a Linked List - https://leetcode.com/problems/reverse-linked-list/
 - Detect Cycle in a Linked List - https://leetcode.com/problems/linked-list-cycle/
 - ✅ Merge Two Sorted Lists - https://leetcode.com/problems/merge-two-sorted-lists/
-- Merge K Sorted Lists - https://leetcode.com/problems/merge-k-sorted-lists/
+- ✅ Merge K Sorted Lists - https://leetcode.com/problems/merge-k-sorted-lists/
 - ✅ Remove Nth Node From End Of List - https://leetcode.com/problems/remove-nth-node-from-end-of-list/
 - Reorder List - https://leetcode.com/problems/reorder-list/
 #### [📋 **Back to Table of Contents**](#toc)
@@ -2937,78 +2937,6 @@ def removeDuplicatesFromLinkedList(head):
 - Initialise currentNode = head, iterate through the linkedList while keeping track of nextDistinctNode = currentNode.next
 - While nextDistinctNode.value == currentNode.value, keep moving nextDistinctNode = nextDistinctNode.next until nextDistinctNode is positioned on a distinct value not equal to currentNode.value. 
 - Then, connect currentNode.next to point to nextDistinctNode and update currentNode to be nextDistinctNode (this bypasses all the equal value nodes).
-
----
-## [🟨 Merge Two Sorted Linked Lists](https://leetcode.com/problems/merge-two-sorted-lists/)
->* You are given the heads of two sorted linked lists `list1` and `list2`.
->* Merge the two lists in a one **sorted** list. The list should be made by splicing together the nodes of the first two lists.
->* Return the **head of the merged linked list**.
-
-- [x] Input:
-```python
-linkedListOne = 1 -> 2 -> 4
-linkedListTwo = 1 -> 3 -> 4
-```
-- [x] Output: 
-```python
-1 -> 1 -> 2 -> 3 -> 4 -> 4
-```
-
-<details><summary><b>Solution</b></summary>
-<p>
-
-<img src="https://assets.leetcode.com/uploads/2020/10/03/merge_ex1.jpg" width="500"/>
-
-
-### **Iteratively In-Place**
-```python
-class LinkedList: 
-    def __init__(self, value): 
-        self.value = value 
-        self.next = None 
-        
-# O(n + m) Time where n is the length of the 1st linked list and m is the length of the 2nd linked list
-# O(1) Space - we mutated the linked lists in place
-def mergeLinkedLists(headOne, headTwo): 
-    # 1: Initialise p1 and p2 to be the input heads of LinkedList1 and LinkedList2 respectively
-    p1, p2 = headOne, headTwo
-    p1Prev = None # Initialise p1Prev to be None. This is used to temporarily store nodes.  
-    
-    # 2: While we have not finished traversing both the linkedLists,
-    while p1 is not None and p2 is not None: 
-        # 3: If p2.value > p1.value, traverse both the p1Prev and p1 pointers onto the next subsequent nodes in LinkedList1
-        if p2.value > p1.value: 
-            p1Prev = p1 
-            p1 = p1.next
-        # 4: If p1.value >= p2.value, perform a series of pointer mutations to satisfy this case.
-        else: 
-            # 5: If p1Prev has been updated to be non-None, set p1Prev.next = p2
-            if p1Prev is not None: 
-                p1Prev.next = p2
-            # 6: Traverse both the p1Prev and p2 pointers onto the next subsequent nodes in LinkedList2
-            p1Prev = p2
-            p2 = p2.next
-            # 7: Connect p1Prev.next to p1
-            p1Prev.next = p1
-        
-        # 8: Edge case - if we have already reached at the None end of LinkedList 1 but still have nodes to traverse in LinkedList2,
-        if p1 is None:
-            # 9: Immediately connect the end of LinkedList1 to the remainder nodes of LinkedList2 (p1Prev would be at the tail of LL1 and p2 would be at the head of LL2)
-            p1Prev.next = p2
-        
-    # 10: Return the correct head of the mutated and merged linkedlist by selecting the smaller head
-    return headOne if headOne.value < headTwo.value else headTwo
-```
-</p>
-</details>
-
-✅ **ITERATIVELY IN-PLACE:** 
-1. Create 3 pointers (p1Prev = `None`, p1 = `input headOne`, p2 = `input headTwo`)
-2. If p2.value > p1.value, keep moving p1Prev and p1 to the next subsequent nodes of LL1.
-3. If p1.value >= p2.value, keep moving p1Prev and p2 to the next subsequent nodes of LL2. Connect p1Prev.next to p1.
-4. Note: if p1Prev is not None, connect p1Prev.next to p2 first before executing Step 3!
-5. Note: if p1 is None, immediately connect p1Prev.next to p2 because p1 being None means we have reached the end of LL1 already but need to connect to the remainder of LL2. 
-6. Return the smaller head of the mutated and merged linkedList.
 
 ---
 
@@ -3192,8 +3120,7 @@ def removeKthNodeFromEnd(head, k):
 ✅ **TWO POINTERS:** _Initially set two pointers (F & S), move the S pointer k number of times, if S points to None already, delete the head immediately, otherwise move F & S pointers at the same pace until S points at None so that F natrually points to the k-th node from end, delete the k-th node by mutating F.next = F.next.next_
 
 ---
-
-## [🟥 Reverse Linked List](https://www.algoexpert.io/questions/Reverse%20Linked%20List)
+## [🟨 Reverse Linked List](https://www.algoexpert.io/questions/Reverse%20Linked%20List)
 >* Write a function that takes in the head of a $\pgly Linked List, reverses the list in place (i.e., doesn't create a brand new list), and returns its new head.
 >* Each `LinkedList` node has an integer `value` as well as a `next` node pointing to the next node in the list or to None / null if it's the tail of the list.
 >* You can assume that the input Linked List will always have at least one node; in other words, the head will never be `None`
@@ -3250,7 +3177,155 @@ def reverseLinkedList(head):
 
 ✅ **ITERATIVE MUTATION:** _Iterate through the linked list while maintaining currentNode and previousNode, iteratively reverse, return new head of list_
 
+---
+## [🟨 Merge Two Sorted Linked Lists](https://leetcode.com/problems/merge-two-sorted-lists/)
+>* You are given the heads of two sorted linked lists `list1` and `list2`.
+>* Merge the two lists in a one **sorted** list. The list should be made by splicing together the nodes of the first two lists.
+>* Return the **head of the merged linked list**.
 
+- [x] Input:
+```python
+linkedListOne = 1 -> 2 -> 4
+linkedListTwo = 1 -> 3 -> 4
+```
+- [x] Output: 
+```python
+1 -> 1 -> 2 -> 3 -> 4 -> 4
+```
+
+<details><summary><b>Solution</b></summary>
+<p>
+
+<img src="./resources/merge-two-linked-lists.jpeg" width="500"/>
+
+### [**Iteratively In-Place**](./linked-lists/merge-linked-lists.py)
+```python
+class ListNode: 
+  def __init__(self, value=0, next=None): 
+    self.value = value
+    self.next = next
+
+# O(n + m) Time where n is the length of the 1st linked list and m is the length of the 2nd linked list
+# O(1) Space - we mutated the linked lists in place
+def mergeTwoLists(list1, list2): 
+  # 0: Instantiate a null ListNode as the head of the new merged linked list (LL)
+  head = current = ListNode() 
+  # head* will be a placeholder that only points at the head of the new merged LL
+  # current* will be used to iterate through the new merged LL
+
+  while list1 is not None and list2 is not None: 
+    if list1.value < list2.value: 
+      # 1: Set current.next to point to the node at list1* if list1.value < list2.value
+      current.next = list1
+      list1 = list1.next # 2: Iterate list1* to the next node in list1
+    else: 
+      # 3: Set current.next to point to the node at list2* if list2.value < list1.value
+      current.next = list2
+      list2 = list2.next # 4: Iterate list2* to the next node in list2
+    current = current.next # 5: Iterate the current* to the next node
+  # At the end of the while loop, either list1* or list2* will be pointing at a None value, so we
+  # 6: Attach the remaining portion of list1 or list2 to current if there are still nodes left
+  if list1 is not None: 
+    current.next = list1
+  elif list2 is not None: 
+    current.next = list2
+  return head.next # 7: Return the head of the new merged linked list
+```
+</p>
+</details>
+
+---
+## [🟥 Merge k Sorted Lists](https://leetcode.com/problems/merge-k-sorted-lists/)
+>* You are given an array of k linked-lists lists, each linked-list is sorted in ascending order.
+>* Merge all the linked-lists into one sorted linked-list and return it.
+
+Example 1:
+- [x] Input: 
+```python
+lists = [
+    [1,4,5], # 1->4->5
+    [1,3,4], # 1->3->4
+    [2,6] # 2->6
+]
+```
+- [x] Output: `[1,1,2,3,4,4,5,6]`
+
+Example 2:
+- [x] Input: lists = `[]`
+- [x] Output: `[]`
+
+Example 3:
+- [x] Input: lists = `[[]]`
+- [x] Output: `[]`
+
+Constraints:
+* `k == lists.length`
+* `0 <= k <= 104`
+* `0 <= lists[i].length <= 500`
+* `-104 <= lists[i][j] <= 104`
+* `lists[i]` is sorted in ascending order.
+* The sum of `lists[i].length` will not exceed `104`.
+
+<details><summary><b>Solution</b></summary>
+<p>
+
+<img src="./resources/merge-k-sorted-lists.png" width="500"/>
+
+### [**Iteratively In-Place**](./linked-lists/merge-k-linked-lists.py)
+```python
+class ListNode:
+  def __init__(self, value=0, next=None):
+    self.value = value
+    self.next = None
+
+# O(nlog(k)) Time - n is the number of nodes in both lists and k is the number of linked lists
+# We keep merging two sorted linked lists in each iteration until we get a single linked list at O(k)
+# Every time we merge two sorted linked lists, we iterate all nodes in both lists once at O(n)
+# O(1) Space - We always merge two sorted linked lists in-place
+def mergeKLists(lists):
+  # EDGE: Return None if input lists is None or empty
+  if lists is None or len(lists) == 0: 
+    return None
+  # 1: While the length of lists to merge > 1, we need to keep merging 2 lists at a time
+  while len(lists) > 1: 
+    mergedLists = []
+    # 2: In each iteration, we merge every 2 lists at a time at O(log(k))
+    for idx in range(0, len(lists), 2): 
+      list1 = lists[idx]
+      # 3: To account for idx* potentially being out-of-bounds if we have odd number of lists,
+      # We set list2 to be None if idx* is out-of-bounds
+      list2 = lists[idx + 1] if idx < len(lists) - 1 else None
+      mergedLists.append(mergeLists(list1, list2))
+    lists = mergedLists # 4: Keep updating lists with new merged lists until we have 1 big merged list
+  return lists[0] # 5: At this point, there is only 1 big merged list, so we return only that
+
+# O(n + m) Time where n is the length of the 1st linked list and m is the length of the 2nd linked list
+# O(1) Space - we mutated the linked lists in place
+def mergeLists(list1, list2): 
+  # 0: Instantiate a null ListNode as the head of the new merged linked list (LL)
+  head = current = ListNode() 
+  # head* will be a placeholder that only points at the head of the new merged LL
+  # current* will be used to iterate through the new merged LL
+  while list1 is not None and list2 is not None: 
+    if list1.value < list2.value: 
+      # 1: Set current.next to point to the node at list1* if list1.value < list2.value
+      current.next = list1
+      list1 = list1.next # 2: Iterate list1* to the next node in list1
+    else: 
+      # 3: Set current.next to point to the node at list2* if list2.value < list1.value
+      current.next = list2
+      list2 = list2.next # 4: Iterate list2* to the next node in list2
+    current = current.next # 5: Iterate the current* to the next node
+  # At the end of the while loop, either list1* or list2* will be pointing at a None value, so we
+  # 6: Attach the remaining portion of list1 or list2 to current if there are still nodes left
+  if list1 is not None: 
+    current.next = list1
+  elif list2 is not None: 
+    current.next = list2
+  return head.next # 7: Return the head of the new merged linked list
+```
+</p>
+</details>
 
 ---
 
@@ -4096,10 +4171,10 @@ def getUnvisitedNeighbours(i, j, matrix, visited):
 # <div id='trees'/> 🌲 **Trees**
 
 - ✅ Maximum Depth of Binary Tree - https://leetcode.com/problems/maximum-depth-of-binary-tree/
-- Same Tree - https://leetcode.com/problems/same-tree/
+- ✅ Same Tree - https://leetcode.com/problems/same-tree/
 - ✅ Invert/Flip Binary Tree - https://leetcode.com/problems/invert-binary-tree/
 - ✅ Binary Tree Maximum Path Sum - https://leetcode.com/problems/binary-tree-maximum-path-sum/
-- Binary Tree Level Order Traversal - https://leetcode.com/problems/binary-tree-level-order-traversal/
+- ✅ Binary Tree Level Order Traversal - https://leetcode.com/problems/binary-tree-level-order-traversal/
 - Serialize and Deserialize Binary Tree - https://leetcode.com/problems/serialize-and-deserialize-binary-tree/
 - Subtree of Another Tree - https://leetcode.com/problems/subtree-of-another-tree/
 - Construct Binary Tree from Preorder and Inorder Traversal - https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/
@@ -4653,7 +4728,7 @@ def findMaxSum(node):
 - `maxBranchSum` = max(`maxChildSum` + value, value)
 - `maxRootSum` = max(leftBranchSum + value + rightBranchSum, `maxBranchSum`)
 - `maxPathSum` = max(leftPathSum, rightPathSum, `maxRootSum`)
-- 
+  
 ---
 # <div id='bst'/> 🎄 **Binary Search Trees**
 #### [📋 **Back to Table of Contents**](#toc)
@@ -4967,8 +5042,6 @@ def swap(left, right, array):
 </p>
 </details>
 
-✅ **Single Pointer Iteration:** 
-
 ---
 ## [🟥 Quick Sort](https://www.algoexpert.io/questions/Quick%20Sort)
 > Write a function that takes in an array of integers and returns a sorted version of that array. Use the Quick Sort algorithm to sort the array.
@@ -5040,8 +5113,6 @@ def quickSortHelper(array, start, end):
 </p>
 </details>
 
-✅ **Single Pointer Iteration:** 
-
 ---
 ## [🟥 Heap Sort](https://www.algoexpert.io/questions/Heap%20Sort)
 > Write a function that takes in an array of integers and returns a sorted version of that array. Use the Heap Sort algorithm to sort the array.
@@ -5064,8 +5135,6 @@ def swap(left, right, array):
 ```
 </p>
 </details>
-
-✅ **Single Pointer Iteration:** 
 
 ---
 ## [🟥 Radix Sort](https://www.algoexpert.io/questions/Radix%20Sort)
@@ -5090,8 +5159,6 @@ def swap(left, right, array):
 </p>
 </details>
 
-✅ **Single Pointer Iteration:** 
-
 ---
 ## [⬛️ Merge Sort](https://www.algoexpert.io/questions/Merge%20Sort)
 > Write a function that takes in an array of integers and returns a sorted version of that array. Use the Merge Sort algorithm to sort the array.
@@ -5114,8 +5181,6 @@ def swap(left, right, array):
 ```
 </p>
 </details>
-
-✅ **Single Pointer Iteration:** 
 
 ---
 
@@ -5224,7 +5289,7 @@ Output: 19
 ---
 # <div id='heaps'/> 🏔 **Heaps**
 
-- Merge K Sorted Lists - https://leetcode.com/problems/merge-k-sorted-lists/
+- ✅ Merge K Sorted Lists - https://leetcode.com/problems/merge-k-sorted-lists/
 - Top K Frequent Elements - https://leetcode.com/problems/top-k-frequent-elements/
 - Find Median from Data Stream - https://leetcode.com/problems/find-median-from-data-stream/
 #### [📋 **Back to Table of Contents**](#toc)
