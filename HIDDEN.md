@@ -59,7 +59,7 @@ Blind 75 questions, coding patterns and in-depth solutions for FAANG coding inte
 ### 📓 [Data Structures and Algorithms Cheat Sheet](https://seanprashad.com/leetcode-patterns/)
 <img src="./resources/data-structures-complexity.png" width="1000"/>
 <img src="./resources/sorting-algorithms-complexity.png" width="1000"/>
-<img src="./resources/big-o-notation-graph.png" width="1000"/><br/>
+<img src="./resources/big-o-notation-graph.png" width="1000"/>
 
 #### 🎹 **If input array is sorted:**
 - `Binary search`
