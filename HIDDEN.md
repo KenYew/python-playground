@@ -9,7 +9,6 @@ details > summary {
 }
 </style>
 
-
 <img src="https://www.python.org/static/community_logos/python-logo-generic.svg" width="500px"/><br/>
 
 # **💻 Data Structures and Algorithms in Python**
@@ -37,7 +36,6 @@ Blind 75 questions, coding patterns and in-depth solutions for FAANG coding inte
 1. ### [📚 **Sorting Algorithms**](#sort)
 1. ### [🔎 **Search Algorithms**](#search)
 1. ### [🧠 **Famous Algorithms**](#algorithms)
-1. ### [🥞 **Stacks**](#stacks)
 1. ### [🏔 **Heaps**](#heaps)
 1. ### [📱 **Dynamic Programming**](#dp)
 1. ### [⚡️ **Binaries**](#binaries)
