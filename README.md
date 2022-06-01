@@ -5921,6 +5921,62 @@ def smallestWindowSubstring(string, pattern):
     if minLength > len(string): 
         return "" 
     return string[substringStart : substringStart + minLength]
+
+## ALTERNATIVE APPROACH
+# O(N + M) Time - where ‘N’ and ‘M’ are the number of characters in the input string and the pattern, respectively.
+# O(M) Space - since, in the worst case, the whole pattern can have distinct characters that will go into the HashMap.
+def minWindow(string, pattern): 
+  # EDGE: Return empty string if input pattern is empty
+  if pattern == "":
+    return ""
+
+  patternFrequency, windowFrequency = {}, {}
+  ## A: BUILD PATTERN HASHMAP
+  # 1: Build a hashmap of frequencies of characters in pattern
+  for char in pattern:
+    if char not in patternFrequency: 
+      patternFrequency[char] = 0
+    patternFrequency[char] += 1
+
+  # 2: Initialise variables
+  # have - number of characters in string that match with pattern
+  # need - number of characters in pattern to match
+  have, need = 0, len(patternFrequency) 
+  result = [-1, -1]
+  minLength = float('inf') # to keep track on the most minimum length of window substring
+  left = 0 # windowStart* pointer that shrinks the window when the window runs
+
+  ## B: BUILD STRING HASHMAP
+  # 3: Build a hashmap of frequencies of characters in string
+  for right, char in enumerate(string):
+    if char not in windowFrequency: 
+      windowFrequency[char] = 0
+    windowFrequency[char] += 1
+  
+    # 4: If incoming char is a matching char in pattern and both their frequencies match,
+    if char in patternFrequency and windowFrequency[char] == patternFrequency[char]: 
+      have += 1 # increment have by 1
+
+    ## C: PERFORM SLIDING WINDOW ALGORITHM
+    # 5: If we have a window substring that contains all the pattern chars we need,
+    while have == need: 
+      currentWindowLength = right - left + 1 # 6: Calculate the currentWindowLength via the current positions of the pointers
+      if currentWindowLength < minLength: # 7: If we have found a more minimum length than before, update result and minLength
+        result = [left, right]
+        minLength = currentWindowLength
+      # 8: Shrink the window to find the next available minimum window substring, 
+      windowFrequency[string[left]] -= 1 # 9: Decrement the frequency of the character that will be dropped from the windowStart*
+      # 10: If the dropped char is a matching char in pattern and both their frequencies mismatch, 
+      if string[left] in patternFrequency and windowFrequency[string[left]] < patternFrequency[string[left]]: 
+        have -= 1 # decrement have by 1
+      left += 1 # 11: Increment windowStart* pointer to keep moving and shrinking the sliding window
+  # 12: After iterating all characters in the input string at O(n), save the positions of the left* and right* pointers in result 
+  left, right = result
+
+  ## D: SPLICE STRING WITH RESULTING LEFT* AND RIGHT* POINTERS
+  # 13: Splice the input string with the resulting pointers to obtain the minWindow
+  return string[left : right + 1] if minLength != float('inf') else "" 
+  # EDGE: If we have not found a minWindow, minLength will be unchanged so return an empty string
 ```
 
 ---

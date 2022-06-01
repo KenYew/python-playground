@@ -55,3 +55,51 @@ def main():
     print(smallestWindowSubstring("adcad", "abc"))
 
 main()
+
+def minWindow(string, pattern): 
+  if pattern == "":
+    return ""
+
+  windowFrequency, patternFrequency = {}, {}
+  for char in pattern: 
+    if char not in patternFrequency: 
+      patternFrequency[char] = 0
+    patternFrequency[char] += 1
+
+  result = [-1, -1]
+  left = 0
+  minLength = float('inf')
+  have, need = 0, len(patternFrequency)
+  for right, char in enumerate(string): 
+    if char not in windowFrequency: 
+      windowFrequency[char] = 0
+    windowFrequency[char] += 1
+  
+    if char in patternFrequency and windowFrequency[char] == patternFrequency[char]: 
+      have += 1
+
+    while have == need:
+      currentWindowLength = right - left + 1
+      if currentWindowLength < minLength: 
+        result = [left, right]
+        minLength = currentWindowLength
+        
+      windowFrequency[string[left]] -= 1
+      if string[left] in patternFrequency and windowFrequency[string[left]] < patternFrequency[string[left]]:
+        have -= 1
+      left += 1
+  
+  left, right = result 
+  return string[left : right + 1] if minLength != float('inf') else ""
+
+import unittest
+class UnitTest(unittest.TestCase):
+  def testCase(self):
+    string = "ADOBECODEBANC"
+    pattern = "ABC"
+    expected = "BANC"
+    actual = minWindow(string, pattern) 
+    self.assertEqual(actual, expected)
+
+if __name__ == '__main__':
+  unittest.main(argv=[''], verbosity=2, exit=False)
