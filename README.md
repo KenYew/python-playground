@@ -1675,6 +1675,58 @@ def runLengthEncoding(string):
 1. Handle the last running characters by appending str(currentLength) and lastChar
 
 ---
+## 🟩 [Reorder Data in Log Files](https://leetcode.com/problems/reorder-data-in-log-files/)
+>* You are given an array of logs. Each log is a space-delimited string of words, where the first word is the identifier.
+>* There are two types of logs:
+    * **Letter-logs:** All words (except the identifier) consist of lowercase English letters.
+    * **Digit-logs:** All words (except the identifier) consist of digits.
+>* Reorder these logs so that:
+    1. The letter-logs come before all digit-logs.
+    1. The letter-logs are sorted lexicographically by their contents. If their contents are the same, then sort them lexicographically by their identifiers.
+    1. The digit-logs maintain their relative ordering.
+Return the final order of the logs.
+
+Example 1:
+- [x] Input: logs = `["dig1 8 1 5 1","let1 art can","dig2 3 6","let2 own kit dig","let3 art zero"]`
+- [x] Output: `["let1 art can","let3 art zero","let2 own kit dig","dig1 8 1 5 1","dig2 3 6"]`
+- [x] Explanation: The letter-log contents are all different, so their ordering is `"art can"`, `"art zero"`, `"own kit dig"`.
+The digit-logs have a relative order of `"dig1 8 1 5 1"`, `"dig2 3 6"`.
+
+Example 2:
+- [x] Input: logs = `["a1 9 2 3 1","g1 act car","zo4 4 7","ab1 off key dog","a8 act zoo"]`
+- [x] Output: `["g1 act car","a8 act zoo","ab1 off key dog","a1 9 2 3 1","zo4 4 7"]`
+ 
+
+Constraints:
+- `1 <= logs.length <= 100`
+- `3 <= logs[i].length <= 100`
+- All the tokens of `logs[i]` are separated by a single space.
+- `logs[i]` is guaranteed to have an identifier and at least one word after the identifier.
+
+
+### [**String Manipulation**](./strings/reorder-data-in-log-files.py)
+```python
+def reorder(logs):
+  digits, letters = [], [] 
+  # e.g.: logs = ["dig1 8 1 5 1","let1 art can","dig2 3 6","let2 own kit dig","let3 art zero"]
+  for log in logs: 
+    # 1: Divide logs into two parts, digit logs and letter logs 
+    # This is based on the 2nd element after the split (e.g.: 8, art, 3, own, art)
+    if log.split()[1].isdigit(): 
+      # Note: Relative order of digit logs are preserved as we traverse the logs
+      digits.append(log) # ['dig1 8 1 5 1', 'dig2 3 6']
+    else: 
+      letters.append(log) # ['let1 art can', 'let2 own kit dig', 'let3 art zero']
+  # 2: Sort letter logs by 1st element (identifiers) (e.g.: let1, let2, let3)
+  letters.sort(key = lambda x : x.split()[0]) # ['let1 art can', 'let2 own kit dig', 'let3 art zero']
+  # 3: Sort letter logs by remaining elements (contents) (e.g.: art can, art zero, own kit dig)
+  letters.sort(key = lambda x : x.split()[1:]) # ['let1 art can', 'let3 art zero', 'let2 own kit dig']
+  # 4: Combine digit logs with sorted letter logs
+  result = letters + digits 
+  return result # ['let1 art can', 'let3 art zero', 'let2 own kit dig', 'dig1 8 1 5 1', 'dig2 3 6']
+```
+
+---
 ## 🟩 [Roman To Integer](https://leetcode.com/problems/roman-to-integer/)
 
 | Symbol | Value |
@@ -2350,55 +2402,6 @@ def compareVersion(version1, version2):
     elif n1 > n2: # 4: Else if revision digit n1 > n2, return 1
       return 1
   return 0 # 5: Otherwise, return 0
-```
-
----
-## 🟨 [Reorder Data in Log Files](https://leetcode.com/problems/reorder-data-in-log-files/)
->* You are given an array of logs. Each log is a space-delimited string of words, where the first word is the identifier.
->* There are two types of logs:
-    * **Letter-logs:** All words (except the identifier) consist of lowercase English letters.
-    * **Digit-logs:** All words (except the identifier) consist of digits.
->* Reorder these logs so that:
-    1. The letter-logs come before all digit-logs.
-    1. The letter-logs are sorted lexicographically by their contents. If their contents are the same, then sort them lexicographically by their identifiers.
-    1. The digit-logs maintain their relative ordering.
-Return the final order of the logs.
-
-Example 1:
-- [x] Input: logs = `["dig1 8 1 5 1","let1 art can","dig2 3 6","let2 own kit dig","let3 art zero"]`
-- [x] Output: `["let1 art can","let3 art zero","let2 own kit dig","dig1 8 1 5 1","dig2 3 6"]`
-- [x] Explanation: The letter-log contents are all different, so their ordering is `"art can"`, `"art zero"`, `"own kit dig"`.
-The digit-logs have a relative order of `"dig1 8 1 5 1"`, `"dig2 3 6"`.
-
-Example 2:
-- [x] Input: logs = `["a1 9 2 3 1","g1 act car","zo4 4 7","ab1 off key dog","a8 act zoo"]`
-- [x] Output: `["g1 act car","a8 act zoo","ab1 off key dog","a1 9 2 3 1","zo4 4 7"]`
- 
-
-Constraints:
-- `1 <= logs.length <= 100`
-- `3 <= logs[i].length <= 100`
-- All the tokens of `logs[i]` are separated by a single space.
-- `logs[i]` is guaranteed to have an identifier and at least one word after the identifier.
-
-
-### [**String Manipulation**](./strings/reorder-data-in-log-files.py)
-```python
-def reorderLogFiles(logs):
-  digits = []
-  letters = []
-  # 1: Divide logs into two parts, one for digit logs, the other for letter logs
-  for log in logs:
-    if log.split()[1].isdigit():
-        digits.append(log)
-    else:
-        letters.append(log)
-          
-  # 2: Sort letter logs
-  letters.sort(key = lambda x: x.split()[0]) # when suffix is tie, sort by identifier
-  letters.sort(key = lambda x: x.split()[1:]) # sort by suffix
-  result = letters + digits # 3: Combine digit logs and letter logs
-  return result
 ```
 
 ---
