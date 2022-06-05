@@ -22,10 +22,50 @@ def threeSumClosest(array, targetSum):
 
   return targetSum - smallestDifference
 
-def main():
-  print(threeSumClosest([-2, 0, 1, 2], 2))
-  print(threeSumClosest([-3, -1, 1, 2], 1))
-  print(threeSumClosest([1, 0, 1, 1], 100))
+def threeSumClosest(array, target): 
+  if len(array) < 3: 
+    return
+  array.sort() 
+  closestSum = array[0] + array[1] + array[2]
+  for idx in range(len(array) - 2): 
+    if idx > 0 and array[idx - 1] == array[idx]: 
+      continue
+    left = idx + 1
+    right = len(array) - 1 
+    while left < right: 
+      currentSum = array[idx] + array[left] + array[right]
+      if currentSum == target:
+        return currentSum
+      elif currentSum < target: 
+        left += 1
+      elif currentSum > target:
+        right -= 1
+      if abs(currentSum - target) < abs(closestSum - target):
+        closestSum = currentSum
+  return closestSum
 
-if __name__ == "__main__":
-  main()
+import unittest
+class UnitTest(unittest.TestCase): 
+  def testCase1(self):
+    array = [-2, 0, 1, 2]
+    target = 2
+    actual = threeSumClosest(array, target)
+    expected = 1
+    self.assertEqual(actual, expected)
+    
+  def testCase2(self):
+    array = [-3, -1, 1, 2]
+    target = 1
+    actual = threeSumClosest(array, target)
+    expected = 0
+    self.assertEqual(actual, expected)
+    
+  def testCase3(self):
+    array = [1, 0, 1, 1]
+    target = 100
+    actual = threeSumClosest(array, target)
+    expected = 3
+    self.assertEqual(actual, expected)
+    
+if __name__ == '__main__':
+  unittest.main(verbosity=2, exit=False)
