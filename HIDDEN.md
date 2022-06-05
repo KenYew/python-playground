@@ -1793,12 +1793,12 @@ def runLengthEncoding(string):
 ## 🟩 [Reorder Data in Log Files](https://leetcode.com/problems/reorder-data-in-log-files/)
 >* You are given an array of logs. Each log is a space-delimited string of words, where the first word is the identifier.
 >* There are two types of logs:
-    * **Letter-logs:** All words (except the identifier) consist of lowercase English letters.
-    * **Digit-logs:** All words (except the identifier) consist of digits.
+    **Letter-logs:** All words (except the identifier) consist of lowercase English letters.
+    **Digit-logs:** All words (except the identifier) consist of digits.
 >* Reorder these logs so that:
     1. The letter-logs come before all digit-logs.
-    1. The letter-logs are sorted lexicographically by their contents. If their contents are the same, then sort them lexicographically by their identifiers.
-    1. The digit-logs maintain their relative ordering.
+    2. The letter-logs are sorted lexicographically by their contents. If their contents are the same, then sort them lexicographically by their identifiers.
+    3. The digit-logs maintain their relative ordering.
 Return the final order of the logs.
 
 Example 1:
@@ -6516,6 +6516,29 @@ def threeSumClosest(array, targetSum):
         right -= 1
 
   return targetSum - smallestDifference
+
+## Alternative Method 
+def threeSumClosest(array, target): 
+  if len(array) < 3: # EDGE: Return None if input array is less than the 3 required elements
+    return
+  array.sort() # 1: Sort the input array so that the two-pointer method works!
+  closestSum = array[0] + array[1] + array[2] # 2: Initialise closestSum value with first 3 elements (will be superceded if we find a smaller closestSum below!)
+  for idx in range(len(array) - 2): 
+    if idx > 0 and array[idx - 1] == array[idx]: # EDGE: Skip iteration if we found duplicates in our for loop
+      continue
+    left = idx + 1
+    right = len(array) - 1 
+    while left < right: 
+      currentSum = array[idx] + array[left] + array[right]
+      if currentSum == target:
+        return currentSum
+      elif currentSum < target: 
+        left += 1
+      elif currentSum > target:
+        right -= 1
+      if abs(currentSum - target) < abs(closestSum - target): # 3: If our currentSum has a smaller absolute difference to the target than our existing closestSum, update closestSum with the new currentSum
+        closestSum = currentSum
+  return closestSum
 ```
 </p>
 </details>
