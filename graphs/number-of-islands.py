@@ -1,66 +1,42 @@
-def numIslands(grid: List[List[str]]) -> int:
-    if not grid: return 0
-    r, c = len(grid), len(grid[0])
-    visited = [[False for _ in range(c)] for _ in range(r)]
-
-    def dfs(i, j):
-        if i < 0 or i >= r or j < 0 or j >= c or grid[i][j] == '0' or visited[i][j]:
-            return
-        visited[i][j] = True
-        dfs(i + 1, j)
-        dfs(i - 1, j)
-        dfs(i, j + 1)
-        dfs(i, j - 1)
-
-    count = 0
-    for i in range(r):
-        for j in range(c):
-            if not visited[i][j] and grid[i][j] == '1':
-                dfs(i, j)
-                count += 1
-    return count
-
-def numIslands(matrix: List[List[str]]) -> int:
-    visited = [[False for value in row] for row in matrix]
-    numberOfRivers = 0
-    def getUnvisitedNeighbours(i, j, matrix, visited): 
-        unvisitedNeighbours = []
-        
-        if i > 0 and not visited[i - 1][j]:
-            unvisitedNeighbours.append([i - 1, j])
-        if i < len(matrix) - 1 and not visited[i + 1][j]:
-            unvisitedNeighbours.append([i + 1, j])
-        if j > 0 and not visited[i][j - 1]:
-            unvisitedNeighbours.append([i, j - 1])
-        if j < len(matrix[0]) - 1 and not visited[i][j + 1]:
-            unvisitedNeighbours.append([i, j + 1])
-        
-        return unvisitedNeighbours    
-      
-    def traverseNode(i, j, matrix, visited, numberOfRivers): 
-        nodesToExplore = [[i, j]]
-
-        while len(nodesToExplore) > 0: 
-            currentNode = nodesToExplore.pop()
-            i, j = currentNode[0], currentNode[1]
-
-            if visited[i][j]:
-                continue
-            visited[i][j] = True
-            if matrix[i][j] == 0:
-                continue
-
-            numberOfRivers += 1
-
-            unvisitedNeighbours = getUnvisitedNeighbours(i, j, matrix, visited)
-            for neighbour in unvisitedNeighbours:
-                nodesToExplore.append(neighbour)
-                
-        return numberOfRivers
-
+def numberOfIslands(matrix): 
+    if not matrix:
+        return 0
+    result = 0
+    visited = [[None for _ in range(len(matrix[0]))] for _ in range(len(matrix))]
     for i in range(len(matrix)):
-        for j in range(len(matrix[i])):
-            if visited[i][j]:
-                continue
-            traverseNode(i, j, matrix, visited, numberOfRivers)
-    return numberOfRivers
+        for j in range(len(matrix[0])):
+            if not visited[i][j] and matrix[i][j] == 1: 
+                dfs(i, j, matrix, visited)
+                result += 1
+    return result
+
+def dfs(i, j, matrix, visited): 
+    if visited[i][j] or matrix[i][j] == 0:
+        return
+    visited[i][j] = True
+    
+    if i > 0 and not visited[i - 1][j]: 
+        dfs(i - 1, j, matrix, visited)
+    if i < len(matrix) - 1 and not visited[i + 1][j]: 
+        dfs(i + 1, j, matrix, visited)
+    if j > 0 and not visited[i][j - 1]: 
+        dfs(i, j - 1, matrix, visited)
+    if j < len(matrix[0]) - 1 and not visited[i][j + 1]: 
+        dfs(i, j + 1, matrix, visited)
+        
+import unittest
+class UnitTest(unittest.TestCase):
+  def testCase(self): 
+    matrix = [
+      [1, 0, 0, 1, 0],
+      [1, 0, 1, 0, 0],
+      [0, 0, 1, 0, 1],
+      [1, 0, 1, 0, 1],
+      [1, 0, 1, 1, 0]
+    ]
+    actual = numberOfIslands(matrix)
+    expected = 5
+    self.assertEqual(actual, expected)
+    
+if __name__ == '__main__':
+  unittest.main(verbosity=2, exit=False)

@@ -3817,7 +3817,7 @@ Explanation: matrix = [ # The rivers can be clearly seen here:
 <details><summary><b>Solution</b></summary>
 <p>
 
-### **Depth First Search (Iterative Stack)**
+### [**Depth First Search (Iterative Stack)**](/graphs/river-sizes.py)
 ```python
 # O(n) Time - we only need to traverse all of the elements in the matrix once
 # O(n) Space - we are using an auxiliary matrix of size n to keep track of visited nodes
@@ -4067,29 +4067,33 @@ Output: 3
 <details><summary><b>Solution</b></summary>
 <p>
 
-### **Depth First Search (Recursive)**
+### [**Depth First Search (Recursive)**](/graphs/number-of-islands.py)
 ```python
-def numIslands(grid: List[List[str]]) -> int:
-    if not grid: return 0
-    r, c = len(grid), len(grid[0])
-    visited = [[False for _ in range(c)] for _ in range(r)]
+def numberOfIslands(matrix):
+  if not matrix:
+    return 0
+  visited = [[None for _ in range(len(matrix[0]))] for _ in range(len(matrix))]
+  result = 0
+  for i in range(len(matrix)):
+    for j in range(len(matrix[0])): 
+      if not visited[i][j] and matrix[i][j] == 1: 
+        dfs(i, j, visited, matrix)
+        result += 1
+  return result 
 
-    def dfs(i, j):
-        if i < 0 or i >= r or j < 0 or j >= c or grid[i][j] == '0' or visited[i][j]:
-            return
-        visited[i][j] = True
-        dfs(i + 1, j)
-        dfs(i - 1, j)
-        dfs(i, j + 1)
-        dfs(i, j - 1)
+def dfs(i, j, visited, matrix): 
+  if visited[i][j] or matrix[i][j] == 0: 
+    return
+  visited[i][j] = True
 
-    count = 0
-    for i in range(r):
-        for j in range(c):
-            if not visited[i][j] and grid[i][j] == '1':
-                dfs(i, j)
-                count += 1
-    return count
+  if i > 0 and not visited[i - 1][j]:
+    dfs(i - 1, j, visited, matrix)
+  if i < len(matrix) - 1 and not visited[i + 1][j]:
+    dfs(i + 1, j, visited, matrix)
+  if j > 0 and not visited[i][j - 1]: 
+    dfs(i, j - 1, visited, matrix)
+  if j < len(matrix[0]) - 1 and not visited[i][j + 1]:
+    dfs(i, j + 1, visited, matrix)
 ```
 </p>
 </details>
