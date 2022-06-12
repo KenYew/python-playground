@@ -7783,7 +7783,7 @@ def findPaths(root, requiredSum):
   findPathsRecursive(root, requiredSum, currentPath, allPaths)
   return allPaths
 
-def findPathsRecursive(currentNode, runningSum, currentPath, allPaths):
+def findPathsRecursive(currentNode, currentSum, currentPath, allPaths):
   # 1: Base case for when we reach the branch end with None child nodes and leaf.value != sum
   if currentNode is None: 
     return
@@ -7791,22 +7791,21 @@ def findPathsRecursive(currentNode, runningSum, currentPath, allPaths):
   # 2: Update currentPath array with currentNode.value for every node traversal
   currentPath.append(currentNode.value)
 
-  # 3: If currentNode is a leaf node and leaf.value == runningSum,  
+  # 3: If currentNode is a leaf node and leaf.value == currentSum,  
   # save the resulting currentPath list into our allPaths array!
-  if currentNode.value == runningSum and currentNode.left is None and currentNode.right is None: 
+  if currentNode.value == currentSum and currentNode.left is None and currentNode.right is None: 
     allPaths.append(list(currentPath))
 
-  # 4: Calculate the currentSum remaining after trimming runningSum with currentNode.value
-  # This is so that when we reach the leaf, if leaf.value == runningSum, we found a path!
-  currentSum = runningSum - currentNode.value
+  # 4: Calculate the currentSum remaining after trimming currentSum with currentNode.value
+  # This is so that when we reach the leaf, if leaf.value == currentSum, we found a path!
+  currentSum -= currentNode.value
 
   # 5: If currentNode is NOT a leaf node, perform DFS recursion on child nodes and pass down all current information
   findPathsRecursive(currentNode.left, currentSum, currentPath, allPaths)
   findPathsRecursive(currentNode.right, currentSum, currentPath, allPaths)
 
-  # 6: Remove the currentNode.value from the path to backtrack!
-  # We remove the currentNode.value as we are going back up the recusrive call stack!
-  del currentPath[-1]
+  # 6: Remove the currentNode.value from the path to backtrack as we go back up the recursive call stack!
+  currentPath.pop() # del currentPath[-1] also works!
 ```
 </p>
 </details>
